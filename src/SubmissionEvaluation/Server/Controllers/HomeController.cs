@@ -81,11 +81,16 @@ namespace SubmissionEvaluation.Server.Controllers
             return Ok(new GenericModel {HasError = true, Message = message});
         }
 
-        [AllowAnonymous]
         [HttpGet("getGitVersionHash")]
         public IActionResult GetGitVersionHash()
         {
             return Ok(Domain.Domain.GetVersionHash());
+        }
+
+        [HttpGet("IsMaintenanceMode")]
+        public IActionResult IsMaintenanceMode()
+        {
+            return Ok(JekyllHandler.Domain.IsMaintenanceMode);
         }
     }
 }

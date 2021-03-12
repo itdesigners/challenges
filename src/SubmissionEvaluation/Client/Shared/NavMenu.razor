@@ -161,7 +161,7 @@
 
     protected async void UpdateCurrentMaintenanceState()
     {
-        IsMaintenanceMode = await httpClient.GetFromJsonAsync<bool>("api/Admin/IsMaintenanceMode");
+        IsMaintenanceMode = await httpClient.GetFromJsonAsync<bool>("api/Home/IsMaintenanceMode");
         StateHasChanged();
     }
 

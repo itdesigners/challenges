@@ -442,6 +442,7 @@ namespace SubmissionEvaluation.Server.Controllers
             return Ok(User);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetCustomSettings")]
         public ActionResult<ClaimsPrincipal> GetCustomizationSettings()
         {

@@ -294,11 +294,5 @@ namespace SubmissionEvaluation.Server.Controllers
             var model = new ResetPasswordModel<IMember> {Member = member, Password = newPwd};
             return Ok(model);
         }
-
-        [HttpGet("IsMaintenanceMode")]
-        public IActionResult IsMaintenanceMode()
-        {
-            return Ok(JekyllHandler.Domain.IsMaintenanceMode);
-        }
     }
 }

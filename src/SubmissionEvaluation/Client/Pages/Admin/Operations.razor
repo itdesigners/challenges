@@ -37,7 +37,7 @@
         {
             navi.NavigateTo($"Home/Error/{SubmissionEvaluation.Shared.Classes.Messages.ErrorMessages.NoPermission}");
         }
-        IsMaintenanceMode = await httpClient.GetFromJsonAsync<bool>("api/Admin/IsMaintenanceMode");
+        IsMaintenanceMode = await httpClient.GetFromJsonAsync<bool>("api/Home/IsMaintenanceMode");
         StateHasChanged();
     }
 
