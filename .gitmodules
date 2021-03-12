@@ -1,0 +1,3 @@
+[submodule "src/SubmissionEvaluation/Client/wwwroot/lib/openiconic"]
+	path = src/SubmissionEvaluation/Client/wwwroot/lib/openiconic
+	url = https://github.com/iconic/open-iconic.git
