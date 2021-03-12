@@ -121,11 +121,7 @@ namespace SubmissionEvaluation.Server.Controllers
                         break;
                 }
             }
-            if(!Settings.Features.EnableRating && !member.IsAdmin)
-            {
-                
 
-            }
             return Ok(new MemberListModel<Member>
             {
                 CurrentSemester = FormatSemester(ranklist.CurrentSemester),
@@ -145,17 +141,19 @@ namespace SubmissionEvaluation.Server.Controllers
             return JekyllHandler.MemberProvider.GetMembers().Any() ? Ok(true) : Ok(false);
         }
 
+        [AllowAnonymous]
         [HttpGet("GetAchievements")]
         public IActionResult GetAchievements()
         {
             return Ok(JekyllHandler.Domain.Achievements);
         }
+
         [AllowAnonymous]
         [HttpGet("Permissions")]
         public IActionResult GetPermissionsForMember()
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(member != null) { 
+            if(member != null) {
             return Ok(JekyllHandler.GetPermissionsForMember(member));
             } else
             {

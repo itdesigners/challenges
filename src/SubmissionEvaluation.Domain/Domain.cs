@@ -82,17 +82,7 @@ namespace SubmissionEvaluation.Domain
                         new SubmitterAchievementRater(),
                         new ReviewAchievementRater()
                     },
-                Contributors = new List<string>
-                {
-                    memberProvider.GetMemberByName("Kevin Erath")?.Id,
-                    memberProvider.GetMemberByName("Wojciech Lesnianski")?.Id,
-                    memberProvider.GetMemberByName("Matthias Gugel")?.Id,
-                    memberProvider.GetMemberByName("Roland Flat")?.Id,
-                    memberProvider.GetMemberByName("Stephan Dittmann")?.Id,
-                    memberProvider.GetMemberByName("Markus Scheider")?.Id,
-                    memberProvider.GetMemberByName("Maximilian Schall")?.Id,
-                    memberProvider.GetMemberByName("Julian Klissenbauer")?.Id
-                },
+                Contributors = new List<string>(),
                 StatisticsOperations = StatisticsOperations
             };
             StatisticsOperations.AchievementOperations = AchievementOperations;
@@ -100,7 +90,6 @@ namespace SubmissionEvaluation.Domain
 
             logger.ActivityAdded += Interactions.AddActivityEntry;
         }
-
 
         internal AchievementOperations AchievementOperations { get; }
         internal MaintenanceOperations Maintenance { get; }

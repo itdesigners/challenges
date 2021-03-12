@@ -444,7 +444,7 @@ namespace SubmissionEvaluation.Server.Controllers
 
         [AllowAnonymous]
         [HttpGet("GetCustomSettings")]
-        public ActionResult<ClaimsPrincipal> GetCustomizationSettings()
+        public ActionResult<CustomizationSettingsClient> GetCustomizationSettings()
         {
             var converted = new CustomizationSettingsClient
             {
