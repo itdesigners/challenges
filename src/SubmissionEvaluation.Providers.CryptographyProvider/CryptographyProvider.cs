@@ -11,7 +11,7 @@ namespace SubmissionEvaluation.Providers.CryptographyProvider
         private const string Name = "libsodium";
         private const int CryptoPwhashArgon2IdAlgArgon2Id13 = 2;
         private const long CryptoPwhashArgon2IdOpslimitSensitive = 4;
-        private const int CryptoPwhashArgon2IdMemlimitSensitive = 1073741824;
+        private const int CryptoPwhashArgon2IdMemlimitSensitive = 33554432;
 
         static CryptographyProvider()
         {
