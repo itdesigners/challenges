@@ -616,7 +616,6 @@ MigrationBackup/
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,dotnetcore,aspnetcore,node
 
 # Challenge Platform Specific
-web/_data/**/*
 web/_members/**/*
 web/_submissions/**/*
 web/security_token.txt

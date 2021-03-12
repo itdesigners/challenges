@@ -1,0 +1,411 @@
+toolVersion: 0.4
+guidedQuestions:
+- id: formating
+  question: "Ist die Formatierung des Codes sauber?"
+  issues:
+  - id: badIndentation
+    text: "Unsaubere Einrückung"
+    category: readability
+    bad: "Die derzeitige Einrückung erschwert das Lesen. Bitte den Quellcode sauber formatieren, am besten automatisch mit Hilfe der IDE."
+    enough: "Gelegentlich ist die Einrückung nicht Ok. Auf saubere Formatierung achten."
+    smellComment: "Hier stimmt die Einrückung nicht"
+    quantifier: 4
+  - id: mixedPlacementOfParentheses
+    text: "Platzierung der Klammern nicht einheitlich"
+    category: readability
+    bad: "Die Klammern sind unterschiedlich angeordnet. Dies erschwert das Lesen. Auf saubere Formatierung achten."
+    enough: "Gelegentlich sind Klammern nicht einheitlich angeordnet. Auf saubere Formatierung achten."
+    smellComment: "Hier stimmt die Platzierung der Klammern nicht"
+    quantifier: 4
+  - id: mixedSpacedBetweenElements
+    text: "Leerzeichen zwischen Elementen nicht einheitlich"
+    category: readability
+    bad: "Bitte auf einheitliche Formatierung von Elementen wie Abstand zwischen Klammern achten. Sonst wird das Lesen stark erschwert. Die automatische Formatierungsfunktionen der meisten IDEs helfen hier."
+    enough: "Gelegentlich unterschiedliche Abstände zwischen Klammern u.ä."
+    smellComment: "Hier stimmen die Leerzeichen nicht"
+    quantifier: 3
+  - id: notNeededNewlines
+    text: "Nicht benötigte Leerzeilen"
+    category: readability
+    bad: "Leerzeilen sind nicht einheitlich. Dies erschwert das Lesen. Auf saubere Formatierung achten."
+    enough: "Gelegentlich sind die Leerzeilen nicht einheitlich. Auf saubere Formatierung achten."
+    smellComment: "Hier stimmen Leerzeilen nicht"
+    quantifier: 3
+  - id: missingNewlines
+    text: "Fehlende Leerzeilen"
+    category: readability
+    bad: "Aufgrund der Formatierung ist es schwer die einzelnen Elemente wie Methoden/Klassen im Code zu identifizieren."
+    enough: "Aufgrund der Formatierung können Elemente wie Methoden/Klassen teilweiße nicht direkt erkannt werden."
+    smellComment: "Element an dieser Stelle besser Einrücken/ voneinander Trennen."
+    quantifier: 2
+  - id: miscIndentationError
+    text: "Sonstige Anmerkung"
+    category: readability
+    bad: "Weitere Anmerkungen zur Lesbarkeit vorhanden."
+    enough: "Weitere Anmerkungen zur Lesbarkeit vorhanden."
+    smellComment: ""
+    quantifier: 4
+- id: naming
+  question: "Ist die verwendete Namensgebung sauber?"
+  issues:
+  - id: mixedCasing
+    text: "Uneinheitliche Groß-/Kleinschreibung"
+    category: readability
+    bad: "Die Schreibweiße (Groß-/Kleinschreibung) ist sehr wechselhaft. Bitte vereinheitlichen. Dabei auch achten, ob die Sprache einen Standard vorgibt (z.B. Java)"
+    enough: "Ein einheitliche Schreibweiße (Groß-/Kleinschreibung) hilft das verstehen. Dabei auch achten, ob die Sprache einen Standard vorgibt (z.B. Java)"
+    smellComment: "Hier auf Schreibweise achten"
+    quantifier: 2
+  - id: mixedLanguage
+    text: "Uneinheitliche Sprache (z. B. deutsch/englisch)"
+    category: readability
+    bad: "Die Sprache (z.B. deutsch/englisch) ist wechselhaft. Bitte vereinheitlichen."
+    enough: "Ein einheitliche Sprache (z.B. deutsch oder englisch) hilft der Verständlichkeit."
+    smellComment: "Hier die Sprache vereinheitlichen"
+    quantifier: 2
+  - id: unknownAcronyms
+    text: "Unverständliche Abkürzungen"
+    category: readability
+    bad: "Die Schreibweise für Elemente ist fehlerhaft. Bitte Schreibfehler korrigieren und unverständliche Abkürzungen vermeiden."
+    enough: "Ein korrekte Schreibweise für Namen hilft der Verständlichkeit. Deshalb sollten Abkürzungen oder Schreibfehler vermieden werden."
+    smellComment: "Hier auf korrekte Schreibweise achten"
+    quantifier: 2
+  - id: hungarianNotation
+    text: "Ungarische Notation verwendet"
+    category: readability
+    bad: "Es wurde die ungarische Notation für Variablennamen (z. B. iZahl oder Zahlchar) verwendet. Dies ist mit heutigen IDEs nicht mehr nötig."
+    enough: "Es stellenweise die ungarische Notation für Variablennamen (z. B. iZahl oder Zahlchar) verwendet. Dies ist mit heutigen IDEs nicht mehr nötig."
+    smellComment: "Hier die prefixe/suffixe (=ungarische Notation) entfernen"
+    quantifier: 2
+  - id: miscNamingError
+    text: "Sonstige Anmerkung"
+    category: intelligibility
+    bad: "Weitere Anmerkungen vorhanden."
+    enough: "Weitere Anmerkungen vorhanden."
+    smellComment: ""
+    quantifier: 4
+- id: reason
+  question: "Ist der Zweck der Codeelemente ersichtlich?"
+  issues:
+  - id: unexpressiveVariableName
+    text: "Variable erklärt nicht ihren Zweck"
+    category: intelligibility
+    bad: "Bei der Namensgebung von Datentypen und Variablen darauf achten, dass diese den jeweilgen Zweck erklären."
+    enough: "Namensgebung von Datentypen und Variablen größtenteils Ok."
+    smellComment: "Der gewählte Name erklärt nicht den Zweck"
+    quantifier: 5
+  - id: unexpressiveClassName
+    text: "Klasse/Struktur erklärt nicht ihren Zweck"
+    category: intelligibility
+    bad: "Bei der Namensgebung von Datentypen und Variablen darauf achten, dass diese den jeweilgen Zweck erklären."
+    enough: "Namensgebung von Datentypen und Variablen größtenteils Ok."
+    smellComment: "Der gewählte Name erklärt nicht den Zweck"
+    quantifier: 5
+  - id: unexpressiveMethodName
+    text: "Methodenname erklärt nicht den Zweck"
+    category: intelligibility
+    bad: "Bei der Namensgebung von Methoden darauf achten, dass diese beschreiben was die Methode macht. Auch sollte eine Methode ein Verb enthalten, da diese ja etwas tut."
+    enough: "Die gewählten Namen der Methoden größtenteils Ok."
+    smellComment: "Name der Methode beschreibt nicht, was diese macht"
+    quantifier: 5
+  - id: miscReasonError
+    text: "Sonstige Anmerkung"
+    category: intelligibility
+    bad: "Weitere Anmerkungen vorhanden."
+    enough: "Weitere Anmerkungen vorhanden."
+    smellComment: ""
+    quantifier: 4
+- id: methodUnderstandable
+  question: "Sind die Methoden verständlich?"
+  issues:
+  - id: methodToLong
+    text: "Methode zu lang"
+    category: intelligibility
+    bad: "Auf Länge von Methoden und Klassen achten. Diese sollten nicht zu lange gewählt werden."
+    enough: "Auf Länge von Methoden und Klassen achten. Diese sollten nicht zu lange gewählt werden."
+    smellComment: "Methode/Klasse aufteilen, da zu lang"
+    quantifier: 3
+  - id: methodToKomplex
+    text: "Methode zu komplex / verschachtelt"
+    category: intelligibility
+    bad: "Die Komplexität des Quellcodes ist zu hoch. Darauf achten, dass diese reduziert wird, indem zum Beispiel Code auf mehrere kleine Methoden verteilt wird. Nur so können andere den Code schnell verstehen."
+    enough: "Die Komplexität einzelner Methoden/Klassen ist Grenzwertig. Darauf achten, dass die Kompläxitet nicht zu groß wird. Nur so können andere den Code schnell verstehen."
+    smellComment: "Methoden/Klassen aufteilen, da die Komplexität zu hoch ist"
+    quantifier: 5
+  - id: methodContainsUnusedCode
+    text: "Methode enthält unbenutzten Code"
+    category: intelligibility
+    bad: "Nicht verwendeter Code vorhanden. Dieser sollte gelöscht werden."
+    enough: "Nicht verwendeter Code vorhanden. Dieser sollte gelöscht werden."
+    smellComment: "Der Code kann gelöscht werden, da dieser nicht verwendet wird."
+    quantifier: 3
+  - id: methodUnused
+    text: "Methode unbenutzt"
+    category: intelligibility
+    bad: "Nicht verwendeter Code vorhanden. Dieser sollte gelöscht werden."
+    enough: "Nicht verwendeter Code vorhanden. Dieser sollte gelöscht werden."
+    smellComment: "Der Code kann gelöscht werden, da dieser nicht verwendet wird."
+    quantifier: 3
+  - id: methodContainsDuplicate
+    text: "Methode enthält Codeduplikat"
+    category: intelligibility
+    bad: "Darauf achten, dass unnötige Codeduplikate vermieden werden."
+    enough: "Wenige Codestellen wurden dupliziert."
+    smellComment: "Codeduplikat entfernen"
+    quantifier: 3
+  - id: methodCouldBeExtracted
+    text: "Methode könnte extrahiert werden"
+    category: intelligibility
+    bad: "Methoden könnten in mehrere kleinere Methoden zerlegt werden."
+    enough: "Teilweise könnten Methoden in mehrere kleinere Methoden zerlegt werden."
+    smellComment: "Diesen Teil in eigene Methode verschieben (Refactoring: Extract Method)"
+    quantifier: 3
+  - id: methodContainsLongRow
+    text: "Zeile auf mehrere aufteilen"
+    category: intelligibility
+    bad: "Zeilen sollten nicht zu lange sein. Lieber auf mehrere aufteilen."
+    enough: "Teilweise könnten Zeilen in mehrere zerlegt werden."
+    smellComment: "Diese Zeile in mehrere Zeilen zerlegen"
+    quantifier: 3
+  - id: miscMethodUnderstandingError
+    text: "Sonstige Anmerkung"
+    category: intelligibility
+    bad: "Weitere Anmerkungen vorhanden."
+    enough: "Weitere Anmerkungen vorhanden."
+    smellComment: ""
+    quantifier: 4
+- id: comments
+  question: "Ist die Verwendung von Kommentaren sauber?"
+  issues:
+  - id: commentedCode
+    text: "Auskommentierter Code vorhanden"
+    category: readability
+    bad: "Auskommentierter Quellcode vorhanden. Löschen statt auskommentieren."
+    enough: "Etwas auskommentierter Quellcode vorhanden. Löschen statt auskommentieren."
+    smellComment: "Auskommentierter Code löschen"
+    quantifier: 2
+  - id: missingComment
+    text: "Code benötigt weitere Kommentare"
+    category: readability
+    bad: "Einige Bereiche im Code sind unklar. Mit Hilfe von Kommentaren könnte an diesen Stellen das 'wieso' erklärt werden."
+    enough: "Stellenweiße ist das 'wieso' im Code unklar. Kommentare könnten hier helfen."
+    smellComment: "Ein Kommentar würde hier dem Verständnis helfen"
+    quantifier: 2
+  - id: notNeededComment
+    text: "Code sollte für sich selbst sprechen (Kommentar unnötig)"
+    category: readability
+    bad: "Es sind Kommentare vorhanden, die kein Wissen hinzufügen. So können bspw. Kommentare gelöscht werden, die nur den Code beschreiben."
+    enough: "Es sind Kommentare vorhanden, die kein Wissen hinzufügen. So können bspw. Kommentare gelöscht werden, die nur den Code beschreiben."
+    smellComment: "Der Kommentar kann entfallen, da er kein neues Wissen hinzufügt"
+    quantifier: 3
+  - id: miscCommentError
+    text: "Sonstige Anmerkung"
+    category: readability
+    bad: "Weitere Anmerkungen zur Lesbarkeit vorhanden."
+    enough: "Weitere Anmerkungen zur Lesbarkeit vorhanden."
+    smellComment: ""
+    quantifier: 4
+- id: simpleProgrammingIssues
+  question: "Sind einfache Programmierfehler vorhanden?"
+  issues:
+  - id: languageConstructs
+    text: "Sprachkonstrukte einsetzen"
+    category: technicalInsight
+    bad: ""
+    enough: ""
+    smellComment: ""
+    quantifier: 5
+  - id: apiConstructs
+    text: "API-Befehle richtig einsetzen"
+    category: technicalInsight
+    bad: ""
+    enough: ""
+    smellComment: ""
+    quantifier: 2
+  - id: unnededDependencies
+    text: "Code enthält unnötige Abhängigkeiten"
+    category: architecture
+    bad: "Unnötige Abhängigkeiten sollten vermieden werden. Nur so kommt man zu leichtgewichtigem Code der schnell geändert werden kann."
+    enough: "Auf unnötige Abhängigkeiten (z.B. globale Variablen) achten."
+    smellComment: "Die Abhängigkeit sollte aufgelöst werden."
+    quantifier: 4
+  - id: typicalProgrammingErrors
+    text: "Code enthält Programmierfehler"
+    category: technicalInsight
+    bad: ""
+    enough: ""
+    smellComment: ""
+    quantifier: 3
+- id: simpleSolution
+  question: "Wurde eine einfache Lösung gewählt?"
+  issues:
+  - id: toComplex
+    text: "Zu kompliziert (-> KISS)"
+    category: intelligibility
+    bad: "Die Lösung ist sehr umständlich. Bitte eine einfachere Lösung wählen (siehe KISS)"
+    enough: "Die gewählte Lösung könnte etwas vereinfacht werden."
+    smellComment: "Dieser Code kann vereinfacht werden."
+    quantifier: 4
+  - id: notNeeded
+    text: "Implementierung unnötige (-> YAGNI)"
+    category: intelligibility
+    bad: "Der Quellcode enthält nicht benötigte bzw. geforderte Funktionalität. Bitte auch darauf achten, dass nur die vom Kunden geforderte Funktionen implementiert werden."
+    enough: "Der Quellcode enthält nicht benötigte bzw. geforderte Funktionalität. Bitte auch darauf achten, dass nur die vom Kunden geforderte Funktionen implementiert werden."
+    smellComment: "Dieser Codeteil wird nicht benötigt"
+    quantifier: 4
+  - id: unnededOptimizations
+    text: "Unnötige Performanceoptimierung"
+    category: intelligibility
+    bad: "Unnötige Optimierungen (Performance..) sollten vermieden werden, da sie die Komplexität des Code unnötig erhöhen."
+    enough: "Bitte darauf achten, dass keine unnötigen Optimierungen gemacht werden."
+    smellComment: "Hier wurde eine unnötige Performanceoptimierung durchgeführt"
+    quantifier: 2
+  - id: designPatternNotNeeded
+    text: "Design Pattern falsch eingesetzt"
+    category: architecture
+    bad: ""
+    enough: ""
+    smellComment: ""
+    quantifier: 2
+  - id: useDesignPattern
+    text: "Design Pattern würde den Code vereinfachen"
+    category: architecture
+    bad: ""
+    enough: ""
+    smellComment: ""
+    quantifier: 2
+  - id: miscArchectureError1
+    text: "Sonstige Anmerkung"
+    category: architecture
+    bad: "Weitere Anmerkungen vorhanden."
+    enough: "Weitere Anmerkungen vorhanden."
+    smellComment: ""
+    quantifier: 4
+- id: advancedProgrammingIssues
+  question: "Sind fortgeschrittene Programmierfehler vorhanden?"
+  issues:
+  - id: missingExceptionHandling
+    text: "Keine passende Fehlerbehandlung"
+    category: technicalInsight
+    bad: ""
+    enough: ""
+    smellComment: ""
+    quantifier: 2
+  - id: resourceLeaks
+    text: "Resourcen werden nicht korrekt freigegeben"
+    category: technicalInsight
+    bad: ""
+    enough: ""
+    smellComment: ""
+    quantifier: 2
+  - id: performanceIssues
+    text: "Performance-Probleme vorhanden"
+    category: technicalInsight
+    bad: ""
+    enough: ""
+    smellComment: ""
+    quantifier: 2
+  - id: inheritIssue
+    text: "Es wird ohne Grund vererbt"
+    category: architecture
+    bad: "Unnötige Vererbung vermeiden, da dies zu einer starke Abhängigkeit zwischen Klassen führt."
+    enough: "Vererbung nur dann einsetzen, wenn diese Sinn macht."
+    smellComment: "Hierfür sollte keine Vererbung verwendet werden. Besser Ansätze wie Aggregation wählen."
+    quantifier: 2
+  - id: liskovIssue
+    text: "Liskovsche Substitutionsprinzip verletzt"
+    category: architecture
+    bad: "Das LSP wird verletzt. Der Sohn sollte auch an die Stelle seines Vaters treten können. Dabei muss er die Verträge des Vaters einhalten."
+    enough: "Das LSP wird gelegentlich verletzt. Der Sohn sollte auch an die Stelle seines Vaters treten können. Dabei muss er die Verträge des Vaters einhalten."
+    smellComment: "Das Liskovsche Substitutionsprinzip wird hier verletzt."
+    quantifier: 2
+- id: codeBaseUnderstandable
+  question: "Ist der Gesamtcode verständlich?"
+  issues:
+  - id: badDistribution
+    text: "Es fehlt eine saubere Aufteilung"
+    category: intelligibility
+    bad: "Die Funktionen/Klassen sollten auf mehrere Dateien aufgeteilt werden. Am besten gruppiert nach Themengebiet."
+    enough: "Die Funktionen/Klassen sollten auf mehrere Dateien aufgeteilt werden. Am besten gruppiert nach Themengebiet."
+    smellComment: "Kann in eigene Datei verschoben werden"
+    quantifier: 4
+  - id: hardcoding
+    text: "Es wurden Werte hardcodiert (Magic Numbers)"
+    category: intelligibility
+    bad: "Auf die Hardcodierung von Werten (=Magic Numbers) sollte verzichtet werden. Besser sprechende Konstanten oder Aufzählungen einführen."
+    enough: "Einzelne Werte sind hargecodet (=Magic Numbers) und sollten durch Konstanten oder ähnliches ersetzt werden."
+    smellComment: "Folgender Wert wurde hardcodiert (=Magic Number)"
+    quantifier: 2
+  - id: differentResponsibilities
+    text: "Funktionseinheiten haben unterschiedliche Aufgaben (-> SRP)"
+    category: architecture
+    bad: "Darauf achten, dass Methoden und Klassen jeweils nur eine Aufgabe haben. Dies fördert die Entkopplung des Quellcodes. (Siehe Single Responsibility Principle)"
+    enough: "Darauf achten, dass Methoden und Klassen jeweils nur eine Aufgabe haben. Dies fördert die Entkopplung des Quellcodes. (Siehe Single Responsibility Principle)"
+    smellComment: "Diese Methode/Klasse verletzt das SRP"
+    quantifier: 6
+  - id: codeContainsSideEffects
+    text: "Der Code enthält Seiteneffekte (-> PLA)"
+    category: architecture
+    bad: "Darauf achten, dass Methoden nur das tun, was man auch erwartet. Siehe Principle Of Least Astonishment"
+    enough: "Nicht alle Methoden sind leicht zu verstehen, da diese nicht erwartete Nebeneffekte besitzen (Siehe Principle Of Least Astonishment)."
+    smellComment: "Diese Methode verletzt das PLA."
+    quantifier: 2
+  - id: codeContainsDifferentLevels
+    text: "Der Code ist auf unterschiedlichen Ebenen (-> SLA)"
+    category: architecture
+    bad: "Darauf achten, dass Methoden nur das tun, was man auch erwartet. Siehe Principle Of Least Astonishment"
+    enough: "Nicht alle Methoden sind leicht zu verstehen, da diese nicht erwartete Nebeneffekte besitzen (Siehe Principle Of Least Astonishment)."
+    smellComment: "Diese Methode verletzt das PLA."
+    quantifier: 2
+  - id: segregationError
+    text: "Interface Segregation Principle verletzt"
+    category: architecture
+    bad: ""
+    enough: ""
+    smellComment: ""
+    quantifier: 2
+  - id: miscArchectureError2
+    text: "Sonstige Anmerkung"
+    category: architecture
+    bad: "Weitere Anmerkungen vorhanden."
+    enough: "Weitere Anmerkungen vorhanden."
+    smellComment: ""
+    quantifier: 4
+- id: testable
+  question: "Ist der Code testbar?"
+  issues:
+  - id: notTestable
+    text: "Der Code ist nicht testbar..."
+    category: testing
+    bad: "Der Code ist in der aktuellen Form nicht durch automatisierte Unittests testbar."
+    enough: "Der Code kann größtenteils getestet werden."
+    smellComment: ""
+    quantifier: 9
+  - id: dependencyPreventsTesting
+    text: "Abhängigkeit verhindert Testen (-> DIP)"
+    category: testing
+    bad: "Der Code ist in der aktuellen Form nicht durch automatisierte Unittests testbar."
+    enough: "Der Code kann größtenteils getestet werden."
+    smellComment: ""
+    quantifier: 9
+categories:
+- id: readability
+  title: Lesbarkeit
+  description: "Code wird häufiger gelesen als geschrieben. Nur wenn der Code gut lesbar ist, können andere sich schnell einfinden.\n \n Darunter fallen Fragen wie:\n \n * Ist der Code sauber formatiert?\n * Werden Kommentare richtig angewendet? Gibt es auskommentierten Code? [[Code Konventionen]](http://clean-code-developer.de/die-grade/orangener-grad/#Source_Code_Konventionen)\n * Stimmt die Aufteilung? Oder ist alles in einer Datei?\n * ...\n \n"
+  quantifier: 1
+- id: intelligibility
+  title: Verständlichkeit
+  description: "Nur mit einer sauberen Struktur, wird auch sauber gearbeitet.\n \n Darunter fallen Fragen wie:\n \n * Wurde auf eine verständliche Namensgebung geachtet? [[Code Konventionen]](http://clean-code-developer.de/die-grade/orangener-grad/#Source_Code_Konventionen)\n * Gibt es unnötige Codeduplikate? Gibt es nicht benötigter Code? [[DRY]](http://clean-code-developer.de/die-grade/roter-grad/#Dont_Repeat_Yourself_DRY)\n * Liegt die Komplexität im Rahmen? [[LoC]](https://de.wikipedia.org/wiki/Lines_of_Code) oder [[CC]](https://de.wikipedia.org/wiki/McCabe-Metrik)\n * Wurde eine einfache Lösung gewählt? [[KISS]](http://clean-code-developer.de/die-grade/roter-grad/#Keep_it_simple_stupid_KISS)\n * Wurde kein unnötiger Code geschrieben? [[YAGNI]](http://clean-code-developer.de/die-grade/blauer-grad/#You_Aint_Gonna_Need_It_YAGNI)\n * Wurden keine unnötigen Optimierungen durchgeführt? [[Premature Optimization]](http://clean-code-developer.de/die-grade/roter-grad/#Vorsicht_vor_Optimierungen)\n\
+    \ * ...\n \n"
+  quantifier: 2
+- id: architecture
+  title: Architektur
+  description: "Ein modularer Aufbau, ist nicht nur für die Weiterentwicklungsfähigkeit ein wichtiges Kriterium, sondern hilft auch Außenstehende sich schnell in das System einzuarbeiten.\n \n Fragen die darunter fallen:\n \n * Hat jede Funktionseinheit (Methode, Klasse etc.) nur eine Aufgabe? [[SRP]](http://clean-code-developer.de/die-grade/orangener-grad/#Single_Responsibility_Principle_SRP)\n * Gibt es unnötige Abhängigkeiten (z.B. Globale Variablen)? [[Minimiere Abhängigkeiten]](http://clean-code-developer.de/die-tugenden/#4_Minimiere_Abhngigkeiten_Minimize_Dependencies_MD)\n * Wird ohne Grund vererbt? [[Favour Composition over Inheritance]](http://clean-code-developer.de/die-grade/roter-grad/#Favour_Composition_over_Inheritance_FCoI)\n * ...\n \n"
+  quantifier: 2
+- id: testing
+  title: Testen
+  description: "Nur mit automatisierten Unittests können Änderungen gefahrlos durchgeführt werden. Dabei ist es zweitrangig wann diese (Test First oder Test After) erstellt werden.\n \n Zu stellende Fragen:\n \n * Sind Unit Tests vorhanden? [[Unit Tests]](http://clean-code-developer.de/die-grade/gelber-grad/#Automatisierte_Unit_Tests)\n * Ist der Code so aufgebaut, dass er getestet werden kann?\n \n"
+  quantifier: 1
+- id: technicalInsight
+  title: Technisches Verständnis
+  description: "Ein technisches Verständnis für die eingesetzten Werkzeuge ist notwendig um Effizient zu seinem Ergebnis zu kommen.\n \n Fragenkatalog:\n \n * Werden die von der Programmiersprache gestellten Konstrukte für die Lösung der Aufgabe passend angewendet? (Konstanten statt Magic Numbers, Richtiges behandeln von Exceptions, etc.)\n * Wurde auf typische Programmierfehler geachtet?\n * Wird die von der Programmierplattform zur Verfügung gestellte API sinnvoll verwendet? Kann Code durch bestehenden Code ersetzt werden?\n * ...\n \n"
+  quantifier: 3
