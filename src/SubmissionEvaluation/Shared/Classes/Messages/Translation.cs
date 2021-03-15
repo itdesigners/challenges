@@ -17,12 +17,12 @@ namespace SubmissionEvaluation.Shared.Classes.Messages
                 {ErrorMessages.PasswordNoLower, "Das Passwort benötigt einen Kleinbuchstaben!" },
                 {ErrorMessages.PasswordNoDigit, "Das Passwort benötigt eine Zahl!" },
                 {
-                    ErrorMessages.InvalidFile, 
+                    ErrorMessages.InvalidFile,
                     "Entweder es wurden keine oder ungültige Dateien hochgeladen. Bitte prüfen und nochmals hochladen!"
                 },
                 {
                     ErrorMessages.InvalidJekyllUser,
-                    "Es wurde kein Nutzer mit den entsprechenden Daten im Challenge System gefunden. <br/> Bitte wende dich an den Administrator!"
+                    "Falscher Benutzername oder falsches Passwort."
                 },
                 {ErrorMessages.GenericError, "Es ist ein Fehler aufgetreten! Sollte das Problem weiterhin bestehen, wende dich an den Administrator."},
                 {ErrorMessages.ChallengeNameSpaces, "Der Projektname darf keine Leerstellen enthalten"},
