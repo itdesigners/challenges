@@ -16,96 +16,102 @@
         {
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="d-none d-xl-block">
-
                 <a class="navbar-brand my-auto" href="/Tasks">Challenges</a>
-                @if (isLoggedin && !seesAdminMenu)
-                {
-                    <p class="navbar-text my-auto">Die Programmierplattform</p>
-                }
+                <p class="navbar-text my-auto">Die Programmierplattform</p>
             </div>
-            <div>
-                @if (IsMaintenanceMode)
-                {
-                    <p class="navbar-text my-auto" style="color: orangered">Wartungsmodus aktiv</p>
-                }
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
 
+            @if (IsMaintenanceMode) {
+                <div>
+                    <p class="navbar-text my-auto" style="color: orangered">Wartungsmodus aktiv</p>
+                </div>
+            }
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="navbar-collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href="/Tasks" Match=NavLinkMatch.All>
-                            <span class="oi oi-home"></span> Aufgaben
-                        </NavLink>
-                    </li>
-                    @if (Features.EnableRating || PermissionHelper.CheckPermissions(Actions.VIEW, "Members", Permissions))
-                    {
-                        <li class="nav-item">
-                            <NavLink class="nav-link" href="Members/List">
-                                <span class="oi oi-bar-chart"></span> Mitglieder
-                            </NavLink>
-                        </li>
-                    }
-                    @if (Features.EnableReview && PermissionHelper.CheckPermissions(Actions.VIEW, "Review", Permissions))
-                    {
-                        <li class="nav-item">
-                            <NavLink class="nav-link" href="Review/Overview">
-                                <span class="oi oi-person"></span> Reviews
-                            </NavLink>
-                        </li>
-                    }
-                    <li class="nav-item">
-                        <NavLink class="nav-link" href="Help/ViewPage">
-                            <span class="oi oi-question-mark"></span> Hilfe
-                        </NavLink>
-                    </li>
-                    <li class="nav-item d-none d-md-block">
-                        <div style="position: relative" class="nav-link">
-                            <input type="text" class="form-control" id="searchBar" placeholder="Search..." @onkeyup="FetchSearchResults" @bind-value="SearchInput" @bind-value:event="oninput" />
-                            <ul id="searchResults" class="dropdown-menu" style=@($"display: {(Results.Count == 0 ? "none" : "block")}")>
-                                @foreach (var result in Results)
-                                {
-                                    <li class="dropdown-item">
-                                        <button class="fake-link no-styling" @onclick="(e) => ResetSearchResultsAndNavigate(result.Url)">@result.Text</button>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="dropdown nav-item @Profile.navItem">
-                        <button class="dropdown-toggle navdroptext nav-link" type="button" id="ProfileMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="@Profile.expanded" @onclick="Profile.ShowOrHide">
-                            <span class="oi oi-person"></span> Profil <span class="caret"></span>
-                        </button>
-                        <div class="dropdown-menu @Profile.navItem" aria-labelledby="ProfileMenuButton">
-                            @{
-                                if (isLoggedin)
-                                {
-                                    <LogoutMenu UserSettings="@UserSettings" ParentAction="() => {Profile.ShowOrHide(); StateHasChanged(); }" />
-                                }
-                                else
-                                {
-                                    <LoginMenu ParentAction="() => {Profile.ShowOrHide(); StateHasChanged(); }" />
-                                }
-                            }
-                        </div>
-                    </li>
 
-                    @if (seesAdminMenu)
-                    {
-                        <li class="dropdown nav-item @Administration.navItem">
-                            <button class="dropdown-toggle navdroptext nav-link" type="button" id="AdminMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="@Administration.expanded" @onclick="Administration.ShowOrHide">
-                                <span class="oi oi-wrench"></span> Verwalten <span class="caret"></span>
-                            </button>
-                            <div class="dropdown-menu @Administration.navItem" aria-labelledby="AdminMenuButton">
-                                <AdminMenu Permissions="Permissions" ParentAction="() => {Administration.ShowOrHide(); StateHasChanged(); }" />
+                    @if (isLoggedin) {
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="/Tasks" Match=NavLinkMatch.All>
+                                <span class="oi oi-home"></span> Aufgaben
+                            </NavLink>
+                        </li>
+
+                        @if (Features.EnableRating || PermissionHelper.CheckPermissions(Actions.VIEW, "Members", Permissions))
+                        {
+                            <li class="nav-item">
+                                <NavLink class="nav-link" href="Members/List">
+                                    <span class="oi oi-bar-chart"></span> Mitglieder
+                                </NavLink>
+                            </li>
+                        }
+
+                        @if (Features.EnableReview && PermissionHelper.CheckPermissions(Actions.VIEW, "Review", Permissions))
+                        {
+                            <li class="nav-item">
+                                <NavLink class="nav-link" href="Review/Overview">
+                                    <span class="oi oi-person"></span> Reviews
+                                </NavLink>
+                            </li>
+                        }
+
+                        <li class="nav-item">
+                            <NavLink class="nav-link" href="Help/ViewPage">
+                                <span class="oi oi-question-mark"></span> Hilfe
+                            </NavLink>
+                        </li>
+
+                        <li class="nav-item d-none d-md-block">
+                            <div style="position: relative" class="nav-link">
+                                <input type="text" class="form-control" id="searchBar" placeholder="Search..." @onkeyup="FetchSearchResults" @bind-value="SearchInput" @bind-value:event="oninput" />
+                                <ul id="searchResults" class="dropdown-menu" style=@($"display: {(Results.Count == 0 ? "none" : "block")}")>
+                                    @foreach (var result in Results)
+                                    {
+                                        <li class="dropdown-item">
+                                            <button class="fake-link no-styling" @onclick="(e) => ResetSearchResultsAndNavigate(result.Url)">@result.Text</button>
+                                        </li>
+                                    }
+                                </ul>
                             </div>
                         </li>
-                    }
-                    @* todo> update layout & links
+
+                        <li class="dropdown nav-item @Profile.navItem">
+                            <button class="dropdown-toggle navdroptext nav-link" type="button" id="ProfileMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="@Profile.expanded" @onclick="Profile.ShowOrHide">
+                                <span class="oi oi-person"></span> Profil <span class="caret"></span>
+                            </button>
+                            <div class="dropdown-menu @Profile.navItem" aria-labelledby="ProfileMenuButton">
+                                @{
+                                    if (isLoggedin)
+                                    {
+                                        <LogoutMenu UserSettings="@UserSettings" ParentAction="() => {Profile.ShowOrHide(); StateHasChanged(); }" />
+                                    }
+                                    else
+                                    {
+                                        <LoginMenu ParentAction="() => {Profile.ShowOrHide(); StateHasChanged(); }" />
+                                    }
+                                }
+                            </div>
+                        </li>
+
+                        @if (seesAdminMenu)
+                        {
+                            <li class="dropdown nav-item @Administration.navItem">
+                                <button class="dropdown-toggle navdroptext nav-link" type="button" id="AdminMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="@Administration.expanded" @onclick="Administration.ShowOrHide">
+                                    <span class="oi oi-wrench"></span> Verwalten <span class="caret"></span>
+                                </button>
+                                <div class="dropdown-menu @Administration.navItem" aria-labelledby="AdminMenuButton">
+                                    <AdminMenu Permissions="Permissions" ParentAction="() => {Administration.ShowOrHide(); StateHasChanged(); }" />
+                                </div>
+                            </li>
+                        }
+
+                        @* todo> update layout & links
                         @if (isLoggedin)
                         {
                             <Notification navItem="@Notifications.navItem" expanded="@Notifications.expanded" />
                         }*@
+                    }
+
                     <li class="nav-item d-none d-sm-block">
                         <a href="https://karriere.it-designers.de/#itdesigners">
                             <img class="hidden-xs" src="images/logo.jpg" style="width: 104px" />
@@ -114,7 +120,6 @@
                 </ul>
             </div>
         }
-        <!-- /.container-fluid -->
     </div>
 </nav>
 
@@ -133,26 +138,25 @@
     string SearchInput { get; set; } = string.Empty;
     bool IsMaintenanceMode { get; set; }
 
-    protected override void OnInitialized()
-    {
+    protected override void OnInitialized() {
         loginService.OnLoginChange += UpdateUserSettingsAndPermissions;
         maintenanceService.OnMaintenanceChange += UpdateCurrentMaintenanceState;
         UpdateUserSettingsAndPermissions();
         UpdateCurrentMaintenanceState();
     }
+
     void ResetSearchResultsAndNavigate(string Url) {
-            Results = new List<SearchResult>();
-            SearchInput = string.Empty;
-            navi.NavigateTo(Url, true);
+        Results = new List<SearchResult>();
+        SearchInput = string.Empty;
+        navi.NavigateTo(Url, true);
     }
-    protected async void UpdateUserSettingsAndPermissions()
-    {
+
+    protected async void UpdateUserSettingsAndPermissions() {
         UserSettings = await httpClient.GetFromJsonAsync<SettingsModel>("api/Account/getusersettings");
         Permissions = await httpClient.GetFromJsonAsync<Permissions>("api/Members/Permissions");
         var viewPermissions = Permissions.ViewPermissions;
         seesAdminMenu = Permissions.isAdmin || viewPermissions.Contains("Users") || viewPermissions.Contains("Challenges") || viewPermissions.Contains("Bundles") || viewPermissions.Contains("Groups");
-        if (UserSettings.Roles == null)
-        {
+        if (UserSettings.Roles == null) {
             UserSettings.Roles = new List<string>();
         }
         Features = await httpClient.GetFromJsonAsync<FeatureSettings>("api/Account/getSettings");

@@ -4,7 +4,7 @@ using SubmissionEvaluation.Shared.Models.Shared;
 
 namespace SubmissionEvaluation.Client
 {
-    public class InputButtonHelper
+    public static class InputButtonHelper
     {
         public static string GetNormalColor()
         {
