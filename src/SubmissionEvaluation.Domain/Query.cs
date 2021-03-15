@@ -325,7 +325,7 @@ namespace SubmissionEvaluation.Domain
         {
             domain.Log.Information("Query: Abfragen der Rangliste für {member}", member.Name);
             var ranklists = domain.StatisticsOperations.GenerateAllChallengeRanklists();
-            var result = domain.StatisticsOperations.BuildSubmitterRanklist(ranklists).FirstOrDefault(p => p.Name == member.Id);
+            var result = domain.StatisticsOperations.BuildSubmitterRanklist(ranklists).Find(p => p.Name == member.Id);
             return result ?? new SubmitterRankings {Name = member.Id, Submissions = new List<SubmitterRankingEntry>()};
         }
 

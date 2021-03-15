@@ -1,17 +1,14 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using SubmissionEvaluation.Contracts.Data;
 using SubmissionEvaluation.Contracts.Data.Ranklist;
 using SubmissionEvaluation.Contracts.Data.Review;
 using SubmissionEvaluation.Contracts.Providers;
 using SubmissionEvaluation.Domain.Comparers;
-using static System.Int32;
 
 namespace SubmissionEvaluation.Domain.Operations
 {
@@ -182,25 +179,23 @@ namespace SubmissionEvaluation.Domain.Operations
 
             var entries = submissions.SelectMany(CreateEntries);
             entries = FilterUnnecessarySubmissionNowFailing(entries);
-            var submitterHistory = new SubmitterHistory {Id = member.Id, Entries = entries.OrderByDescending(x => x.Date).ToList()};
-            return submitterHistory;
+            return new SubmitterHistory {Id = member.Id, Entries = entries.OrderByDescending(x => x.Date).ToList()};
         }
 
         private IEnumerable<HistoryEntry> FilterUnnecessarySubmissionNowFailing(IEnumerable<HistoryEntry> entries)
         {
             var submissionNowFailing = entries.Where(p => p.Type == HistoryType.SubmissionNowFailing);
-            var removedDoubeFailings = submissionNowFailing.GroupBy(p => p.Challenge).Select(p => p.OrderByDescending(q => q.Date).First());
+            var removedDoubleFailings = submissionNowFailing.GroupBy(p => p.Challenge).Select(p => p.OrderByDescending(q => q.Date).First());
             var buffer = entries.Where(p => p.Type != HistoryType.SubmissionNowFailing).ToList();
-            var removeSolvedFailings = removedDoubeFailings.Where(p => !buffer.Any(q => q.Challenge == p.Challenge && q.IsPassed));
+            var removeSolvedFailings = removedDoubleFailings.Where(p => !buffer.Any(q => q.Challenge == p.Challenge && q.IsPassed));
             buffer.AddRange(removeSolvedFailings);
             return buffer;
         }
 
         public List<SubmitterRankings> BuildSubmitterRanklist(List<ChallengeRanklist> ranklists)
         {
-            var result = new Dictionary<string, SubmitterRankings>();
-            foreach (var ranklist in ranklists)
-            { 
+            var result = new ConcurrentDictionary<string, SubmitterRankings>();
+            Parallel.ForEach(ranklists, ranklist => {
                 foreach (var submitter in ranklist.Submitters)
                 {
                     if (!result.ContainsKey(submitter.Id))
@@ -217,8 +212,7 @@ namespace SubmissionEvaluation.Domain.Operations
                         DuplicateScore = submitter.DuplicateScore
                     });
                 }
-            }
-
+            });
             return result.Values.ToList();
         }
         public GlobalRanklist BuildGlobalRanklist(IEnumerable<ChallengeRanklist> ranklists, GlobalRanklist oldRanklist)
@@ -284,7 +278,7 @@ namespace SubmissionEvaluation.Domain.Operations
         private void DetermineMemberRankings(ref GlobalRanklist ranklist, GlobalRanklist oldRanklist)
         {
             // Number of days without ranking changes before LastPeriodRank gets reset
-            var daysWithoutRankingChangeThreshold = 3;
+            const int daysWithoutRankingChangeThreshold = 3;
 
             var sortedList = ranklist.Submitters.OrderByDescending(x => x.Points).ToList();
             var rank = 0;
@@ -391,7 +385,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 period = SemesterPeriod.WS;
                 year = $"{date:yy}/{date.AddYears(1):yy}";
                 firstDay = ParseDate($"01.08.{date:yyyy}");
-                var lastDayString = "";
+                string lastDayString;
                 if (DateTime.IsLeapYear(date.AddYears(1).Year))
                 {
                     lastDayString = $"29.02.{date.AddYears(1):yyyy}";
@@ -419,8 +413,8 @@ namespace SubmissionEvaluation.Domain.Operations
             var authorId = MemberProvider.GetMemberById(challengeProperties.AuthorID)?.Id;
             var excludeAuthor = results.Where(x => x.MemberId != authorId).ToList();
             var onlyAuthor = results.Where(x => x.MemberId == authorId).ToList();
-            var ranklist = BuildRanklistFromSumbissions(challengeProperties, excludeAuthor, rater, ratingPoints);
-            var authorRanklist = BuildRanklistFromSumbissions(challengeProperties, onlyAuthor, rater, ratingPoints);
+            var ranklist = BuildRanklistFromSubmissions(challengeProperties, excludeAuthor, rater, ratingPoints);
+            var authorRanklist = BuildRanklistFromSubmissions(challengeProperties, onlyAuthor, rater, ratingPoints);
             AddAuthorsToRanklist(authorRanklist, ranklist);
             return ranklist;
         }
@@ -459,7 +453,7 @@ namespace SubmissionEvaluation.Domain.Operations
             }
         }
 
-        public ChallengeRanklist BuildRanklistFromSumbissions(IChallenge challenge, IList<Result> results, ISubmissionRater rater, RatingPoints ratingPoints)
+        public ChallengeRanklist BuildRanklistFromSubmissions(IChallenge challenge, IList<Result> results, ISubmissionRater rater, RatingPoints ratingPoints)
         {
             var ranklist = new ChallengeRanklist {Challenge = challenge.Id};
             var submitters = results.Where(x => x.IsPassed).Select(x => new SubmissionEntry
@@ -477,8 +471,7 @@ namespace SubmissionEvaluation.Domain.Operations
             }).OrderByDescending(x => x, rater).ThenByDescending(x => x.Rating).ToList();
             var solvedCounter = new List<string>();
 
-            var grouped = submitters.GroupBy(x => x.Id);
-            foreach (var submitter in grouped)
+            foreach (var submitter in submitters.GroupBy(x => x.Id))
             {
                 var bestEntry = submitter.First();
                 var otherLanguages = results.Where(x => x.IsPassed && x.MemberId == bestEntry.Id).Where(x => x.Language != bestEntry.Language)

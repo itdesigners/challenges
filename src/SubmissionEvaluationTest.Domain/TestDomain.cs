@@ -65,7 +65,7 @@ namespace SubmissionEvaluationTest.Domain
 
             var memberProvider = Substitute.For<IMemberProvider>();
             memberProvider.GetMemberById(Arg.Any<string>()).Returns(x => new Member {Id = x.Arg<string>(), Name = x.Arg<string>()});
-            memberProvider.GetMembers().Returns(x => new List<IMember> {new Member {Id = "User1"}, new Member {Id = "User2"}});
+            memberProvider.GetMembers().Returns(_ => new List<IMember> {new Member {Id = "User1"}, new Member {Id = "User2"}});
             var builder = new StatisticsOperations {MemberProvider = memberProvider, Compilers = new List<ICompiler>()};
             var result = builder.BuildGlobalRanklist(ranklists, new GlobalRanklist());
             var submitter = result.Submitters.Single(x => x.Id == "User1");
@@ -85,7 +85,7 @@ namespace SubmissionEvaluationTest.Domain
 
             var memberProvider = Substitute.For<IMemberProvider>();
             memberProvider.GetMemberById(Arg.Any<string>()).Returns(x => new Member {Id = x.Arg<string>(), Name = x.Arg<string>()});
-            memberProvider.GetMembers().Returns(x => new List<IMember> {new Member {Id = "User1"}, new Member {Id = "User2"}, new Member {Id = "User3"}});
+            memberProvider.GetMembers().Returns(_ => new List<IMember> {new Member {Id = "User1"}, new Member {Id = "User2"}, new Member {Id = "User3"}});
             var builder = new StatisticsOperations {MemberProvider = memberProvider, Compilers = new List<ICompiler>()};
             var result = builder.BuildGlobalRanklist(ranklists, new GlobalRanklist());
 
@@ -114,7 +114,7 @@ namespace SubmissionEvaluationTest.Domain
             rater.WhenForAnyArgs(x => x.UpdateRanking(Arg.Any<List<SubmissionEntry>>())).Do(x => x.Arg<List<SubmissionEntry>>().ForEach(y => y.Rank = 1));
 
             var builder = new StatisticsOperations();
-            var result = builder.BuildRanklistFromSumbissions(new Challenge {Id = ""}, ranklists, rater, new RatingPoints(1, 1, 1));
+            var result = builder.BuildRanklistFromSubmissions(new Challenge {Id = ""}, ranklists, rater, new RatingPoints(1, 1, 1));
             var submitter = result.Submitters[0];
             Assert.AreEqual("User1", submitter.Id);
             Assert.AreEqual(5, submitter.Points);
@@ -125,7 +125,7 @@ namespace SubmissionEvaluationTest.Domain
         }
 
         [Test]
-        public void BuildRanklistFromSumbissions_Should_Count_Submissions_Correctly_When_Failed_Submissions_Are_Passed()
+        public void BuildRanklistFromSubmissions_Should_Count_Submissions_Correctly_When_Failed_Submissions_Are_Passed()
         {
             IList<Result> ranklists = new List<Result>
             {
@@ -138,7 +138,7 @@ namespace SubmissionEvaluationTest.Domain
                 x.Arg<List<SubmissionEntry>>().ForEach(y => y.Rank = y.Exectime));
 
             var builder = new StatisticsOperations();
-            var result = builder.BuildRanklistFromSumbissions(new Challenge {Id = ""}, ranklists, rater, new RatingPoints(1, 1, 1));
+            var result = builder.BuildRanklistFromSubmissions(new Challenge {Id = ""}, ranklists, rater, new RatingPoints(1, 1, 1));
             Assert.AreEqual(2, result.Submitters[0].SubmissionCount);
         }
 
@@ -155,7 +155,7 @@ namespace SubmissionEvaluationTest.Domain
                 x.Arg<List<SubmissionEntry>>().ForEach(y => y.Rank = y.Exectime));
 
             var builder = new StatisticsOperations();
-            var result = builder.BuildRanklistFromSumbissions(new Challenge {Id = ""}, ranklists, rater, new RatingPoints(1, 1, 1));
+            var result = builder.BuildRanklistFromSubmissions(new Challenge {Id = ""}, ranklists, rater, new RatingPoints(1, 1, 1));
             Assert.AreEqual("User2", result.Submitters[0].Id);
             Assert.AreEqual("User1", result.Submitters[1].Id);
         }
@@ -173,7 +173,7 @@ namespace SubmissionEvaluationTest.Domain
                 x.ArgAt<SubmissionEntry>(1).Exectime - x.ArgAt<SubmissionEntry>(0).Exectime);
 
             var builder = new StatisticsOperations();
-            var result = builder.BuildRanklistFromSumbissions(new Challenge {Id = ""}, ranklists, rater, new RatingPoints(1, 1, 1));
+            var result = builder.BuildRanklistFromSubmissions(new Challenge {Id = ""}, ranklists, rater, new RatingPoints(1, 1, 1));
             Assert.AreEqual(1, result.Submitters[0].Exectime);
         }
 

@@ -121,8 +121,12 @@
         Model = await HttpClient.GetFromJsonAsync<SettingsModel>("api/Account/getusersettings");
         Features = await HttpClient.GetFromJsonAsync<FeatureSettings>("api/Account/getSettings");
         CustomSettings = await HttpClient.GetFromJsonAsync<CustomizationSettingsClient>("api/Account/GetCustomSettings");
-        Achievements = await HttpClient.GetFromJsonAsync<List<Achievement>>("api/Members/GetAchievements");
+        StateHasChanged();
+    }
+
+    protected override async Task OnInitializedAsync() {
         Points = await HttpClient.GetFromJsonAsync<List<SubmitterRankingEntry>>("api/Account/PointsList");
+        Achievements = await HttpClient.GetFromJsonAsync<List<Achievement>>("api/Members/GetAchievements");
         StateHasChanged();
     }
 
