@@ -39,8 +39,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubmissionEvaluationTest.Do
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubmissionEvaluationTest.Domain", "SubmissionEvaluationTest.Domain\SubmissionEvaluationTest.Domain.csproj", "{114A3AC3-64AB-4EBE-B2B1-5DD2B848586F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testrunner", "Testrunner\Testrunner.csproj", "{B6EDE81D-16AC-4697-8351-E3A7AE6B5F98}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubmissionEvaluation.Providers.CryptographyProvider", "SubmissionEvaluation.Providers.CryptographyProvider\SubmissionEvaluation.Providers.CryptographyProvider.csproj", "{256DEC85-629F-4CAA-A857-C23CC612B258}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SubmissionEvaluationTest.Markdown", "SubmissionEvaluationTest.Markdown\SubmissionEvaluationTest.Markdown.csproj", "{88E71D34-3B99-4961-9766-ACF808DC8765}"
@@ -111,10 +109,6 @@ Global
 		{114A3AC3-64AB-4EBE-B2B1-5DD2B848586F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{114A3AC3-64AB-4EBE-B2B1-5DD2B848586F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{114A3AC3-64AB-4EBE-B2B1-5DD2B848586F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B6EDE81D-16AC-4697-8351-E3A7AE6B5F98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B6EDE81D-16AC-4697-8351-E3A7AE6B5F98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B6EDE81D-16AC-4697-8351-E3A7AE6B5F98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B6EDE81D-16AC-4697-8351-E3A7AE6B5F98}.Release|Any CPU.Build.0 = Release|Any CPU
 		{256DEC85-629F-4CAA-A857-C23CC612B258}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{256DEC85-629F-4CAA-A857-C23CC612B258}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{256DEC85-629F-4CAA-A857-C23CC612B258}.Release|Any CPU.ActiveCfg = Release|Any CPU
