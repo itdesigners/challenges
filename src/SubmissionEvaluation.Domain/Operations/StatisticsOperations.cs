@@ -26,7 +26,7 @@ namespace SubmissionEvaluation.Domain.Operations
         {
             var oldFeasibilityIndex = challenge.State.FeasibilityIndex;
 
-            var maxFeasibilityIndex = 500000;
+            const int maxFeasibilityIndex = 500000;
             var statePassedCount = challenge.State.PassedCount;
             if (challenge.State.FailedCount > 0 && statePassedCount >= 3)
             {
@@ -436,12 +436,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 return new RatingPoints(1, 2, 3);
             }
 
-            if (challengeProperties.State.DifficultyRating < 90) // Expert
-            {
-                return new RatingPoints(3, 4, 5);
-            }
-
-            return new RatingPoints(6, 7, 8);
+            return new RatingPoints(3, 4, 5);
         }
 
         private static void AddAuthorsToRanklist(ChallengeRanklist authorRanklist, ChallengeRanklist ranklist)
@@ -474,7 +469,7 @@ namespace SubmissionEvaluation.Domain.Operations
             foreach (var submitter in submitters.GroupBy(x => x.Id))
             {
                 var bestEntry = submitter.First();
-                var otherLanguages = results.Where(x => x.IsPassed && x.MemberId == bestEntry.Id).Where(x => x.Language != bestEntry.Language)
+                var otherLanguages = results.Where(x => x.IsPassed && x.MemberId == bestEntry.Id && x.Language != bestEntry.Language)
                     .Select(x => x.Language).Distinct().ToList();
                 solvedCounter.Add(bestEntry.Language);
                 solvedCounter.AddRange(otherLanguages);
@@ -581,7 +576,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 var updated = ProviderStore.FileProvider.LoadChallenge(challengeId, writeLock);
                 var results = ProviderStore.FileProvider.LoadAllSubmissionsFor(updated).ToList();
                 double? lastEst = null;
-                var bundle = bundles.FirstOrDefault(x => x.Challenges.Contains(updated.Id));
+                var bundle = bundles.Find(x => x.Challenges.Contains(updated.Id));
                 if (bundle != null)
                 {
                     lastEstimation.TryGetValue(bundle.Id, out lastEst);
@@ -626,7 +621,7 @@ namespace SubmissionEvaluation.Domain.Operations
         {
             using var writeLock = ProviderStore.FileProvider.GetLock();
             var oldRanklist = ProviderStore.FileProvider.LoadGlobalRanklist(writeLock);
-            var submitter = oldRanklist.Submitters.FirstOrDefault(x => x.Id == member.Id);
+            var submitter = oldRanklist.Submitters.Find(x => x.Id == member.Id);
             if (submitter != null)
             {
                 oldRanklist.Submitters.Remove(submitter);
@@ -637,10 +632,9 @@ namespace SubmissionEvaluation.Domain.Operations
         public void DeleteMemberFromSemesterRanking(IMember member)
         {
             using var writeLock = ProviderStore.FileProvider.GetLock();
-            var oldRanklists = ProviderStore.FileProvider.LoadAllSemesterRanklists();
-            foreach (var oldRanklist in oldRanklists)
+            foreach (var oldRanklist in ProviderStore.FileProvider.LoadAllSemesterRanklists())
             {
-                var submitter = oldRanklist.Submitters.FirstOrDefault(x => x.Id == member.Id);
+                var submitter = oldRanklist.Submitters.Find(x => x.Id == member.Id);
                 if (submitter != null)
                 {
                     oldRanklist.Submitters.Remove(submitter);
@@ -653,8 +647,7 @@ namespace SubmissionEvaluation.Domain.Operations
         {
             var ranklist = new ChallengeRanklist {Challenge = "ChallengeCreators"};
             var members = memberProvider.GetMembers().ToDictionary(x => x.Id);
-            var challenges = ProviderStore.FileProvider.LoadChallenges();
-            foreach (var challenge in challenges)
+            foreach (var challenge in ProviderStore.FileProvider.LoadChallenges())
             {
                 var succeedSubmitters = members.Values.Count(x => x.SolvedChallenges.Contains(challenge.Id));
                 try
@@ -862,7 +855,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 var ctr = 0;
                 foreach (var challenge in sortedByFeasibility)
                 {
-                    challenge.State.DifficultyRating = Math.Min(100, (ctr / groupCount + 1) * 100 / groups);
+                    challenge.State.DifficultyRating = Math.Min(100, ((ctr / groupCount) + 1) * 100 / groups);
                     if (challenge.RatingMethod != RatingMethod.Fixed)
                     {
                         challenge.State.DifficultyRating = Math.Min((int) (1.25 * challenge.State.DifficultyRating), 100);
@@ -877,10 +870,10 @@ namespace SubmissionEvaluation.Domain.Operations
         public static void FixNotSolvedChallengesForMember(IMember member, IFileProvider fileProvider, IMemberProvider memberProvider, ILog log)
         {
             var solved = fileProvider.LoadAllSubmissionsFor(member).Where(x => x.IsPassed).Select(x => x.Challenge).Distinct().ToList();
-            var allSovled = solved.Concat(member.SolvedChallenges).Distinct().ToArray();
-            if (member.SolvedChallenges.Length < allSovled.Length)
+            var allSolved = solved.Concat(member.SolvedChallenges).Distinct().ToArray();
+            if (member.SolvedChallenges.Length < allSolved.Length)
             {
-                memberProvider.UpdateSolvedChallenges(member, allSovled);
+                memberProvider.UpdateSolvedChallenges(member, allSolved);
                 log.Error($"Gelöste Aufgaben wurden für {member.Name} behoben.");
             }
         }
