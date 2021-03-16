@@ -22,7 +22,7 @@
                         }
                         @if (PermissionHelper.CheckPermissions(Actions.EDIT, "Challenges", Permissions, Restriction.CHALLENGES, ChallengeId))
                         {
-                            <a class="btn btn-sm" href="@("Challenges/Edit/" + Model.Name)" style="padding: 2px">
+                            <a class="btn btn-sm" href="@("Challenge/Edit/" + Model.Name)" style="padding: 2px">
                                 <span class="oi oi-pencil"></span>
                             </a>
                         }@if(PermissionHelper.CheckPermissions(Actions.VIEW, "Submissions", Permissions, Restriction.CHALLENGES, ChallengeId)) { 
