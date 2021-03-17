@@ -2,12 +2,16 @@
 @using SubmissionEvaluation.Shared.Models.Admin
 @using System.Net.Http.Json
 @using SubmissionEvaluation.Client.Services
-@inject HttpClient httpClient
-@inject IToastService toaster
-@inject NavigationManager navi
-@inject LoginService loginService
+
+@inject HttpClient HttpClient
+@inject IToastService Toaster
+@inject NavigationManager Navi
+@inject LoginService LoginService
+
 <div id="users-table_wrapper" class="dataTables_wrapper no-footer">
-    <label for="searchInput">Suche: </label><input type="search" id="searchInput" aria-controls="users-table" @onkeypress="StateHasChanged" @bind="searchvalue" placeholder="Suche nach einem Benutzer" />
+    <label for="searchInput">Suche: </label>
+    <input type="search" id="searchInput" aria-controls="users-table" @onkeypress="StateHasChanged" @bind="SearchValue" placeholder="Suche nach einem Benutzer" />
+
     <table id="users-table" class="display table dataTable no-footer" role="grid" aria-describedby="users-table_info">
         <thead>
             <tr>
@@ -34,8 +38,8 @@
         </thead>
         <tbody>
 
-            @foreach (var member in memberships.Members.Where(x => x.Name.ToLower().Contains(searchvalue.ToLower())))
-            {
+        @foreach (var member in Memberships.Members.Where(x => x.Name.ToLower().Contains(SearchValue.ToLower())))
+        {
             <tr>
                 <td>
                     <a class="no-link-coloring" href=@($"Members/Member/{member.Id}")>@(member.Uid.Length > 8 ? member.Uid.Substring(0, 7) + ".." : member.Uid)</a>
@@ -53,8 +57,9 @@
                         <a @onclick="() => ActivatePendingMember(member.Id)" title="Freischalten" class="btn btn-sm">
                             <span class="oi oi-lock-unlocked"></span>
                         </a>
-                    }else
-                     {
+                    }
+                    else
+                    {
                         <a @onclick="() => ImpersonateMember(member.Id)" title="Impersonieren" class="btn btn-sm">
                             <span class="oi oi-person"></span>
                         </a>
@@ -62,37 +67,39 @@
                             <span class="oi oi-people"></span>
                         </a>
                         <a href=@($"Admin/ManageMemberGroups/{member.Id}") title="Gruppen verwalten" class="btn btn-sm">
-                           <span class="oi oi-tags"></span>
+                            <span class="oi oi-tags"></span>
                         </a>
                         <a @onclick="() => IncreaseMemberReviewLevel(member.Id)" title="Reviewlevel anheben" class="btn btn-sm">
-                           <span class="oi oi-arrow-circle-top"></span>
+                            <span class="oi oi-arrow-circle-top"></span>
                         </a>
                         @if (member.Type != MemberType.LDAP)
                         {
-                          <a href=@($"Admin/ConfirmAction/{member.Id}/ResetMemberPassword") title="Passwort zurücksetzen" class="btn btn-sm">
-                             <span class="oi-key oi"></span>
-                          </a>
+                            <a href=@($"Admin/ConfirmAction/{member.Id}/ResetMemberPassword") title="Passwort zurücksetzen" class="btn btn-sm">
+                                <span class="oi-key oi"></span>
+                            </a>
                         }
                         <a href=@($"Admin/ConfirmAction/{member.Id}/DeleteMember") title="Löschen" class="btn btn-sm">
-                           <span class="oi-trash oi"></span>
+                            <span class="oi-trash oi"></span>
                         </a>
-                        }
+                    }
                 </td>
             </tr>
-            }
+        }
         </tbody>
     </table>
 </div>
+
 @code {
     [Parameter]
-    public GroupMemberships<Member> memberships { get; set; }
+    public GroupMemberships<Member> Memberships { get; set; }
     [Parameter]
-    public EventCallback<GroupMemberships<Member>> membershipsChanged { get; set; }
-    string searchvalue { get; set; } = string.Empty;
+    public EventCallback<GroupMemberships<Member>> MembershipsChanged { get; set; }
+
+    string SearchValue { get; set; } = string.Empty;
 
     void Sort(string type)
     {
-        var members = memberships.Members.ToList();
+        var members = Memberships.Members.ToList();
         switch (type)
         {
             case "ID":
@@ -128,47 +135,49 @@
                 members.Sort((x, y) => x.ReviewLevel.CompareTo(y.ReviewLevel));
                 break;
         }
-        memberships.Members = members;
+        Memberships.Members = members;
     }
-    async void ActivatePendingMember(string Id)
+
+    async void ActivatePendingMember(string id)
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<string>("api/Admin/ActivatePendingMember", Id);
-        AdminUserModel<Member> model = new AdminUserModel<Member>();
+        var responseMessage = await HttpClient.PostAsJsonAsync<string>("api/Admin/ActivatePendingMember", id);
+        var model = new AdminUserModel<Member>();
         if (responseMessage.IsSuccessStatusCode)
         {
             model = await responseMessage.Content.ReadFromJsonAsync<AdminUserModel<Member>>();
         }
         if (model.HasSuccess)
         {
-            memberships = model.GroupMemberships.First();
-            await membershipsChanged.InvokeAsync(memberships);
-            toaster.ShowSuccess("Pending member was successfully activated.");
+            Memberships = model.GroupMemberships.First();
+            await MembershipsChanged.InvokeAsync(Memberships);
+            Toaster.ShowSuccess("Pending member was successfully activated.");
         }
         StateHasChanged();
     }
 
-    async void ImpersonateMember(string Id)
+    async void ImpersonateMember(string id)
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<string>("api/Admin/ImpersonateMember", Id);
-        AdminUserModel<Member> model = new AdminUserModel<Member>();
+        var responseMessage = await HttpClient.PostAsJsonAsync<string>("api/Admin/ImpersonateMember", id);
+        var model = new AdminUserModel<Member>();
         if (responseMessage.IsSuccessStatusCode)
         {
             model = await responseMessage.Content.ReadFromJsonAsync<AdminUserModel<Member>>();
         }
         if (model.HasSuccess)
         {
-            loginService.InvokeEvent();
-            navi.NavigateTo("Account/View");
+            LoginService.InvokeEvent();
+            Navi.NavigateTo("Account/View");
         }
     }
-    async void IncreaseMemberReviewLevel(string Id)
+
+    async void IncreaseMemberReviewLevel(string id)
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<string>("api/Admin/IncreaseMemberReviewLevel", Id);
+        var responseMessage = await HttpClient.PostAsJsonAsync<string>("api/Admin/IncreaseMemberReviewLevel", id);
         if (responseMessage.IsSuccessStatusCode)
         {
             var model = await responseMessage.Content.ReadFromJsonAsync<AdminUserModel<Member>>();
-            memberships = model.GroupMemberships.First();
-            await membershipsChanged.InvokeAsync(memberships);
+            Memberships = model.GroupMemberships.First();
+            await MembershipsChanged.InvokeAsync(Memberships);
         }
         StateHasChanged();
     }
