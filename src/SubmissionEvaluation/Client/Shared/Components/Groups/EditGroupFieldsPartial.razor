@@ -5,7 +5,7 @@
 @using Group = SubmissionEvaluation.Contracts.ClientPocos.Group
 @inject HelperService helper
 <div class="row">
-    <div id="settingsCol" class="col-4">
+    <div id="settingsCol" class="col-12">
         <div id="title-group" class="form-group">
             <h4 class="col-form-label">Titel*</h4>
             <InputText @bind-Value="Model.Title" class="form-control"/>
@@ -52,7 +52,6 @@
             </div>
         } else
         {
-            
             <h4 class="col-form-label">Verfügbare Challenges</h4>
             <div class="form-group">
                 <select size="6" @bind="Model.SelectedAvailableChallenge" class="form-control">
@@ -70,13 +69,14 @@
                     <span class="oi-plus oi"></span>
                 </button>
                 <select @bind="Model.SelectedAddAvailableChallenge" class="form-control">
-                    <option value="" selected>Bitte wähle eine Challenge, die du hinzufügen möchtest</option>
+                    <option value="" selected>Weitere verfügbare Challenge hinzufügen</option>
                     @foreach (var challenge in Model.SelectableAvailableChallenges.Where(x => !Model.AvailableChallenges.Contains(x.Id)))
                     {
                         <option value="@challenge.Id" title="@challenge.Id">@challenge.Title</option>
                     }
                 </select>
             </div>
+
             <h4 class="col-form-label">In Reihenfolge erzwungene Challenges</h4>
             <div class="form-group">
                 <select size="6" class="form-control" @bind="Model.SelectedForcedChallenge">
@@ -100,7 +100,7 @@
                     <span class="oi-plus oi"></span>
                 </button>
                 <select class="form-control" @bind="Model.SelectedAddForcedChallenge">
-                    <option value="" selected>Bitte wähle eine Challenge, die du hinzufügen möchtest</option>
+                    <option value="" selected>Weitere erzwunge Challenge hinzufügen</option>
                     @foreach (var challenge in  Model.SelectableForcedChallenges.Where(x => !Model.ForcedChallenges.Contains(x.Title)))
                     {
                         <option value="@challenge.Id" title="@challenge.Title">@challenge.Title</option>
