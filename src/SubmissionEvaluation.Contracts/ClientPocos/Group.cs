@@ -15,10 +15,12 @@ namespace SubmissionEvaluation.Contracts.ClientPocos
             RequiredPoints = group.RequiredPoints;
             Title = group.Title;
             StartDate = group.StartDate;
+            EndDate = group.EndDate;
             GroupAdminIds = group.GroupAdminIds ?? new List<string>();
             IsSuperGroup = group.IsSuperGroup;
             SubGroups = group.SubGroups;
         }
+
 
         public Group()
         {
@@ -37,6 +39,7 @@ namespace SubmissionEvaluation.Contracts.ClientPocos
 
         public int? RequiredPoints { get; set; }
         public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         public bool IsSuperGroup { get; set; }
 

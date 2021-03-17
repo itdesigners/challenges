@@ -540,7 +540,7 @@ namespace SubmissionEvaluationTest.Domain.Operations
         }
 
         public void CreateGroup(string id, string title, List<string> groupAdminIds, bool isSupergroup, string[] SubGroups, string[] forcedChallenges, string[] availableChallenges,
-            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate)
+            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate)
         {
             throw new NotImplementedException();
         }

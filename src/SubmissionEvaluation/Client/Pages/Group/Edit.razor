@@ -63,18 +63,18 @@
 
     async void SendModelToServer(EditContext editContext, string command)
     {
-        if(editContext.Validate()) {
-            var responseMessage = await httpClient.PostAsJsonAsync<GroupModel<Challenge, Member, Group>>("api/Group/EditGroup", Model);
-            if(responseMessage.IsSuccessStatusCode)
-            {
-                Model = await responseMessage.Content.ReadFromJsonAsync<GroupModel<Challenge, Member, Group>>();
-            }
-            if (Model.HasSuccess && command.Equals("SaveAndClose"))
-            {
-                navi.NavigateTo("Groups");
-            } else {
-                    base.StateHasChanged();
-            }
+        if (!editContext.Validate()) { return; }
+
+        var responseMessage = await httpClient.PostAsJsonAsync<GroupModel<Challenge, Member, Group>>("api/Group/EditGroup", Model);
+        if(responseMessage.IsSuccessStatusCode)
+        {
+            Model = await responseMessage.Content.ReadFromJsonAsync<GroupModel<Challenge, Member, Group>>();
+        }
+        if (Model.HasSuccess && command.Equals("SaveAndClose"))
+        {
+            navi.NavigateTo("Groups");
+        } else {
+            base.StateHasChanged();
         }
     }
 

@@ -15,5 +15,6 @@ namespace SubmissionEvaluation.Contracts.Data
         string[] ForcedChallenges { get; }
         int? RequiredPoints { get; }
         DateTime? StartDate { get; }
+        DateTime? EndDate { get; set; }
     }
 }

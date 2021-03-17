@@ -115,14 +115,18 @@
             <input type="number" @bind-value="Model.RequiredPoints" class="form-control"/>
         }
 
-        @*
-            todo> start date of groups needed?
-            <h4 class="col-form-label">Start Datum</h4>
-            @if (Model.StartDate == null)
-            {
-                Model.StartDate = new DateTime();
-            }
-            <input @bind-value="Model.StartDate" type="date" pattern="{0:dd.mm.yy}" class="form-control" placeholder="StartDate" id="datepicker2"/>*@
+        @if (Model.StartDate == null)
+        {
+            Model.StartDate = DateTime.UtcNow.Date;
+        }
+        @if (Model.EndDate == null)
+        {
+            Model.EndDate = DateTime.UtcNow.Date.AddMonths(6);
+        }
+        <h4 class="col-form-label">Ermögliche Selbsteinschreibungen ab</h4>
+        <input @bind-value="Model.StartDate" type="date" pattern="{0:dd.mm.yy}" class="form-control" id="datepicker1" />
+        <h4 class="col-form-label">Ermögliche Selbsteinschreibungen bis einschließlich</h4>
+        <input @bind-value="Model.EndDate" type="date" pattern="{0:dd.mm.yy}" class="form-control" id="datepicker2" />
     </div>
 
 </div>

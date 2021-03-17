@@ -25,7 +25,7 @@ namespace SubmissionEvaluation.Contracts.Providers
         void MoveChallengeSubmissionTo(IChallenge challenge, string newId);
 
         void CreateGroup(string id, string title, List<string> groupAdminIds, bool isSuperGroup, string[] subgroups, string[] forcedChallenges, string[] availableChallenges,
-            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate);
+            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate);
 
         void DeleteGroup(string id);
         void ChangeGroupId(IGroup group, string newId);

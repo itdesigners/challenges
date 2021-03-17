@@ -1564,7 +1564,7 @@ namespace SubmissionEvaluation.Providers.FileProvider
         }
 
         public void CreateGroup(string id, string title, List<string> groupAdminIds, bool isSuperGroup, string[] subGroups, string[] forcedChallenges, string[] availableChallenges,
-            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate)
+            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate)
         {
             using var writeLock = (WriteLock)GetLock();
             var group = new Group
@@ -1577,6 +1577,7 @@ namespace SubmissionEvaluation.Providers.FileProvider
                 MaxUnlockedChallenges = maxUnlockedChallenges,
                 RequiredPoints = requiredPoints,
                 StartDate = startDate,
+                EndDate = endDate,
                 IsSuperGroup = isSuperGroup,
                 SubGroups = subGroups
             };

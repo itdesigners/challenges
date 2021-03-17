@@ -29,5 +29,6 @@ namespace SubmissionEvaluation.Shared.Models.Admin
         public List<T> SelectableAvailableChallenges { get; set; }
         public List<R> SelectableSubGroups { get; set; } = new List<R>();
         public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }

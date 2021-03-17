@@ -35,5 +35,6 @@ namespace SubmissionEvaluation.Contracts.Data
         public bool IsSuperGroup { get; set; }
 
         public string[] SubGroups { get; set; } = new string[] { };
+        public DateTime? EndDate { get; set; }
     }
 }

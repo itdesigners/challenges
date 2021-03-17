@@ -9,8 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SubmissionEvaluation.Contracts.Data;
-using SubmissionEvaluation.Providers.CryptographyProvider;
 using SubmissionEvaluation.Contracts.Interfaces;
+using SubmissionEvaluation.Providers.CryptographyProvider;
 using SubmissionEvaluation.Server.Classes;
 using SubmissionEvaluation.Server.Classes.Authentication;
 using SubmissionEvaluation.Server.Classes.JekyllHandling;
@@ -209,13 +209,14 @@ namespace SubmissionEvaluation.Server.Controllers
             {
                 return Ok(model);
             }
+
             var result = RegistrationHelper.registrationHelper.RegisterMember(model, HttpContext, _logger);
             if (!Settings.Features.EnableSendMail)
             {
-                await Login(new LoginModel() { Password = model.Password, Username = model.Username }, "Account/View");
+                await Login(new LoginModel() {Password = model.Password, Username = model.Username}, "Account/View");
             }
-            return Ok(result);
 
+            return Ok(result);
         }
 
         [AllowAnonymous]
@@ -278,16 +279,23 @@ namespace SubmissionEvaluation.Server.Controllers
             var settingsmodel = BuildSettingsModel();
             return Ok(settingsmodel);
         }
+
         [HttpGet("Groups")]
         public IActionResult Groups()
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            var groups = JekyllHandler.Domain.Query.GetAllGroups();
+
+            var groups = JekyllHandler.Domain.Query.GetAllGroups().ToList();
             var subgroups = groups.SelectMany(x => x.SubGroups);
-            var model = new SelectGroupModel
-            {
-                Groups = GetGroups(groups.Where(x=> !subgroups.Contains(x.Id)).ToList(), member)
-            };
+            groups = groups.Where(x => !subgroups.Contains(x.Id)).ToList();
+
+            var groupOfMember = groups.Where(x => member.Groups.Contains(x.Id)).ToList();
+            var groupsWithEnabledSubscription = groups.Where(x => x.StartDate < DateTime.UtcNow && x.EndDate > DateTime.UtcNow).ToList();
+            groups = new List<Contracts.Data.Group>();
+            groups.AddRange(groupOfMember);
+            groups.AddRange(groupsWithEnabledSubscription);
+
+            var model = new SelectGroupModel {Groups = GetGroups(groups.Distinct(), member)};
             model.HasError = model.Groups.All(x => !x.Selected);
             if (model.HasError)
             {
@@ -297,36 +305,52 @@ namespace SubmissionEvaluation.Server.Controllers
             FillProfileMenuModel(model, member, ProfileMenuType.Overview);
             return Ok(model);
         }
-        public static GroupInfo[] GetGroups(List<Contracts.Data.Group> groups, IMember member)
+
+        public static GroupInfo[] GetGroups(IEnumerable<Contracts.Data.Group> groups, IMember member)
         {
             var groupInfos = new List<GroupInfo>();
-            foreach(var group in groups)
+            foreach (var group in groups)
             {
-                if(group.IsSuperGroup)
+                if (group.IsSuperGroup)
                 {
                     var subgroups = GetGroups(JekyllHandler.Domain.Query.GetAllGroups().Where(x => group.SubGroups.Contains(x.Id)).ToList(), member);
-                    groupInfos.Add(new GroupInfo { Title = group.Title, Id = group.Id, Selected = member.Groups.Any(y=> y==group.Id), IsSuperGroup = group.IsSuperGroup, SubGroups = subgroups});
-                } else
+                    groupInfos.Add(new GroupInfo
+                    {
+                        Title = group.Title,
+                        Id = group.Id,
+                        Selected = member.Groups.Any(y => y == group.Id),
+                        IsSuperGroup = group.IsSuperGroup,
+                        SubGroups = subgroups
+                    });
+                }
+                else
                 {
-                    groupInfos.Add(new GroupInfo { Title = group.Title, Id = group.Id, Selected = member.Groups.Any(y => y == group.Id), IsSuperGroup = group.IsSuperGroup });
+                    groupInfos.Add(new GroupInfo
+                    {
+                        Title = group.Title, Id = group.Id, Selected = member.Groups.Any(y => y == group.Id), IsSuperGroup = group.IsSuperGroup
+                    });
                 }
             }
+
             return groupInfos.ToArray();
         }
+
         public static string[] UpdateGroupsSelected(IEnumerable<GroupInfo> selectedGroups)
         {
             var result = new List<string>();
-            foreach(var group in selectedGroups)
+            foreach (var group in selectedGroups)
             {
-                if(group.IsSuperGroup)
+                if (group.IsSuperGroup)
                 {
                     result.AddRange(UpdateGroupsSelected(group.SubGroups));
                     result.Add(group.Id);
-                } else
+                }
+                else
                 {
                     result.Add(group.Id);
                 }
             }
+
             return result.ToArray();
         }
 
@@ -367,12 +391,14 @@ namespace SubmissionEvaluation.Server.Controllers
         {
             return Ok(Settings.Features);
         }
+
         [AllowAnonymous]
         [HttpGet("getMailAddress")]
         public IActionResult GetMailAddress()
         {
             return Ok(Settings.Mail.HelpMailAddress);
         }
+
         private List<Notification> GetAllNotificationsForUser(SubmitterHistory userHistory, DateTime? memberLastNotificationCheck)
         {
             var notifications = new List<Notification>();

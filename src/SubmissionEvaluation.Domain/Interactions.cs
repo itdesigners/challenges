@@ -193,7 +193,7 @@ namespace SubmissionEvaluation.Domain
             domain.Log.Information($"Interaktion: Kopiere Gruppe {group.Id} zu {toGroupName}");
             var groupToCopy = domain.ProviderStore.FileProvider.LoadGroup(group.Id);
             groupToCopy.Id = toGroupName;
-            domain.ProviderStore.FileProvider.CreateGroup(groupToCopy.Id, groupToCopy.Title, groupToCopy.GroupAdminIds, groupToCopy.IsSuperGroup, groupToCopy.SubGroups, groupToCopy.ForcedChallenges, groupToCopy.AvailableChallenges, groupToCopy.MaxUnlockedChallenges, groupToCopy.RequiredPoints, groupToCopy.StartDate);
+            domain.ProviderStore.FileProvider.CreateGroup(groupToCopy.Id, groupToCopy.Title, groupToCopy.GroupAdminIds, groupToCopy.IsSuperGroup, groupToCopy.SubGroups, groupToCopy.ForcedChallenges, groupToCopy.AvailableChallenges, groupToCopy.MaxUnlockedChallenges, groupToCopy.RequiredPoints, groupToCopy.StartDate, groupToCopy.EndDate);
 
             using (var writeLock = domain.ProviderStore.FileProvider.GetLock())
             {
@@ -1350,7 +1350,7 @@ namespace SubmissionEvaluation.Domain
         }
 
         public void CreateGroup(IMember member, string id, string title, List<string> groupAdminIds, bool isSuperGroup, string[] subGroups, string[] forcedChallenges, string[] availableChallenges,
-            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate)
+            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate)
         {
             if (requiredPoints == 0)
             {
@@ -1358,26 +1358,25 @@ namespace SubmissionEvaluation.Domain
             }
 
             domain.ProviderStore.FileProvider.CreateGroup(id, title, groupAdminIds, isSuperGroup, subGroups, forcedChallenges, availableChallenges, maxUnlockedChallenges,
-                requiredPoints, startDate);
+                requiredPoints, startDate, endDate);
         }
 
         public void EditGroup(IMember member, string id, string title, List<string> groupAdminIds, bool isSuperGroup, string[] subGroups, string[] forcedChallenges, string[] availableChallenges,
-            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate)
+            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate)
         {
-            using (var writeLock = domain.ProviderStore.FileProvider.GetLock())
-            {
-                var group = domain.ProviderStore.FileProvider.LoadGroup(id, writeLock);
-                group.Title = title;
-                group.GroupAdminIds = groupAdminIds ?? new List<string>();
-                group.ForcedChallenges = forcedChallenges;
-                group.AvailableChallenges = availableChallenges;
-                group.MaxUnlockedChallenges = maxUnlockedChallenges;
-                group.RequiredPoints = requiredPoints;
-                group.StartDate = startDate;
-                group.IsSuperGroup = isSuperGroup;
-                group.SubGroups = subGroups;
-                domain.ProviderStore.FileProvider.SaveGroup(group, writeLock);
-            }
+            using var writeLock = domain.ProviderStore.FileProvider.GetLock();
+            var group = domain.ProviderStore.FileProvider.LoadGroup(id, writeLock);
+            @group.Title = title;
+            @group.GroupAdminIds = groupAdminIds ?? new List<string>();
+            @group.ForcedChallenges = forcedChallenges;
+            @group.AvailableChallenges = availableChallenges;
+            @group.MaxUnlockedChallenges = maxUnlockedChallenges;
+            @group.RequiredPoints = requiredPoints;
+            @group.StartDate = startDate;
+            @group.EndDate = endDate;
+            @group.IsSuperGroup = isSuperGroup;
+            @group.SubGroups = subGroups;
+            domain.ProviderStore.FileProvider.SaveGroup(@group, writeLock);
         }
 
         public void DeleteGroup(string id)

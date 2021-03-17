@@ -84,7 +84,7 @@ namespace SubmissionEvaluation.Server.Controllers
             if (model.AvailableChallenges == null) model.AvailableChallenges = new List<string>();
             JekyllHandler.Domain.Interactions.CreateGroup(member, model.Id, model.Title, model.GroupAdminsIds, model.IsSuperGroup, model.SubGroups.ToArray(),
                 model.ForcedChallenges.ToArray(), model.AvailableChallenges.ToArray(), model.MaxUnlockedChallenges,
-                model.RequiredPoints, model.StartDate);
+                model.RequiredPoints, model.StartDate, model.EndDate);
 
             var challenges = JekyllHandler.Domain.Query.GetAllChallenges(member).OrderBy(x => x.Id).ToList();
             model.SelectableAvailableChallenges = challenges.Where(x => !model.AvailableChallenges.Contains(x.Id))
@@ -109,7 +109,7 @@ namespace SubmissionEvaluation.Server.Controllers
                 JekyllHandler.Domain.Interactions.EditGroup(member, model.Id, model.Title, model.GroupAdminsIds,
                     model.IsSuperGroup, model.SubGroups.ToArray(), model.ForcedChallenges.ToArray(),
                     model.AvailableChallenges.ToArray(), model.MaxUnlockedChallenges, model.RequiredPoints,
-                    model.StartDate);
+                    model.StartDate, model.EndDate);
 
                 var challenges = JekyllHandler.Domain.Query.GetAllChallenges(member).OrderBy(x => x.Id).ToList();
                 model.SelectableAvailableChallenges = challenges.Select(x => new Challenge(x)).ToList();
@@ -149,6 +149,7 @@ namespace SubmissionEvaluation.Server.Controllers
                     MaxUnlockedChallenges = group.MaxUnlockedChallenges,
                     RequiredPoints = group.RequiredPoints,
                     StartDate = group.StartDate,
+                    EndDate = group.EndDate,
                     AdminsSelectable = groupAdmins.Select(x => new Member(x, false)).ToList(),
                     GroupAdminsIds = group.GroupAdminIds ?? new List<string>(),
                     IsSuperGroup = group.IsSuperGroup,
@@ -166,8 +167,8 @@ namespace SubmissionEvaluation.Server.Controllers
         {
             var subGroups = JekyllHandler.Domain.Query.GetAllGroups();
             var alreadySubGroup = subGroups.SelectMany(x => x.SubGroups).Distinct();
-            //Remove last condition for multi-level hierarchies & adapt frontend
-            subGroups = subGroups.Where(x => (!alreadySubGroup.Contains(x.Id) || AlreadySubGroups.Contains(x.Id)) & !x.IsSuperGroup);
+            // Remove last condition for multi-level hierarchies & adapt frontend
+            subGroups = subGroups.Where(x => (!alreadySubGroup.Contains(x.Id) || AlreadySubGroups.Contains(x.Id)) && !x.IsSuperGroup);
             return subGroups.Select(x => new Group(x)).ToList();
         }
 
