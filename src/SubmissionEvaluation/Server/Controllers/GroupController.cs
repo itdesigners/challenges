@@ -74,7 +74,6 @@ namespace SubmissionEvaluation.Server.Controllers
             });
         }
 
-
         [Authorize(Roles = "admin")]
         [HttpPost("CreateGroup")]
         public IActionResult CreateGroup(GroupModel<Challenge, Member, Group> model)
@@ -97,7 +96,6 @@ namespace SubmissionEvaluation.Server.Controllers
             model.SelectableSubGroups = GetSelectableSubGroups(model.SubGroups.ToArray());
             return Ok(model);
         }
-
 
         [HttpPost("EditGroup")]
         public IActionResult EditGroup(GroupModel<Challenge, Member, Group> model)
@@ -137,7 +135,6 @@ namespace SubmissionEvaluation.Server.Controllers
                 var challenges = JekyllHandler.Domain.Query.GetAllChallenges(member).OrderBy(x => x.Id).ToList();
                 var groupAdmins = JekyllHandler.MemberProvider.GetMembers().Where(x => x.IsAdmin || x.IsGroupAdmin);
 
-
                 return Ok(new GroupModel<IChallenge, Member, Group>
                 {
                     Id = id,
@@ -156,14 +153,14 @@ namespace SubmissionEvaluation.Server.Controllers
                     SubGroups = group.SubGroups.ToList(),
                     SelectableSubGroups = GetSelectableSubGroups(group.SubGroups)
                 });
-
             }
             else
             {
                 return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
             }
         }
-        List<Group> GetSelectableSubGroups(string[] AlreadySubGroups)
+
+        private List<Group> GetSelectableSubGroups(string[] AlreadySubGroups)
         {
             var subGroups = JekyllHandler.Domain.Query.GetAllGroups();
             var alreadySubGroup = subGroups.SelectMany(x => x.SubGroups).Distinct();
@@ -177,8 +174,7 @@ namespace SubmissionEvaluation.Server.Controllers
         public ActionResult<bool> RenameGroup([FromBody] RenameModel model)
         {
             var challenge = JekyllHandler.Domain.Query.GetGroup(model.Name);
-            var result = JekyllHandler.Domain.Interactions.ChangeGroupId(challenge, model.NewName);
-            return result;
+            return JekyllHandler.Domain.Interactions.ChangeGroupId(challenge, model.NewName);
         }
 
         [Authorize(Roles = "admin")]
@@ -204,8 +200,8 @@ namespace SubmissionEvaluation.Server.Controllers
             {
                 return Ok(new GenericModel { HasSuccess = true, Message = SuccessMessages.GenericSuccess });
             }
-
         }
+
         [HttpPost("Copy")]
         public IActionResult Copy(CopyModel model)
         {
@@ -246,7 +242,6 @@ namespace SubmissionEvaluation.Server.Controllers
             {
                 return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
             }
-
         }
     }
 }
