@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using YamlDotNet.Serialization;
@@ -29,7 +29,7 @@ namespace SubmissionEvaluation.Contracts.Data
         public string Title { get; set; }
         public RatingMethod RatingMethod { get; set; }
         public string Category { get; set; }
-        public bool StickAsBeginner { get; set; }
+        public bool FreezeDifficultyRating { get; set; }
         public DateTime Date { get; set; }
         public string Source { get; set; }
         public string LearningFocus { get; set; }

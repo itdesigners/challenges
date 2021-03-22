@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using SubmissionEvaluation.Contracts.Data;
 
@@ -25,7 +25,7 @@ namespace SubmissionEvaluation.Contracts.ClientPocos
             RatingMethod = c.RatingMethod;
             Source = c.Source;
             State = c.State;
-            StickAsBeginner = c.StickAsBeginner;
+            FreezeDifficultyRating = c.FreezeDifficultyRating;
             Title = c.Title;
             LearningFocus = c.LearningFocus;
         }
@@ -64,7 +64,7 @@ namespace SubmissionEvaluation.Contracts.ClientPocos
 
         public ChallengeState State { get; set; }
 
-        public bool StickAsBeginner { get; set; }
+        public bool FreezeDifficultyRating { get; set; }
 
         public DateTime LastEdit { get; set; }
 

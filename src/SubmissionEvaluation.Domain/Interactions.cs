@@ -1057,7 +1057,7 @@ namespace SubmissionEvaluation.Domain
                         var srcFiles = compiler.GetSourceFiles(files).Select(x => Regex.Replace(File.ReadAllText(x).ToLower(), @"[\s\n\r]+", string.Empty));
                         sub.Source = srcFiles.ToArray();
                     }
-                    
+
                     foreach (var toCheck in notChecked)
                     {
                         var bestScore = 0;
@@ -1256,7 +1256,7 @@ namespace SubmissionEvaluation.Domain
             var sorted = challenges.OrderBy(x => x.State.FeasibilityIndex > 0 ? x.State.FeasibilityIndex : max).ToList();
             var feasibilityIndex = challenge.State.FeasibilityIndex;
             var challengeBefore = sorted.FirstOrDefault(x => x.State.FeasibilityIndex > feasibilityIndex);
-            if (challengeBefore != null && !challengeBefore.StickAsBeginner)
+            if (challengeBefore?.FreezeDifficultyRating == false)
             {
                 var diff = levels + challengeBefore.State.FeasibilityIndex - challenge.State.FeasibilityIndex;
                 challenge.State.FeasibilityIndexMod += diff;
@@ -1288,7 +1288,7 @@ namespace SubmissionEvaluation.Domain
         {
             using var writeLock = domain.ProviderStore.FileProvider.GetLock();
             var challenge = domain.ProviderStore.FileProvider.LoadChallenge(challengeId, writeLock);
-            if (challenge.State.FeasibilityIndex == 0 || challenge.StickAsBeginner)
+            if (challenge.State.FeasibilityIndex == 0)
             {
                 return;
             }

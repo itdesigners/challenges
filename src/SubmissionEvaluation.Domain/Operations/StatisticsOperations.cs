@@ -59,7 +59,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 challenge.State.FeasibilityIndex += challenge.State.FeasibilityIndexMod;
             }
 
-            if (challenge.StickAsBeginner || challenge.State.FeasibilityIndex > maxFeasibilityIndex)
+            if (challenge.State.FeasibilityIndex > maxFeasibilityIndex)
             {
                 challenge.State.FeasibilityIndex = maxFeasibilityIndex;
             }
@@ -831,8 +831,8 @@ namespace SubmissionEvaluation.Domain.Operations
             {
                 using var writeLock = ProviderStore.FileProvider.GetLock();
                 var updating = ProviderStore.FileProvider.LoadChallenge(props.Id, writeLock);
-                UpdateFeasibilityIndexForChallenge(updating);
-                if (updating.State.FeasibilityIndex == 0)
+                if (updating.FreezeDifficultyRating) { continue; }
+                if (!updating.FreezeDifficultyRating && updating.State.FeasibilityIndex == 0)
                 {
                     updating.State.DifficultyRating = null;
                 }
@@ -855,10 +855,13 @@ namespace SubmissionEvaluation.Domain.Operations
                 var ctr = 0;
                 foreach (var challenge in sortedByFeasibility)
                 {
-                    challenge.State.DifficultyRating = Math.Min(100, ((ctr / groupCount) + 1) * 100 / groups);
-                    if (challenge.RatingMethod != RatingMethod.Fixed)
+                    if (!challenge.FreezeDifficultyRating)
                     {
-                        challenge.State.DifficultyRating = Math.Min((int) (1.25 * challenge.State.DifficultyRating), 100);
+                        challenge.State.DifficultyRating = Math.Min(100, ((ctr / groupCount) + 1) * 100 / groups);
+                        if (challenge.RatingMethod != RatingMethod.Fixed)
+                        {
+                            challenge.State.DifficultyRating = Math.Min((int) (1.25 * challenge.State.DifficultyRating), 100);
+                        }
                     }
 
                     ProviderStore.FileProvider.SaveChallenge(challenge, writeLock);
