@@ -56,6 +56,7 @@ namespace SubmissionEvaluation.Server
             services.AddResponseCompression(opts => { opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] {"application/octet-stream"}); });
 
             services.AddHangfire(x => { });
+            services.AddHangfireServer();
             services.AddDirectoryBrowser();
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -91,16 +92,6 @@ namespace SubmissionEvaluation.Server
             }
             
             app.UseStaticFiles(new StaticFileOptions {ServeUnknownFileTypes = true});
-
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions {Authorization = new[] {new MyAuthorizationFilter()}});
-            app.UseHangfireServer(new BackgroundJobServerOptions
-            {
-                ServerName = "Default",
-                Queues = new[] {"default"},
-                WorkerCount = 3,
-                SchedulePollingInterval = TimeSpan.FromSeconds(Settings.Application.Delaytime)
-            });
-
             app.Use(async (context, next) =>
             {
                 if (!context.Request.Path.StartsWithSegments(new PathString("/Account")) && !context.Request.Path.StartsWithSegments(new PathString("/Help")))
@@ -109,12 +100,9 @@ namespace SubmissionEvaluation.Server
                     if (id != null)
                     {
                         var member = JekyllHandler.MemberProvider.GetMemberById(id);
-                        if (member.Groups.Length == 0)
+                        if (member.Groups.Length == 0 && JekyllHandler.Domain.Query.GetAllGroups().Any())
                         {
-                            if (JekyllHandler.Domain.Query.GetAllGroups().Any())
-                            {
-                                context.Response.Redirect("/Account/Groups");
-                            }
+                            context.Response.Redirect("/Account/Groups");
                         }
                     }
                 }
@@ -125,6 +113,7 @@ namespace SubmissionEvaluation.Server
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions { Authorization = new[] { new MyAuthorizationFilter() } });
             app.UseBlazorFrameworkFiles();
             app.UseEndpoints(endpoints =>
             {
@@ -133,6 +122,7 @@ namespace SubmissionEvaluation.Server
                 endpoints.MapControllerRoute("imageView", "Challenge/Edit/{challengeName}/{action=Show}/{FileName}", new {controller = "Challenge"});
                 endpoints.MapControllerRoute("files", "files/{action}/{id}/{*path}", new {controller = "Download"});
                 endpoints.MapControllerRoute("help", "Help/{*path}", new {controller = "Help", action = "ViewPage"});
+                endpoints.MapHangfireDashboard();
                 endpoints.MapFallbackToFile("index.html");
             });
         }
