@@ -55,7 +55,7 @@ namespace SubmissionEvaluation.Compilers
             {
                 projectFile = Path.Combine(paths.Host.SourcePath, "submission.csproj");
                 File.WriteAllText(projectFile,
-                    "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>netcoreapp2.1</TargetFramework></PropertyGroup></Project>");
+                    "<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>netcoreapp5.0</TargetFramework></PropertyGroup></Project>");
             }
 
             var document = XDocument.Load(projectFile);
