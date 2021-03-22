@@ -16,18 +16,12 @@
             <div class="post-list-body">
                 <div class="all-posts" post-cate="All">
                     @{
-                        @foreach (var entry in category.Value.Take(7))
+                        @foreach (var entry in category.Value)
                         {
                             if (entry.Id != null)
                             {
                                 <ChallengeTile entry="entry" Member="new Member()" bundles="Bundles.Where(x => x.Category.Equals(category.Key)).ToList()"/>
                             }
-                        }
-                        if (category.Value.Count > 7)
-                        {
-                            <a class="post-list-item" href="Challenge/Category/@category.Key" style="height: 110px">
-                                <h2 style="margin: 0; padding-top: 15%; text-align: center;"> Mehr...</h2>
-                            </a>
                         }
                     }
                 </div>
