@@ -20,7 +20,7 @@
         </div>
         <div>
             <h4 class="col-form-label groupEdit">Die Gruppe fasst mehrere Gruppen zusammen.</h4>
-            <InputCheckbox @bind-Value=Model.IsSuperGroup @onchange=base.StateHasChanged/>
+            <InputCheckbox @bind-Value="Model.IsSuperGroup" @onchange="base.StateHasChanged"/>
         </div>
         @if(Model.IsSuperGroup)
         {
@@ -143,6 +143,7 @@
         }
         StateHasChanged();
     }
+
     void AddToSubGroups()
     {
         if(!string.IsNullOrWhiteSpace(Model.SelectedAddSubGroup) & !Model.SubGroups.Contains(Model.SelectedAddSubGroup))
@@ -150,11 +151,13 @@
             Model.SubGroups.Add(Model.SelectedAddSubGroup);
         }
     }
+
     void AddToAvailableChallenges()
     {
         if (!string.IsNullOrWhiteSpace(Model.SelectedAddAvailableChallenge) & !Model.AvailableChallenges.Contains(Model.SelectedAddAvailableChallenge))
         {
             Model.AvailableChallenges.Add(Model.SelectedAddAvailableChallenge);
+            Model.SelectedAddAvailableChallenge = string.Empty;
         }
         StateHasChanged();
     }
@@ -184,6 +187,7 @@
     {
         if (!string.IsNullOrWhiteSpace(Model.SelectedForcedChallenge))
             Model.ForcedChallenges.Remove(Model.SelectedForcedChallenge);
+
         StateHasChanged();
     }
 
@@ -201,5 +205,4 @@
         Model.GroupAdminsIds.Add(string.Empty);
         StateHasChanged();
     }
-
 }

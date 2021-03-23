@@ -18,10 +18,10 @@
             </div>
             <div class="card-body challenge-creation-panel">
                 <EditForm Model="Model" Context="formContext" id="challengeform" enctype="multipart/form-data">
-                    <ValidationSummary/>
-                    <DataAnnotationsValidator/>
+                    <ValidationSummary />
+                    <DataAnnotationsValidator />
                     <div class="card-body challenge-creation-panel">
-                        <MessageHeader Model="Model"/>
+                        <MessageHeader Model="Model" />
 
                         <div id="project-group" class="form-group">
                             <h4 class="col-form-label">ID (Ändern nicht mehr möglich)</h4>
@@ -29,10 +29,10 @@
                             {
                                 <a href=@($"Group/Edit/Rename/{Model.Id}")>Umbenennen</a>
                             }
-                            <input readonly class="form-control" @bind-value="Model.Id"/>
+                            <input readonly class="form-control" @bind-value="Model.Id" />
                         </div>
 
-                        <EditGroupFieldsPartial Model="Model"/>
+                        <EditGroupFieldsPartial Model="Model" />
 
                         <button id="btnSave" name="command" type="submit" value="Save" class="btn btn-primary btn-block text-center input-field-padding" @onclick='e => SendModelToServer(formContext, "Save")'><span class="oi oi-book"></span> Gruppe speichern </button>
                         <button id="btnSaveAndClose" name="command" type="submit" value="SaveAndClose" class="btn btn-primary btn-block text-center input-field-padding" @onclick='() => SendModelToServer(formContext, "SaveAndClose")'><span class="oi oi-book"></span> Gruppe speichern und zurück</button>
@@ -43,21 +43,24 @@
     </div>
 </div>
 
-@code {
-    [Parameter]
-        public string groupId { get; set; }
+@code { [Parameter]
+    public string GroupId { get; set; }
 
-        GroupModel<Challenge, Member, Group> Model { get; set; }
-        SettingsModel UserSettings { get; set; }
-        Permissions Permissions { get; set; }
+    GroupModel<Challenge, Member, Group> Model { get; set; }
+    SettingsModel UserSettings { get; set; }
+    Permissions Permissions { get; set; }
 
     protected override async void OnInitialized()
     {
         Permissions = await httpClient.GetFromJsonAsync<Permissions>("api/Members/Permissions");
-        if(!PermissionHelper.CheckPermissions(Actions.EDIT, "Groups", Permissions, Restriction.GROUPS, groupId)) {
+        if (!PermissionHelper.CheckPermissions(Actions.EDIT, "Groups", Permissions, Restriction.GROUPS, GroupId))
+        {
             navi.NavigateTo($"Home/Error/{SubmissionEvaluation.Shared.Classes.Messages.ErrorMessages.NoPermission}");
         }
-        Model = await httpClient.GetFromJsonAsync<GroupModel<Challenge, Member, Group>>($"api/Group/EditGroup/{groupId}");
+        Model = await httpClient.GetFromJsonAsync<GroupModel<Challenge, Member, Group>>($"api/Group/EditGroup/{GroupId}");
+        Model.SelectableAvailableChallenges.Sort((x, y) => string.Compare(x.Title, y.Title, StringComparison.Ordinal));
+        Model.AvailableChallenges.Sort();
+        Model.ForcedChallenges.Sort();
         StateHasChanged();
     }
 
@@ -65,17 +68,17 @@
     {
         if (!editContext.Validate()) { return; }
 
-        var responseMessage = await httpClient.PostAsJsonAsync<GroupModel<Challenge, Member, Group>>("api/Group/EditGroup", Model);
-        if(responseMessage.IsSuccessStatusCode)
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Group/EditGroup", Model);
+        if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<GroupModel<Challenge, Member, Group>>();
         }
         if (Model.HasSuccess && command.Equals("SaveAndClose"))
         {
             navi.NavigateTo("Groups");
-        } else {
+        }
+        else
+        {
             base.StateHasChanged();
         }
-    }
-
-}
+    } }
