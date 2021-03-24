@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Net;
 using SubmissionEvaluation.Contracts.Data;
 using SubmissionEvaluation.Contracts.Exceptions;
 using SubmissionEvaluation.Contracts.Providers;
@@ -63,7 +64,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 Log.Warning("Nicht erlaubte Programmiersprache für Aufgabe verwendet!");
                 evaluationParameters = new EvaluationParameters
                 {
-                    ErrorDetails = new List<FailedTestRunDetails> {new FailedTestRunDetails {ErrorMessage = $"<pre>{e.Message}</pre>"}},
+                    ErrorDetails = new List<FailedTestRunDetails> {new FailedTestRunDetails {ErrorMessage = $"<pre>{WebUtility.HtmlEncode(e.Message)}</pre>"}},
                     Language = e.Language,
                     State = EvaluationResult.NotAllowedLanguage
                 };

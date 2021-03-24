@@ -109,9 +109,13 @@
         {
             <DetailedTestInfo detail="Model.ErrorDetails"/>
         }
-        else if (!Model.SelectedSubmission.IsPassed)
+        else if (!Model.SelectedSubmission.IsPassed && Model.SelectedSubmission.EvaluationResult != EvaluationResult.CompilationError)
         {
             @((MarkupString) "<p>Kein Testergebnis verfügbar.</p>")
+        }
+        else if (!Model.SelectedSubmission.IsPassed && Model.SelectedSubmission.EvaluationResult == EvaluationResult.CompilationError && Model.SelectedSubmission.CompileError != null)
+        {
+            @((MarkupString) Model.SelectedSubmission.CompileError)
         }
     }
 </div>

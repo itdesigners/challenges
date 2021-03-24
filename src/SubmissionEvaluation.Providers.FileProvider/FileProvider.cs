@@ -171,6 +171,14 @@ namespace SubmissionEvaluation.Providers.FileProvider
                     result.ReportFailing = false;
                 }
 
+                if (evaluationParameters.State == EvaluationResult.CompilationError)
+                {
+                    if (evaluationParameters.ErrorDetails.Count == 1)
+                    {
+                        result.CompileError = evaluationParameters.ErrorDetails[0].ErrorMessage;
+                    }
+                }
+
                 if (result.IsPassed != evaluationParameters.IsPassed)
                 {
                     changed = true;

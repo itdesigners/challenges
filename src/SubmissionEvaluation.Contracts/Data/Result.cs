@@ -60,7 +60,7 @@ namespace SubmissionEvaluation.Contracts.Data
         public string Reviewer { get; set; }
         public DateTime? ReviewDate { get; set; }
         public int ReviewRating { get; set; }
-
+        public string? CompileError { get; set; }
         [YamlIgnore] public bool HasReviewData { get; set; }
 
         public DateTime LastSubmissionDate
