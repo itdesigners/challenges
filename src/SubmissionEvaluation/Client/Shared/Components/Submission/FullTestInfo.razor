@@ -42,17 +42,22 @@
                 {
                     @((MarkupString) $"<b>{Model.SelectedSubmission.TestsFailed}</b> von <b>{Model.SelectedSubmission.TestsFailed + Model.SelectedSubmission.TestsPassed + Model.SelectedSubmission.TestsSkipped}</b> Tests fehlgeschlagen!<br />")
                 }
-                else
+                else if (Model.SelectedSubmission.EvaluationResult != EvaluationResult.CompilationError)
                 {
                     <b>@Model.SelectedSubmission.TestsFailed</b>
                     @((MarkupString) "Test(s) fehlgeschlagen! <br />")
                 }
-                if (Model.SelectedSubmission.EvaluationResult == EvaluationResult.Timeout)
+                if (Model.SelectedSubmission.EvaluationResult == EvaluationResult.CompilationError)
+                {
+                    <b>Compilierfehler:</b>
+                    @((MarkupString) "Die Einreichung konnte wegen Fehlern nicht compiliert werden!<br />")
+                }
+                else if (Model.SelectedSubmission.EvaluationResult == EvaluationResult.Timeout)
                 {
                     <b>Timeout:</b>
                     @((MarkupString) "Die Einreichung lief zu lange und musste abgebrochen werden! Evtl. ist eine Endlosschleife vorhanden?<br />")
                 }
-                if (Model.SelectedSubmission.EvaluationResult == EvaluationResult.SucceededWithTimeout)
+                else if (Model.SelectedSubmission.EvaluationResult == EvaluationResult.SucceededWithTimeout)
                 {
                     <b>Timeout:</b>
                     @((MarkupString) "Die Einreichung hat zwar den Test bestanden, aber sie lief zu lange und musste abgebrochen werden! Evtl. ist eine Endlosschleife vorhanden?<br />")
@@ -100,7 +105,7 @@
                 </a>
             }
         </p>
-        @if (!Model.SelectedSubmission.IsPassed && Model.ErrorDetails != null)
+        @if (!Model.SelectedSubmission.IsPassed && Model.ErrorDetails != null && Model.SelectedSubmission.EvaluationResult != EvaluationResult.CompilationError)
         {
             <DetailedTestInfo detail="Model.ErrorDetails"/>
         }
