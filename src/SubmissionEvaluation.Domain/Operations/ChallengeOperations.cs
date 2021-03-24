@@ -237,8 +237,9 @@ namespace SubmissionEvaluation.Domain.Operations
         {
             var visibleChallenges = new List<IChallenge>();
 
-            // If admin append all challenges
-            if (member.IsAdmin)
+            // If admin or group admin append all challenges
+            // Group admin needs to see all challenges to check which one he/she wants to add to his group!
+            if (member.IsAdmin || member.IsGroupAdmin)
             {
                 visibleChallenges.AddRange(fileProvider.LoadChallenges());
                 return visibleChallenges;
@@ -248,14 +249,6 @@ namespace SubmissionEvaluation.Domain.Operations
             if (member.IsCreator)
             {
                 visibleChallenges.AddRange(fileProvider.LoadChallenges().Where(x => x.AuthorID.Equals(member.Id)));
-            }
-
-            // If groupAdmin append all challenges of his*her group
-            if (member.IsGroupAdmin)
-            {
-                var groups = fileProvider.LoadAllGroups().Where(x => (x.GroupAdminIds ?? new List<string>()).Contains(member.Id));
-                visibleChallenges.AddRange(groups.SelectMany(x => x.AvailableChallenges).Distinct().Select(x => fileProvider.LoadChallenge(x)));
-                visibleChallenges.AddRange(groups.SelectMany(x => x.ForcedChallenges).Distinct().Select(x => fileProvider.LoadChallenge(x)));
             }
 
             // Append all solved and unlocked challenges
