@@ -54,8 +54,9 @@ namespace SubmissionEvaluation.Domain.Operations
                 {
                     ErrorDetails = new List<FailedTestRunDetails> {new FailedTestRunDetails {ErrorMessage = $"<pre>{e.Message}</pre>"}},
                     Language = e.Language,
-                    State = EvaluationResult.CompilationError
-                };
+                    State = EvaluationResult.CompilationError,
+                    SizeInBytes = new System.IO.FileInfo(ProviderStore.FileProvider.GetSourceZipPathForSubmission(result)).Length
+            };
             }
             catch (LanguageNotAllowedException e)
             {
