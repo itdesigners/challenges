@@ -860,9 +860,7 @@ namespace SubmissionEvaluation.Providers.FileProvider
 
         public ISubmission StoreNewSubmission(IMember member, DateTime date, string challengeName, byte[] zipData, IEnumerable<string> compilableFiles)
         {
-            var filesData = ExtractFilesFromZip(zipData, compilableFiles);
-            var data = filesData.SelectMany(x => x).ToArray();
-            var hash = GetHash(data);
+            var hash = GetHash(zipData);
             var challenge = LoadChallenge(challengeName);
             var submission = LoadAllSubmissionsFor(challenge).FirstOrDefault(x => x.MemberId == member.Id && x.Hash == hash);
             string submissionPath;
