@@ -238,7 +238,7 @@ namespace SubmissionEvaluation.Server.Controllers
             var member = JekyllHandler.GetMemberForUser(User);
             if (JekyllHandler.CheckPermissions(Actions.VIEW, "ChallengeOverview", member))
             {
-                var categoryStats = JekyllHandler.Domain.Query.GetCategoryStats(new Member() { IsAdmin = true });
+                var categoryStats = JekyllHandler.Domain.Query.GetCategoryStats(new Member() { IsAdmin = true, Id = "_-=42=-_" });
                 var elements = categoryStats.ToDictionary(x => x.Key,
                 x => x.Value.Select(element => new CategoryListEntryExtendedModel
                 {

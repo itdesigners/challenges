@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Text.RegularExpressions;
 using System.Web;
 using SubmissionEvaluation.Contracts.Data;
@@ -186,6 +187,8 @@ namespace SubmissionEvaluation.Domain.Operations
             return allowed.Values.Where(x => containUnavailable || x.IsAvailable).ToList();
         }
 
+        private static MemoryCache ChallengesCanBeViewedByMemberCache = new MemoryCache("ChallengesCanBeViewedByMemberCache");
+
         /// <summary>
         ///     Get all challenges that should be visible for the provided user.
         /// </summary>
@@ -200,30 +203,85 @@ namespace SubmissionEvaluation.Domain.Operations
                 return new List<IChallenge>().ToDictionary(x => x.Id);
             }
 
-            var visibleChallenges = FetchDefaultVisibleChallenges(member, fileProvider);
-
-
-            #region determine challenges visible for an user
-
-            // Please, be aware that there are several dependencies which must be considered
-            // 1) There are bundles of challenges - although always the first challenge of a bundle should be visible
-            // 2) There could be an overlap of challenge across the different groups
-            //    Nevertheless, group constraints of forced challenges should be guaranteed
-            //    In addition, the maximum count of visible challenges of the group should be guaranteed, too
-            // 3) Challenges within a group should be assigned randomly
-            // 4) Once assigned challenges should be stable
-            //    First, changes in the member rating should not affect assigned challenges
-            //    Second, further added challenges to a group should not affect the visible challenges
-
-            // Get groups of the member
-            var groupsOfMember = (member.Groups ?? new string[] { }).Select(x => fileProvider.LoadGroup(x));
-
-            // it is possible to treat each group independently ;)
-            foreach (var groupOfMember in groupsOfMember)
+            if (ChallengesCanBeViewedByMemberCache.Contains(member.Id))
             {
-                AddChallengesForGroup(groupOfMember, member, visibleChallenges, fileProvider);
+                return ChallengesCanBeViewedByMemberCache.Get(member.Id) as IReadOnlyDictionary<string, IChallenge>;
             }
 
+            var visibleChallenges = FetchDefaultVisibleChallenges(member, fileProvider);
+
+            #region determine challenges visible for an user that is not an admin or groupadmin
+            if (!(member.IsAdmin || member.IsGroupAdmin))
+            {
+                // Please, be aware that there are several dependencies which must be considered
+                // 1) There are bundles of challenges - although always the first challenge of a bundle should be visible
+                // 2) There could be an overlap of challenge across the different groups
+                //    Nevertheless, group constraints of forced challenges should be guaranteed
+                //    In addition, the maximum count of visible challenges of the group should be guaranteed, too
+                // 3) Challenges within a group should be assigned randomly
+                // 4) Once assigned challenges should be stable
+                //    First, changes in the member rating should not affect assigned challenges
+                //    Second, further added challenges to a group should not affect the visible challenges
+
+                // Get groups of the member
+                var groupsOfMember = (member.Groups ?? new string[] { }).Select(x => fileProvider.LoadGroup(x));
+
+                // it is possible to treat each group independently ;)
+                foreach (var groupOfMember in groupsOfMember)
+                {
+                    if (groupOfMember != null)
+                        AddChallengesForGroup(groupOfMember, member, visibleChallenges, fileProvider);
+                }
+            }
+            #endregion
+
+            var res = visibleChallenges.Distinct(new IChallengeComparer()).ToDictionary(x => x.Id);
+
+            ChallengesCanBeViewedByMemberCache.Set(member.Id, res, DateTimeOffset.Now.AddMinutes(5));
+
+            // ensure list of challenges is unique before returning as dictionary
+            return res;
+        }
+
+        /// <summary>
+        ///     Get all challenges that should be visible for the provided user.
+        /// </summary>
+        /// <param name="member">the user for which the check should take place</param>
+        /// <param name="fileProvider">file provider to access challenges</param>
+        /// <returns>a dictionary containing the challenges with id string as lookup</returns>
+        private static IReadOnlyDictionary<string, IChallenge> UnCachedGetChallengesCanBeViewedByMember(IMember member, IFileProvider fileProvider)
+        {
+            // If no member given return an empty dictionary
+            if (member == null)
+            {
+                return new List<IChallenge>().ToDictionary(x => x.Id);
+            }
+
+            var visibleChallenges = FetchDefaultVisibleChallenges(member, fileProvider);
+
+            #region determine challenges visible for an user that is not an admin or groupadmin
+            if (!(member.IsAdmin || member.IsGroupAdmin))
+            {
+                // Please, be aware that there are several dependencies which must be considered
+                // 1) There are bundles of challenges - although always the first challenge of a bundle should be visible
+                // 2) There could be an overlap of challenge across the different groups
+                //    Nevertheless, group constraints of forced challenges should be guaranteed
+                //    In addition, the maximum count of visible challenges of the group should be guaranteed, too
+                // 3) Challenges within a group should be assigned randomly
+                // 4) Once assigned challenges should be stable
+                //    First, changes in the member rating should not affect assigned challenges
+                //    Second, further added challenges to a group should not affect the visible challenges
+
+                // Get groups of the member
+                var groupsOfMember = (member.Groups ?? new string[] { }).Select(x => fileProvider.LoadGroup(x));
+
+                // it is possible to treat each group independently ;)
+                foreach (var groupOfMember in groupsOfMember)
+                {
+                    if (groupOfMember != null)
+                        AddChallengesForGroup(groupOfMember, member, visibleChallenges, fileProvider);
+                }
+            }
             #endregion
 
             // ensure list of challenges is unique before returning as dictionary
@@ -409,6 +467,7 @@ namespace SubmissionEvaluation.Domain.Operations
 
         public static bool CanAccessChallenge(IMember member, Challenge challenge, IFileProvider fileProvider)
         {
+            
             return GetChallengesCanBeViewedByMember(member, fileProvider).ContainsKey(challenge.Id);
         }
 

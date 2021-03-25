@@ -261,7 +261,7 @@ namespace SubmissionEvaluation.Server.Controllers
                 IEnumerable<IBundle> bundles;
                 try
                 {
-                    bundles = JekyllHandler.Domain.Query.GetAllBundles(new Member() { IsAdmin = true });
+                    bundles = JekyllHandler.Domain.Query.GetAllBundles(new Member() { IsAdmin = true , Id = "_-=42=-_"});
                 }
                 catch (IOException)
                 {

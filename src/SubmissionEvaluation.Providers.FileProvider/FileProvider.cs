@@ -21,6 +21,8 @@ namespace SubmissionEvaluation.Providers.FileProvider
         private readonly ILog log;
         private readonly bool logStatusChanges;
         private readonly YamlProvider yamlProvider;
+        private bool dirtyFlag;
+        private IEnumerable<IChallenge> chached_challenges;
 
         public FileProvider(ILog log, string challengesDir, string wwwrootDir, bool logStatusChanges)
         {
@@ -28,6 +30,7 @@ namespace SubmissionEvaluation.Providers.FileProvider
             this.log = log;
             yamlProvider = new CachedYamlProvider(log);
             this.logStatusChanges = logStatusChanges;
+            dirtyFlag = true;
             if (logStatusChanges)
             {
                 File.WriteAllText(statusChangesLogFile, $"Challenge;Lang;ID;Old;New{Environment.NewLine}");
@@ -91,7 +94,12 @@ namespace SubmissionEvaluation.Providers.FileProvider
 
         public IEnumerable<IChallenge> LoadChallenges()
         {
-            return GetChallengeIds().Select(x => LoadChallenge(x));
+            if (dirtyFlag)
+            {
+                chached_challenges = GetChallengeIds().Select(x => LoadChallenge(x));
+                dirtyFlag = false;
+            }
+            return chached_challenges;
         }
 
         public IEnumerable<ISubmission> GetSubmissionsWithoutResult(IChallenge challenge)
@@ -118,6 +126,7 @@ namespace SubmissionEvaluation.Providers.FileProvider
             var path = GetPathToChallenge(challenge.Id);
             writeLock.Add(path);
             DeleteDirectory(path);
+            dirtyFlag = true;
         }
 
         public bool UpdateEvaluationResult(ISubmission submission, EvaluationParameters evaluationParameters, bool resetStats = false)
@@ -850,6 +859,7 @@ namespace SubmissionEvaluation.Providers.FileProvider
             ((Challenge)challenge).IsDraft = true;
             ((Challenge)challenge).Date = DateTime.Now;
             SaveChallenge(challenge, writeLock);
+            dirtyFlag = true;
         }
 
         public void SaveChallenge(IChallenge challenge, IWriteLock writeLock)
@@ -864,6 +874,7 @@ namespace SubmissionEvaluation.Providers.FileProvider
 
             var filePath = Path.Combine(path, "challenge.md");
             yamlProvider.SerializeWithDescription(filePath, props);
+            dirtyFlag = true;
         }
 
         public ISubmission StoreNewSubmission(IMember member, DateTime date, string challengeName, byte[] zipData, IEnumerable<string> compilableFiles)
@@ -985,10 +996,17 @@ namespace SubmissionEvaluation.Providers.FileProvider
             {
                 w.Add(path);
             }
+            if (File.Exists(path))
+            {
+                var group = yamlProvider.Deserialize<Group>(path);
 
-            var group = yamlProvider.Deserialize<Group>(path);
-            group.Id = id;
-            return group;
+                group.Id = id;
+                return group;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void SaveGroup(Group group, IWriteLock writeLock)
