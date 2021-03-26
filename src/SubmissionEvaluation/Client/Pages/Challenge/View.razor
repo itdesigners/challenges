@@ -368,7 +368,7 @@
 
     async void RateChallenge(RatingType rating)
     {
-        await httpClient.PostAsJsonAsync<RatingType>($"api/Challenge/RateChallenge/{Model.Name}", rating);
+        await httpClient.PostAsJsonAsync($"api/Challenge/RateChallenge/{Model.Name}", rating);
         Model.CanRate = false;
         StateHasChanged();
     }

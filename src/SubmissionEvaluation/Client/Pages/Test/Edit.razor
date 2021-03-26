@@ -67,12 +67,12 @@
             Model.Test.InputFiles = new List<File>();
             domain.MapFilesToTest(ChallengeModel.Files, Model.Test.InputFiles, Model.Test.Id.ToString());
             domain.MapFilesToTest(ChallengeModel.NewFiles, Model.Test.InputFiles, Model.Test.Id.ToString());
-            var responseMessage = await httpClient.PostAsJsonAsync<ChallengeTestUpdateModel>("api/Test/EditTest/Save", Model);
+            var responseMessage = await httpClient.PostAsJsonAsync("api/Test/EditTest/Save", Model);
             if (responseMessage.IsSuccessStatusCode)
             {
                 Model = await responseMessage.Content.ReadFromJsonAsync<ChallengeTestUpdateModel>();
             }
-            responseMessage = await httpClient.PostAsJsonAsync<ExtendedChallengeModel>("api/Challenge/Edit/Save", ChallengeModel);
+            responseMessage = await httpClient.PostAsJsonAsync("api/Challenge/Edit/Save", ChallengeModel);
             if (responseMessage.IsSuccessStatusCode)
             {
                 ChallengeModel = await responseMessage.Content.ReadFromJsonAsync<ExtendedChallengeModel>();

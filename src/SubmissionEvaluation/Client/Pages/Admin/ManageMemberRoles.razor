@@ -1,4 +1,4 @@
-﻿@page "/Admin/ManageMemberRoles/{memberId}"
+@page "/Admin/ManageMemberRoles/{memberId}"
 @using SubmissionEvaluation.Shared.Models.Admin
 @using System.Net.Http.Json
 @using SubmissionEvaluation.Shared.Models.Permissions
@@ -52,7 +52,7 @@
 
     async void SendChangesToServer()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<ManageMemberRolesModel>("api/Admin/NewMemberRoles", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Admin/NewMemberRoles", Model);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<ManageMemberRolesModel>();

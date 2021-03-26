@@ -58,7 +58,7 @@
             var result = await responseMessage.Content.ReadFromJsonAsync<GenericModel>();
             if (result.HasSuccess)
             {
-                responseMessage = await httpClient.PostAsJsonAsync<ExtendedChallengeModel>("api/Challenge/Edit/Save", ChallengeModel);
+                responseMessage = await httpClient.PostAsJsonAsync("api/Challenge/Edit/Save", ChallengeModel);
                 if (responseMessage.IsSuccessStatusCode)
                 {
                     ChallengeModel = await responseMessage.Content.ReadFromJsonAsync<ExtendedChallengeModel>();

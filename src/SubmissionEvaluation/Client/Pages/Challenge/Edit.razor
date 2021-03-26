@@ -101,7 +101,7 @@
         var isValid = editContext.Validate();
         if (isValid)
         {
-            var responseMessage = await httpClient.PostAsJsonAsync<ExtendedChallengeModel>($"api/Challenge/Edit/{command}", Model);
+            var responseMessage = await httpClient.PostAsJsonAsync($"api/Challenge/Edit/{command}", Model);
             if (responseMessage.IsSuccessStatusCode)
             {
                 switch (command)

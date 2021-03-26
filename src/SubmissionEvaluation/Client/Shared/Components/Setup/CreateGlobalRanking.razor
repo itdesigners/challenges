@@ -1,4 +1,4 @@
-﻿@using SubmissionEvaluation.Contracts.Data.Ranklist
+@using SubmissionEvaluation.Contracts.Data.Ranklist
 @using System.Net.Http.Json
 @inject HttpClient httpClient
 @inject NavigationManager navi
@@ -53,7 +53,7 @@
 
     async void CreateRanking()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<GlobalRanklist>("api/Setup/CreateGlobalRanklist", Ranklist);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Setup/CreateGlobalRanklist", Ranklist);
         if (responseMessage.IsSuccessStatusCode)
         {
             var success = await responseMessage.Content.ReadFromJsonAsync<bool>();

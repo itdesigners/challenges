@@ -1,4 +1,4 @@
-﻿@using System.Net.Http.Json
+@using System.Net.Http.Json
 @inject IToastService toaster
 @inject HttpClient httpClient
 <div hidden="@(Step != 0)" class="shadow text-center loginbox">
@@ -32,7 +32,7 @@
     async void CheckSecurityToken()
     {
         await securityTokenChanged.InvokeAsync(securityToken);
-        var responseMessage = await httpClient.PostAsJsonAsync<string>("api/Setup/TokenValid", securityToken);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Setup/TokenValid", securityToken);
         if (responseMessage.IsSuccessStatusCode)
         {
             var result = await responseMessage.Content.ReadFromJsonAsync<bool>();

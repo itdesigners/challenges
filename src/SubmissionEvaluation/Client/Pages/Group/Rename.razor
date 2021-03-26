@@ -56,7 +56,7 @@
     {
         if (Model.Name != null && (Model.NewName != null) & !Model.Name.Equals(Model.NewName))
         {
-            var responseMessage = await httpClient.PostAsJsonAsync<RenameModel>("api/Group/RenameGroup", Model);
+            var responseMessage = await httpClient.PostAsJsonAsync("api/Group/RenameGroup", Model);
             var success = false;
             if(responseMessage.IsSuccessStatusCode)
             {

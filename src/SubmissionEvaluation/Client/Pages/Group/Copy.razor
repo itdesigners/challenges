@@ -55,7 +55,7 @@
 
     public async void CopyGroup()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<CopyModel>("api/Group/Copy", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Group/Copy", Model);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<CopyModel>();

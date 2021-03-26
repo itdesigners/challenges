@@ -47,7 +47,7 @@
     }
     async void CreateUser()
     {
-        var res = await httpClient.PostAsJsonAsync<AddTempUserModel>("api/Admin/AddUser", Model);
+        var res = await httpClient.PostAsJsonAsync("api/Admin/AddUser", Model);
         if (res.IsSuccessStatusCode)
         {
             var result = await res.Content.ReadFromJsonAsync<GenericModel>();

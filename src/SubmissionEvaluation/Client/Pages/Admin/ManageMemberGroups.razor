@@ -63,7 +63,7 @@
 
     async void SendChangesToServer()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<ManageMemberGroupsModel>("api/Admin/NewMemberGroups", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Admin/NewMemberGroups", Model);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<ManageMemberGroupsModel>();

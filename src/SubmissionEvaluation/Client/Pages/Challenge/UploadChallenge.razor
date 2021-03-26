@@ -1,4 +1,4 @@
-﻿@page "/Challenge/UploadChallenge" 
+@page "/Challenge/UploadChallenge" 
 @using System.IO
 @using System.Net.Http.Json
 @using SubmissionEvaluation.Shared.Models.Shared
@@ -44,7 +44,7 @@
     async void ChallengeUpload()
     {
 
-        var res = await httpClient.PostAsJsonAsync<List<DetailedInputFile>>("api/Challenge/UploadChallenge", Model.UploadedFiles);
+        var res = await httpClient.PostAsJsonAsync("api/Challenge/UploadChallenge", Model.UploadedFiles);
         if(res.IsSuccessStatusCode)
         {
             var result = await res.Content.ReadAsStringAsync();

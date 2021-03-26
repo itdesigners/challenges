@@ -78,14 +78,14 @@
     {
         ChallengeModel.NewFiles = domain.ExtractFoldersToServerFiles(ChallengeModel.NewFiles);
         domain.MapFilesToTest(ChallengeModel.NewFiles, Model.Test.InputFiles, Model.Test.Id.ToString());
-        var responseMessage = await httpClient.PostAsJsonAsync<ChallengeTestCreateModel>("api/Test/createtest/Create", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Test/createtest/Create", Model);
         if (responseMessage.IsSuccessStatusCode)
         {
             var result = await responseMessage.Content.ReadFromJsonAsync<ChallengeTestCreateModel>();
             if (result.HasSuccess)
             {
                 Model = result;
-                responseMessage = await httpClient.PostAsJsonAsync<ExtendedChallengeModel>("api/Challenge/Edit/Save", ChallengeModel);
+                responseMessage = await httpClient.PostAsJsonAsync("api/Challenge/Edit/Save", ChallengeModel);
                 if (responseMessage.IsSuccessStatusCode)
                 {
                     ChallengeModel = await responseMessage.Content.ReadFromJsonAsync<ExtendedChallengeModel>();

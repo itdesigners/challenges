@@ -64,7 +64,7 @@
 
     private async void CreateTest()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<TestGeneratorModel<Result, Member>>("api/Test/CreateTestWithTestGeneratorResult", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Test/CreateTestWithTestGeneratorResult", Model);
         if (responseMessage.IsSuccessStatusCode)
         {
             var result = await responseMessage.Content.ReadFromJsonAsync<TestGeneratorModel<Result, Member>>();

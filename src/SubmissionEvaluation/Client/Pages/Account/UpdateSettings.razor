@@ -56,7 +56,7 @@
 
     async void SendNewSettings()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<SettingsModel>("api/Account/UpdateSettings", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Account/UpdateSettings", Model);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<SettingsModel>();

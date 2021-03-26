@@ -106,7 +106,7 @@
     {
         Model.UploadArchive = TempHolder;
         TempHolder = new List<DetailedInputFile>();
-        var responseMessage = await httpClient.PostAsJsonAsync<List<DetailedInputFile>>($"api/Submission/UploadJSON/{ChallengeName}", Model.UploadArchive);
+        var responseMessage = await httpClient.PostAsJsonAsync($"api/Submission/UploadJSON/{ChallengeName}", Model.UploadArchive);
         if (responseMessage.IsSuccessStatusCode)
         {
             var result = await responseMessage.Content.ReadFromJsonAsync<GenericModel>();

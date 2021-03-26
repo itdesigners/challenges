@@ -1,4 +1,4 @@
-﻿@page "/Challenge/Rename/{Id}"
+@page "/Challenge/Rename/{Id}"
 @using SubmissionEvaluation.Shared.Classes.Messages
 @using System.Net.Http.Json
 @inject HttpClient httpClient
@@ -55,7 +55,7 @@
     {
         if (Model.Name != null && (Model.NewName != null) & !Model.Name.Equals(Model.NewName))
         {
-            var responseMessage = await httpClient.PostAsJsonAsync<RenameModel>("api/Challenge/Rename", Model);
+            var responseMessage = await httpClient.PostAsJsonAsync("api/Challenge/Rename", Model);
             if (responseMessage.IsSuccessStatusCode)
             {
                 var success = await responseMessage.Content.ReadFromJsonAsync<bool>();

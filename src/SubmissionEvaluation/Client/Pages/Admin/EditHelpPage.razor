@@ -1,4 +1,4 @@
-﻿@page "/Admin/EditHelpPage/{pathOne}/{pathTwo}"
+@page "/Admin/EditHelpPage/{pathOne}/{pathTwo}"
 @page "/Admin/EditHelpPage/{pathOne}"
 @using SubmissionEvaluation.Shared.Models.Help
 @using System.Net.Http.Json
@@ -91,7 +91,7 @@
         {
             navi.NavigateTo($"Home/Error/{SubmissionEvaluation.Shared.Classes.Messages.ErrorMessages.NoPermission}");
         }
-        var responseMessage = await httpClient.PostAsJsonAsync<string>("api/Admin/EditHelpPage", path);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Admin/EditHelpPage", path);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<HelpModel>();
@@ -107,7 +107,7 @@
         var isValid = context.Validate();
         if (isValid)
         {
-            var responseMessage = await httpClient.PostAsJsonAsync<HelpModel>("api/Admin/UpdateHelpPage", Model);
+            var responseMessage = await httpClient.PostAsJsonAsync("api/Admin/UpdateHelpPage", Model);
             if (responseMessage.IsSuccessStatusCode)
             {
                 Model = await responseMessage.Content.ReadFromJsonAsync<HelpModel>();

@@ -1,4 +1,4 @@
-﻿@page "/Help/ViewPage"
+@page "/Help/ViewPage"
 @page "/Help/ViewPage/{pathOne}/{pathTwo}"
 @page "/Help/ViewPage/{pathOne}"
 @using SubmissionEvaluation.Shared.Models.Help
@@ -96,7 +96,7 @@
             path = " ";
         }
     //Sincerely a get-request, but the path-string could contain slashes itself, so it needs to be transferred as a model.
-        var responseMessage = await httpClient.PostAsJsonAsync<string>("api/Help/getViewPage", path);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Help/getViewPage", path);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<HelpModel>();

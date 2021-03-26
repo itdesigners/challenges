@@ -56,7 +56,7 @@
 
     public async void CopyChallenge()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<CopyModel>("api/Challenge/Copy", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Challenge/Copy", Model);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<CopyModel>();

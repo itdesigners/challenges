@@ -55,7 +55,7 @@
 
     async void CreateNewGroup()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<GroupModel<Challenge, Member, Group>>("api/Group/CreateGroup", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Group/CreateGroup", Model);
         if(responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<GroupModel<Challenge, Member, Group>>();

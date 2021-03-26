@@ -1,4 +1,4 @@
-﻿@using System.Net.Http.Json
+@using System.Net.Http.Json
 @inject HttpClient httpClient
 @inject IToastService toaster
 @inject NavigationManager navi
@@ -27,7 +27,7 @@
 
     async void SendRegistration()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<RegisterAdminTupel>("api/Setup/RegisterFirstAdmin", new RegisterAdminTupel(Model, securityToken));
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Setup/RegisterFirstAdmin", new RegisterAdminTupel(Model, securityToken));
         if (responseMessage.IsSuccessStatusCode)
         {
             var result = await responseMessage.Content.ReadFromJsonAsync<GenericModel>();

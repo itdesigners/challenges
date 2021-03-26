@@ -58,7 +58,7 @@
 
     async void UpdateGroups()
     {
-        var res = await HttpClient.PostAsJsonAsync<SelectGroupModel>("api/Account/Groups", Model);
+        var res = await HttpClient.PostAsJsonAsync("api/Account/Groups", Model);
         if(res.IsSuccessStatusCode)
         {
             Model = await res.Content.ReadFromJsonAsync<SelectGroupModel>();

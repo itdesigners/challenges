@@ -1,4 +1,4 @@
-﻿@page "/Submission/View/{ChallengeName}/{SelectedSubmission}"
+@page "/Submission/View/{ChallengeName}/{SelectedSubmission}"
 @using System.Net.Http.Json
 ﻿@using SubmissionEvaluation.Shared.Models.Submission
 @inject HttpClient httpClient
@@ -52,7 +52,7 @@
     private async void SetCurrentFile(string item)
     {
     //The below is a get, but you need to give the file as model, cause otherwise it blocks.
-        var responseMessage = await httpClient.PostAsJsonAsync<string>($"api/Submission/GetCurrentFile/{ChallengeName}/{SelectedSubmission}", item);
+        var responseMessage = await httpClient.PostAsJsonAsync($"api/Submission/GetCurrentFile/{ChallengeName}/{SelectedSubmission}", item);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<SubmissionViewModel>();

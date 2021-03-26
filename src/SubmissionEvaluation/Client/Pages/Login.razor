@@ -57,7 +57,7 @@
 
     public async void HandleLogin()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<LoginModel>("api/Account/Login", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Account/Login", Model);
         if (responseMessage.IsSuccessStatusCode)
         {
             var result = await responseMessage.Content.ReadFromJsonAsync<LoginModel>();

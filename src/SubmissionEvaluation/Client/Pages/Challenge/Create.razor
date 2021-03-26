@@ -64,7 +64,7 @@
     public async void CreateChallenge()
     {
         await Partial.SaveEditor();
-        var responseMessage = await httpClient.PostAsJsonAsync<ExtendedChallengeModel>("api/Challenge/CreateChallenge", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Challenge/CreateChallenge", Model);
         if (responseMessage.IsSuccessStatusCode)
         {
             var result = await responseMessage.Content.ReadFromJsonAsync<ExtendedChallengeModel>();

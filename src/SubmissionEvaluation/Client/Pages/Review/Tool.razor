@@ -94,14 +94,14 @@
 
     void CancelReview()
     {
-        httpClient.PostAsJsonAsync<ReviewToolModel>("api/Review/CancelReview", Model);
+        httpClient.PostAsJsonAsync("api/Review/CancelReview", Model);
         navi.NavigateTo("Review/Overview/Canceled");
     }
 
     async void SubmitReview()
     {
         var data = new ReviewData {Challenge = challengeId, Id = submissionId, Time = (DateTime.Now - ReviewStartTime).ToString(@"hh\:mm\:ss"), ResultComments = synchronizer.AllFilesWithComments.Select(x => x.Comments).ToArray(), GuidedQuestionResult = Model.GuidedQuestions.ToArray()};
-        var responseMessage = await httpClient.PostAsJsonAsync<ReviewData>("api/Review/SubmitReview", data);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Review/SubmitReview", data);
         if (responseMessage.IsSuccessStatusCode)
         {
             var result = await responseMessage.Content.ReadFromJsonAsync<GenericModel>();

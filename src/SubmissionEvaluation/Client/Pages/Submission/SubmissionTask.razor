@@ -131,7 +131,7 @@
 
     private async void RerunSubmission(string selectedSubmission)
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<bool>($"api/Submission/RerunSubmission/{Model.Id}/{selectedSubmission}", true);
+        var responseMessage = await httpClient.PostAsJsonAsync($"api/Submission/RerunSubmission/{Model.Id}/{selectedSubmission}", true);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<SubmissionHistoryModel<Member>>();
@@ -142,7 +142,7 @@
 
     private async void RerunAllSubmissions()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<string>("api/Submission/RerunAllSubmissions", Model.Id);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Submission/RerunAllSubmissions", Model.Id);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<SubmissionHistoryModel<Member>>();
@@ -154,7 +154,7 @@
     private async void RemoveDeadSubmissions()
     {
         //Though this is deleting old failed submissions, it´s modifying the model with it. Cause the method server side returns the model, this is the view to be taken and it is a post.
-        var responseMessage = await httpClient.PostAsJsonAsync<string>("api/Submission/RemoveDeadSubmissions", Model.Id);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Submission/RemoveDeadSubmissions", Model.Id);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<SubmissionHistoryModel<Member>>();

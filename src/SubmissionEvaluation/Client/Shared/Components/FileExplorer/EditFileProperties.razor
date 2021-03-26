@@ -115,7 +115,7 @@
 
     private async void DownloadFile()
     {
-        var responseMessage = await httpClient.PostAsJsonAsync<string>(DownloadUrl, file.Path + file.OriginalName);
+        var responseMessage = await httpClient.PostAsJsonAsync(DownloadUrl, file.Path + file.OriginalName);
         if (responseMessage.IsSuccessStatusCode)
         {
             var info = await responseMessage.Content.ReadFromJsonAsync<DownloadInfo>();

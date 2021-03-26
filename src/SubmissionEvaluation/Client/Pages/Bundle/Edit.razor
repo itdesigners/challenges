@@ -82,7 +82,7 @@
         await Partial.SaveEditor();
         if (context.Validate())
         {
-            var responseMessage = await httpClient.PostAsJsonAsync<BundleModel>($"api/Bundle/Edit/{command}", Model);
+            var responseMessage = await httpClient.PostAsJsonAsync($"api/Bundle/Edit/{command}", Model);
             if (responseMessage.IsSuccessStatusCode)
             {
                 Model = await responseMessage.Content.ReadFromJsonAsync<BundleModel>();

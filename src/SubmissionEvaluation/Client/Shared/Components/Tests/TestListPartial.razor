@@ -1,4 +1,4 @@
-﻿@using System.Net.Http.Json
+@using System.Net.Http.Json
 @inject HttpClient httpClient
 @inject NavigationManager NavigationManager
 @inject IToastService toastService
@@ -123,7 +123,7 @@
             toastService.ShowSuccess($"Test {Convert.ToInt32(test.Index)} deleted", "Success");
             Model.Tests.Remove(test);
             Model.Files.Where(x => x.Name.StartsWith(test.Id.ToString()) || x.Name.StartsWith("_" + test.Id)).ToList().ForEach(x => x.IsDelete = true);
-            var responseMessage = await httpClient.PostAsJsonAsync<ExtendedChallengeModel>("api/Challenge/Edit/Save", Model);
+            var responseMessage = await httpClient.PostAsJsonAsync("api/Challenge/Edit/Save", Model);
             if (responseMessage.IsSuccessStatusCode)
             {
                 Model = await responseMessage.Content.ReadFromJsonAsync<ExtendedChallengeModel>();

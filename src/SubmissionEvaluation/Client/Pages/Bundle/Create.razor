@@ -72,7 +72,7 @@
     async void CreateBundle()
     {
         await Partial.SaveEditor();
-        var responseMessage = await httpClient.PostAsJsonAsync<BundleModel>("api/Bundle/Create", Model);
+        var responseMessage = await httpClient.PostAsJsonAsync("api/Bundle/Create", Model);
         if (responseMessage.IsSuccessStatusCode)
         {
             Model = await responseMessage.Content.ReadFromJsonAsync<BundleModel>();

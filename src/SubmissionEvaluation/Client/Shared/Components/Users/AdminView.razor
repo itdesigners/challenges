@@ -140,7 +140,7 @@
 
     async void ActivatePendingMember(string id)
     {
-        var responseMessage = await HttpClient.PostAsJsonAsync<string>("api/Admin/ActivatePendingMember", id);
+        var responseMessage = await HttpClient.PostAsJsonAsync("api/Admin/ActivatePendingMember", id);
         var model = new AdminUserModel<Member>();
         if (responseMessage.IsSuccessStatusCode)
         {
@@ -157,7 +157,7 @@
 
     async void ImpersonateMember(string id)
     {
-        var responseMessage = await HttpClient.PostAsJsonAsync<string>("api/Admin/ImpersonateMember", id);
+        var responseMessage = await HttpClient.PostAsJsonAsync("api/Admin/ImpersonateMember", id);
         var model = new AdminUserModel<Member>();
         if (responseMessage.IsSuccessStatusCode)
         {
@@ -172,7 +172,7 @@
 
     async void IncreaseMemberReviewLevel(string id)
     {
-        var responseMessage = await HttpClient.PostAsJsonAsync<string>("api/Admin/IncreaseMemberReviewLevel", id);
+        var responseMessage = await HttpClient.PostAsJsonAsync("api/Admin/IncreaseMemberReviewLevel", id);
         if (responseMessage.IsSuccessStatusCode)
         {
             var model = await responseMessage.Content.ReadFromJsonAsync<AdminUserModel<Member>>();
