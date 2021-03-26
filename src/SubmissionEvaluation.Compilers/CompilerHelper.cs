@@ -23,6 +23,11 @@ namespace SubmissionEvaluation.Compilers
 
         public static string GetRelativePath(string file, string folder)
         {
+            // swap windows path to unix path style
+            file = file.Replace("\\", "/");
+            folder = folder.Replace("\\", "/");
+
+            // finally determine the relative path
             return MakeRelativePath(folder, file);
         }
 
