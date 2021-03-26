@@ -1,4 +1,4 @@
-﻿@page "/Group/Edit/Rename/{Id}"
+@page "/Group/Edit/Rename/{Id}"
 @using SubmissionEvaluation.Shared.Classes.Messages
 @using System.Net.Http.Json
 @using SubmissionEvaluation.Shared.Models.Account
@@ -57,7 +57,7 @@
         if (Model.Name != null && (Model.NewName != null) & !Model.Name.Equals(Model.NewName))
         {
             var responseMessage = await httpClient.PostAsJsonAsync<RenameModel>("api/Group/RenameGroup", Model);
-            bool success = false;
+            var success = false;
             if(responseMessage.IsSuccessStatusCode)
             {
                 success = await responseMessage.Content.ReadFromJsonAsync<bool>();

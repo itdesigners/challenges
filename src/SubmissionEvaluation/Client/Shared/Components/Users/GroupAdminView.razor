@@ -23,8 +23,8 @@
             <tr>
                 @{
                     var Points = PointsForRelevantMembers[member.Id].ToList();
-                    int duplicateMetric = 0;
-                    int points_in_group = 0;
+                    var duplicateMetric = 0;
+                    var points_in_group = 0;
                     var available_challenges = Groups.Groups.Single(x => x.Id == memberships.GroupName).AvailableChallenges ?? new string[] { };
                     var forced_challenges = Groups.Groups.Single(x => x.Id == memberships.GroupName).ForcedChallenges ?? new string[] { };
                     foreach (var item in Points)

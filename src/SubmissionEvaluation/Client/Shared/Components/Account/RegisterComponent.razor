@@ -98,8 +98,8 @@
         }
         else
         {
-            string outputString = "";
-            List<string> errorList = pwService.GetRequirementsString();
+            var outputString = "";
+            var errorList = pwService.GetRequirementsString();
             Model.HasError = true;
             Model.Message = ErrorMessages.WrongUserPassword;
             outputString += Model.MessageTranslation + "\n";
