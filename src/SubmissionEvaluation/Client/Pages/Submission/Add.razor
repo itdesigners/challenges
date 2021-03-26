@@ -18,7 +18,7 @@
                 Bisherige Einreichungen
             </div>
             <div>
-                <button class="btn btn-outline-dark btn-margin" style="width: 100%" type="button" @onclick="Reload">Aktualisieren</button>
+                <button class="btn btn-outline-dark" style="width: 100%" type="button" @onclick="Reload">Aktualisieren</button>
             </div>
             <SubmissionList @bind-Model="Model"/>
         </div>
@@ -142,7 +142,7 @@
         {
             Model = await httpClient.GetFromJsonAsync<UploadModel<Result, Member>>($"/api/Submission/Add/{ChallengeName}/{submissionId}");
         }
-        toaster.ShowInfo("Wurde neu geladen.");
+        toaster.ShowInfo("Die bisherigen Einreichungen wurden erneut geladen.");
         StateHasChanged();
     }
 
