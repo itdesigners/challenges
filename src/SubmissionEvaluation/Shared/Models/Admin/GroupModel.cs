@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Markdig.Helpers;
 using SubmissionEvaluation.Contracts.Data;
 
 namespace SubmissionEvaluation.Shared.Models.Admin
 {
-    public class GroupModel<T, S, R> : GenericModel where T : IChallenge where S : IMember where R: IGroup
+    public class GroupModel<T, S, R> : GenericModel where T : IChallenge where S : IMember where R : IGroup
     {
         [Required] public string Id { get; set; }
 

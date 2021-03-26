@@ -193,7 +193,9 @@ namespace SubmissionEvaluation.Domain
             domain.Log.Information($"Interaktion: Kopiere Gruppe {group.Id} zu {toGroupName}");
             var groupToCopy = domain.ProviderStore.FileProvider.LoadGroup(group.Id);
             groupToCopy.Id = toGroupName;
-            domain.ProviderStore.FileProvider.CreateGroup(groupToCopy.Id, groupToCopy.Title, groupToCopy.GroupAdminIds, groupToCopy.IsSuperGroup, groupToCopy.SubGroups, groupToCopy.ForcedChallenges, groupToCopy.AvailableChallenges, groupToCopy.MaxUnlockedChallenges, groupToCopy.RequiredPoints, groupToCopy.StartDate, groupToCopy.EndDate);
+            domain.ProviderStore.FileProvider.CreateGroup(groupToCopy.Id, groupToCopy.Title, groupToCopy.GroupAdminIds, groupToCopy.IsSuperGroup,
+                groupToCopy.SubGroups, groupToCopy.ForcedChallenges, groupToCopy.AvailableChallenges, groupToCopy.MaxUnlockedChallenges,
+                groupToCopy.RequiredPoints, groupToCopy.StartDate, groupToCopy.EndDate);
 
             using (var writeLock = domain.ProviderStore.FileProvider.GetLock())
             {
@@ -1062,7 +1064,9 @@ namespace SubmissionEvaluation.Domain
                     {
                         var bestScore = 0;
                         Result bestMatch = null;
-                        foreach (var sub in submissions.Where(x => x.Result.SubmissionDate < toCheck.Result.SubmissionDate && x.Result.SubmissionDate >= toCheck.Result.SubmissionDate.AddDays(-Settings.DuplicateCheckWindow)))
+                        foreach (var sub in submissions.Where(x =>
+                            x.Result.SubmissionDate < toCheck.Result.SubmissionDate &&
+                            x.Result.SubmissionDate >= toCheck.Result.SubmissionDate.AddDays(-Settings.DuplicateCheckWindow)))
                         {
                             var score = EvaluateDuplicationScore(toCheck, sub);
                             if (score > bestScore)
@@ -1349,20 +1353,20 @@ namespace SubmissionEvaluation.Domain
             return member;
         }
 
-        public void CreateGroup(IMember member, string id, string title, List<string> groupAdminIds, bool isSuperGroup, string[] subGroups, string[] forcedChallenges, string[] availableChallenges,
-            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate)
+        public void CreateGroup(IMember member, string id, string title, List<string> groupAdminIds, bool isSuperGroup, string[] subGroups,
+            string[] forcedChallenges, string[] availableChallenges, int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate)
         {
             if (requiredPoints == 0)
             {
                 requiredPoints = null;
             }
 
-            domain.ProviderStore.FileProvider.CreateGroup(id, title, groupAdminIds, isSuperGroup, subGroups, forcedChallenges, availableChallenges, maxUnlockedChallenges,
-                requiredPoints, startDate, endDate);
+            domain.ProviderStore.FileProvider.CreateGroup(id, title, groupAdminIds, isSuperGroup, subGroups, forcedChallenges, availableChallenges,
+                maxUnlockedChallenges, requiredPoints, startDate, endDate);
         }
 
-        public void EditGroup(IMember member, string id, string title, List<string> groupAdminIds, bool isSuperGroup, string[] subGroups, string[] forcedChallenges, string[] availableChallenges,
-            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate)
+        public void EditGroup(IMember member, string id, string title, List<string> groupAdminIds, bool isSuperGroup, string[] subGroups,
+            string[] forcedChallenges, string[] availableChallenges, int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate)
         {
             using var writeLock = domain.ProviderStore.FileProvider.GetLock();
             var group = domain.ProviderStore.FileProvider.LoadGroup(id, writeLock);

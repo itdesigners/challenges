@@ -25,7 +25,7 @@ namespace SubmissionEvaluation.Client
             builder.Services.AddSingleton<ReviewSynchronizer>();
             builder.Services.AddSingleton<HelperService>();
             builder.Services.AddSingleton<PasswordRequirementsService>();
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped(sp => new HttpClient {BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)});
 
             await builder.Build().RunAsync();
         }

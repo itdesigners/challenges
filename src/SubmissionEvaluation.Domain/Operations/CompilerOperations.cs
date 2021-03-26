@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -41,7 +40,7 @@ namespace SubmissionEvaluation.Domain.Operations
             var sizeInfo = compiler.DetermineContentSize(submissionSourcePath);
             return (execParams, sizeInfo);
         }
-        
+
         private static void EnsureLanguageSupported(IList<string> supportedLanguages, string language)
         {
             if (supportedLanguages != null && supportedLanguages.Count > 0 && !supportedLanguages.Contains(language))

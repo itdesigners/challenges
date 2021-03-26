@@ -30,7 +30,7 @@ namespace SubmissionEvaluation.Server.Classes.Authentication
 
                 if (CryptographyProvider.VerifyPassword(password, member.Password))
                 {
-                    return new Dictionary<string, string> { { "uid", member.Uid }, { "sn", member.Name }, { "givenName", "" }, { "mail", member.Mail } };
+                    return new Dictionary<string, string> {{"uid", member.Uid}, {"sn", member.Name}, {"givenName", ""}, {"mail", member.Mail}};
                 }
 
                 if (!BCrypt.Net.BCrypt.EnhancedVerify(password, member.Password))
@@ -41,7 +41,7 @@ namespace SubmissionEvaluation.Server.Classes.Authentication
                 var pwdHash = CryptographyProvider.CreateArgon2Password(password);
                 JekyllHandler.MemberProvider.UpdatePassword(member, pwdHash);
 
-                return new Dictionary<string, string> { { "uid", member.Uid }, { "sn", member.Name }, { "givenName", "" }, { "mail", member.Mail } };
+                return new Dictionary<string, string> {{"uid", member.Uid}, {"sn", member.Name}, {"givenName", ""}, {"mail", member.Mail}};
             }
             catch (Exception)
             {

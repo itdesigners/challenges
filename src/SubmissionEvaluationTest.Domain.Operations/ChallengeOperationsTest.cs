@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using SubmissionEvaluation.Contracts.Data;
 using SubmissionEvaluation.Domain.Operations;
 
 namespace SubmissionEvaluationTest.Domain.Operations

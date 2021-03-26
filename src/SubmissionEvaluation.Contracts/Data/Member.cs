@@ -33,41 +33,17 @@ namespace SubmissionEvaluation.Contracts.Data
         public int ReviewFrequency { get; set; } = 14;
         public DateTime LastReview { get; set; }
 
-        public string[] ReviewLanguages
-        {
-            get => reviewLanguages ?? new string[0];
-            set => reviewLanguages = value;
-        }
+        public string[] ReviewLanguages { get => reviewLanguages ?? new string[0]; set => reviewLanguages = value; }
 
-        public string[] Roles
-        {
-            get => roles ?? new string[0];
-            set => roles = value;
-        }
+        public string[] Roles { get => roles ?? new string[0]; set => roles = value; }
 
-        public string[] Groups
-        {
-            get => groups ?? new string[0];
-            set => groups = value;
-        }
+        public string[] Groups { get => groups ?? new string[0]; set => groups = value; }
 
-        public string[] UnlockedChallenges
-        {
-            get => unlockedChallenges ?? new string[0];
-            set => unlockedChallenges = value;
-        }
+        public string[] UnlockedChallenges { get => unlockedChallenges ?? new string[0]; set => unlockedChallenges = value; }
 
-        public string[] SolvedChallenges
-        {
-            get => solvedChallenges ?? new string[0];
-            set => solvedChallenges = value;
-        }
+        public string[] SolvedChallenges { get => solvedChallenges ?? new string[0]; set => solvedChallenges = value; }
 
-        public string[] CanRate
-        {
-            get => canRate ?? new string[0];
-            set => canRate = value;
-        }
+        public string[] CanRate { get => canRate ?? new string[0]; set => canRate = value; }
 
         public string Password { get; set; }
         public DateTime? LastNotificationCheck { get; set; }

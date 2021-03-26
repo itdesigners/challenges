@@ -10,17 +10,9 @@ namespace SubmissionEvaluation.Contracts.Data
         public string Path { get; set; }
         public string TestRunnerPath { get; set; }
 
-        public string[] Arguments
-        {
-            get => arguments;
-            set => arguments = value ?? new string[0];
-        }
+        public string[] Arguments { get => arguments; set => arguments = value ?? new string[0]; }
 
-        public string[] PreludingTestParameters
-        {
-            get => preludingTestParameters;
-            set => preludingTestParameters = value ?? new string[0];
-        }
+        public string[] PreludingTestParameters { get => preludingTestParameters; set => preludingTestParameters = value ?? new string[0]; }
 
         public string Language { get; set; }
         public string CompilerVersion { get; set; }

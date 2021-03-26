@@ -43,15 +43,11 @@ namespace SubmissionEvaluation.Server.Controllers
         private AdminUserModel<Member> FetchBasicModel()
         {
             var members = JekyllHandler.MemberProvider.GetMembers();
-            var memberShips = new List<GroupMemberships<Member>> { new GroupMemberships<Member>()
+            var memberShips = new List<GroupMemberships<Member>>
             {
-                Members = members.Select(x => new Member(x)).ToList(),
-                GroupName = string.Empty
-            }};
-            var model = new AdminUserModel<Member>
-            {
-                GroupMemberships = memberShips
+                new GroupMemberships<Member>() {Members = members.Select(x => new Member(x)).ToList(), GroupName = string.Empty}
             };
+            var model = new AdminUserModel<Member> {GroupMemberships = memberShips};
             return model;
         }
 
@@ -86,6 +82,7 @@ namespace SubmissionEvaluation.Server.Controllers
             {
                 actionMessage = $"Wollen sie die Gruppe {id} wirklich löschen?";
             }
+
             var model = new ConfirmActionModel {Id = id, Action = activity, ActionMessage = actionMessage};
             return Ok(model);
         }
@@ -256,9 +253,7 @@ namespace SubmissionEvaluation.Server.Controllers
             var subgroups = groups.SelectMany(x => x.SubGroups);
             var model = new ManageMemberGroupsModel
             {
-                Groups = AccountController.GetGroups(groups.Where(x => !subgroups.Contains(x.Id)).ToList(), member),
-                Name = member.Name,
-                Id = id
+                Groups = AccountController.GetGroups(groups.Where(x => !subgroups.Contains(x.Id)).ToList(), member), Name = member.Name, Id = id
             };
 
             return Ok(model);

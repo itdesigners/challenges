@@ -19,11 +19,7 @@ namespace SubmissionEvaluation.Contracts.Data
         public int Timeout { get; set; } = DefaultTimeout;
 
         [YamlMember(ScalarStyle = ScalarStyle.DoubleQuoted)]
-        public string[] Parameters
-        {
-            get => parameters;
-            set => parameters = value ?? new string[0];
-        }
+        public string[] Parameters { get => parameters; set => parameters = value ?? new string[0]; }
 
         public InputDefinition Input { get; set; }
         public List<FileDefinition> InputFiles { get; set; }

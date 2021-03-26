@@ -12,24 +12,15 @@ namespace SubmissionEvaluation.Shared.Classes.Messages
             translations = new Dictionary<string, string>
             {
                 {ErrorMessages.WrongUserPassword, "Der eingegebene Nutzer oder das Passwort sind ungültig!"},
-                {ErrorMessages.PasswordWrongLength, "Das Passwort ist nicht lang genug!" },
-                {ErrorMessages.PasswordNoUpper, "Das Passwort benötigt einen Großbuchstaben!" },
-                {ErrorMessages.PasswordNoLower, "Das Passwort benötigt einen Kleinbuchstaben!" },
-                {ErrorMessages.PasswordNoDigit, "Das Passwort benötigt eine Zahl!" },
-                {
-                    ErrorMessages.InvalidFile,
-                    "Entweder es wurden keine oder ungültige Dateien hochgeladen. Bitte prüfen und nochmals hochladen!"
-                },
-                {
-                    ErrorMessages.InvalidJekyllUser,
-                    "Falscher Benutzername oder falsches Passwort."
-                },
+                {ErrorMessages.PasswordWrongLength, "Das Passwort ist nicht lang genug!"},
+                {ErrorMessages.PasswordNoUpper, "Das Passwort benötigt einen Großbuchstaben!"},
+                {ErrorMessages.PasswordNoLower, "Das Passwort benötigt einen Kleinbuchstaben!"},
+                {ErrorMessages.PasswordNoDigit, "Das Passwort benötigt eine Zahl!"},
+                {ErrorMessages.InvalidFile, "Entweder es wurden keine oder ungültige Dateien hochgeladen. Bitte prüfen und nochmals hochladen!"},
+                {ErrorMessages.InvalidJekyllUser, "Falscher Benutzername oder falsches Passwort."},
                 {ErrorMessages.GenericError, "Es ist ein Fehler aufgetreten! Sollte das Problem weiterhin bestehen, wende dich an den Administrator."},
                 {ErrorMessages.ChallengeNameSpaces, "Der Projektname darf keine Leerstellen enthalten"},
-                {
-                    ErrorMessages.NoPermission,
-                    "Du hast keine Berechtigung!"
-                },
+                {ErrorMessages.NoPermission, "Du hast keine Berechtigung!"},
                 {
                     ErrorMessages.ConfirmDeleteChallenge,
                     "Bitte bestätige, dass du die Challenge löschen möchtest. Scrolle dazu zum Seitenende und wählen den Button \"Entgültig löschen\" aus!"

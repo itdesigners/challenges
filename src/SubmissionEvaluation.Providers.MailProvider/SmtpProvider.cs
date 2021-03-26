@@ -27,7 +27,8 @@ namespace SubmissionEvaluation.Providers.MailProvider
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
         }
 
-        public void SendMail(string address, string subject, string content, AttachmentProperties[] attachmentProperties = null, string cc = null, bool htmlBody = false)
+        public void SendMail(string address, string subject, string content, AttachmentProperties[] attachmentProperties = null, string cc = null,
+            bool htmlBody = false)
         {
             log.Warning("Sende Mail an {to} mit {subject}", address, subject, content);
             if (!enableSendMail)

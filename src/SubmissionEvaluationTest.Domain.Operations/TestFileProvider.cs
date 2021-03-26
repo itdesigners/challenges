@@ -39,42 +39,12 @@ namespace SubmissionEvaluationTest.Domain.Operations
             throw new NotImplementedException();
         }
 
-        public string GetTournamentSubmissionPath(IMember member, string tournament)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetSourceZipPathForTournamentEntry(TournamentEntry tournamentEntry)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetPathToGame(string game)
-        {
-            throw new NotImplementedException();
-        }
-
         public string GetBuildPathForSubmissionSource(string pathToContent)
         {
             throw new NotImplementedException();
         }
 
         public string ExtractContent(string pathToZip, bool forceClean = true)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<string> GetAllEntriesForTournament(string tournament)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetPathToTournamentEntry(string tournament, string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetExtractPathForZip(TournamentEntry author)
         {
             throw new NotImplementedException();
         }
@@ -174,27 +144,12 @@ namespace SubmissionEvaluationTest.Domain.Operations
             throw new NotImplementedException();
         }
 
-        public void SaveTournamentStats(IDictionary<string, TournamentStats> stats, IWriteLock writeLock)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SaveSemesterRankingList(GlobalRanklist ranklist)
         {
             throw new NotImplementedException();
         }
 
         public void SaveGlobalRankingList(GlobalRanklist ranklist, IWriteLock writeLock)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveTournamentRanklist(TournamentRankings ranklist)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveTournamentMatches(TournamentMatches matches, IWriteLock writeLock)
         {
             throw new NotImplementedException();
         }
@@ -439,26 +394,6 @@ namespace SubmissionEvaluationTest.Domain.Operations
             throw new NotImplementedException();
         }
 
-        public void CreateTournament(ITournament tournament)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveTournamentProperties(ITournament tournament, IWriteLock writeLock)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<string> GetTournamentNames()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteAdditionalFile(ITournament tournament, string filename)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<Bundle> LoadAllBundles()
         {
             return bundles.Select(x => (Bundle) x);
@@ -539,8 +474,8 @@ namespace SubmissionEvaluationTest.Domain.Operations
             throw new NotImplementedException();
         }
 
-        public void CreateGroup(string id, string title, List<string> groupAdminIds, bool isSupergroup, string[] SubGroups, string[] forcedChallenges, string[] availableChallenges,
-            int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate)
+        public void CreateGroup(string id, string title, List<string> groupAdminIds, bool isSupergroup, string[] SubGroups, string[] forcedChallenges,
+            string[] availableChallenges, int maxUnlockedChallenges, int? requiredPoints, DateTime? startDate, DateTime? endDate)
         {
             throw new NotImplementedException();
         }
@@ -568,6 +503,71 @@ namespace SubmissionEvaluationTest.Domain.Operations
         }
 
         public bool ChallengeExists(string challengeId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetTournamentSubmissionPath(IMember member, string tournament)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetSourceZipPathForTournamentEntry(TournamentEntry tournamentEntry)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetPathToGame(string game)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<string> GetAllEntriesForTournament(string tournament)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetPathToTournamentEntry(string tournament, string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetExtractPathForZip(TournamentEntry author)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveTournamentStats(IDictionary<string, TournamentStats> stats, IWriteLock writeLock)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveTournamentRanklist(TournamentRankings ranklist)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveTournamentMatches(TournamentMatches matches, IWriteLock writeLock)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CreateTournament(ITournament tournament)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SaveTournamentProperties(ITournament tournament, IWriteLock writeLock)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<string> GetTournamentNames()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteAdditionalFile(ITournament tournament, string filename)
         {
             throw new NotImplementedException();
         }

@@ -107,7 +107,8 @@ namespace SubmissionEvaluation.Server.Classes.JekyllHandling
                 permissions.EditPermissions.AddRange(Settings.Permissions.GroupAdminPermissions.EditPermissions);
                 var groups = Domain.Query.GetAllGroups();
                 permissions.GroupsAccessible.AddRange(groups.Where(x => (x.GroupAdminIds ?? new List<string>()).Contains(member.Id)).Select(x => x.Id));
-                permissions.GroupsAccessible.AddRange(groups.Where(x => (x.GroupAdminIds ?? new List<string>()).Contains(member.Id) && x.IsSuperGroup).SelectMany(x => x.SubGroups));
+                permissions.GroupsAccessible.AddRange(groups.Where(x => (x.GroupAdminIds ?? new List<string>()).Contains(member.Id) && x.IsSuperGroup)
+                    .SelectMany(x => x.SubGroups));
                 var members = MemberProvider.GetMembers();
                 permissions.MembersAccessible.AddRange(members.Where(x => x.Groups.Intersect(permissions.GroupsAccessible).Any()).Select(x => x.Id));
                 permissions.ChallengesAccessible.AddRange(groups.SelectMany(x => x.AvailableChallenges));

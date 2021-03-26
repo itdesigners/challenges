@@ -16,11 +16,7 @@ namespace SubmissionEvaluation.Contracts.Data
         [YamlMember(Alias = "Author")] public string AuthorID { get; set; }
 
         [YamlMember(Alias = "LastEditor")]
-        public string LastEditorID
-        {
-            get => string.IsNullOrEmpty(lastEditor) ? AuthorID : lastEditor;
-            set => lastEditor = value;
-        }
+        public string LastEditorID { get => string.IsNullOrEmpty(lastEditor) ? AuthorID : lastEditor; set => lastEditor = value; }
 
         [YamlIgnore] [JsonIgnore] public string Name { get; set; }
 

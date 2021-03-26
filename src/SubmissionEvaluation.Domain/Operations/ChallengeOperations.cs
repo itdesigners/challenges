@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Caching;
 using System.Text.RegularExpressions;
-using System.Web;
 using SubmissionEvaluation.Contracts.Data;
 using SubmissionEvaluation.Contracts.Exceptions;
 using SubmissionEvaluation.Contracts.Providers;
@@ -15,6 +14,8 @@ namespace SubmissionEvaluation.Domain.Operations
 {
     public static class ChallengeOperations
     {
+        private static MemoryCache ChallengesCanBeViewedByMemberCache = new MemoryCache("ChallengesCanBeViewedByMemberCache");
+
         internal static void RemoveAdditionalFileFromChallenge(ProviderStore providerStore, string challengeName, string filename)
         {
             using var writeLock = providerStore.FileProvider.GetLock();
@@ -181,13 +182,12 @@ namespace SubmissionEvaluation.Domain.Operations
             var allowed = GetChallengesCanBeViewedByMember(member, fileProvider);
             return allowed.Values.Where(x => containUnavailable || x.IsAvailable).ToList();
         }
+
         public static IReadOnlyList<IChallenge> GetAllChallengesForMember(IFileProvider fileProvider, bool containUnavailable)
         {
             var allowed = GetChallengesCanBeViewedByMember(null, fileProvider);
             return allowed.Values.Where(x => containUnavailable || x.IsAvailable).ToList();
         }
-
-        private static MemoryCache ChallengesCanBeViewedByMemberCache = new MemoryCache("ChallengesCanBeViewedByMemberCache");
 
         /// <summary>
         ///     Get all challenges that should be visible for the provided user.
@@ -211,6 +211,7 @@ namespace SubmissionEvaluation.Domain.Operations
             var visibleChallenges = FetchDefaultVisibleChallenges(member, fileProvider);
 
             #region determine challenges visible for an user that is not an admin or groupadmin
+
             if (!(member.IsAdmin || member.IsGroupAdmin))
             {
                 // Please, be aware that there are several dependencies which must be considered
@@ -230,9 +231,12 @@ namespace SubmissionEvaluation.Domain.Operations
                 foreach (var groupOfMember in groupsOfMember)
                 {
                     if (groupOfMember != null)
+                    {
                         AddChallengesForGroup(groupOfMember, member, visibleChallenges, fileProvider);
+                    }
                 }
             }
+
             #endregion
 
             var res = visibleChallenges.Distinct(new IChallengeComparer()).ToDictionary(x => x.Id);
@@ -260,6 +264,7 @@ namespace SubmissionEvaluation.Domain.Operations
             var visibleChallenges = FetchDefaultVisibleChallenges(member, fileProvider);
 
             #region determine challenges visible for an user that is not an admin or groupadmin
+
             if (!(member.IsAdmin || member.IsGroupAdmin))
             {
                 // Please, be aware that there are several dependencies which must be considered
@@ -279,9 +284,12 @@ namespace SubmissionEvaluation.Domain.Operations
                 foreach (var groupOfMember in groupsOfMember)
                 {
                     if (groupOfMember != null)
+                    {
                         AddChallengesForGroup(groupOfMember, member, visibleChallenges, fileProvider);
+                    }
                 }
             }
+
             #endregion
 
             // ensure list of challenges is unique before returning as dictionary
@@ -366,10 +374,8 @@ namespace SubmissionEvaluation.Domain.Operations
             // determine the first unsolved challenge of each bundle and
             // determine all unsolved challenges which are not part of a bundle
             var bundles = fileProvider.LoadAllBundles();
-            var unlockableChallengeIdsOfBundles = bundles
-                .Select(x => x.Challenges.FirstOrDefault(y => !member.SolvedChallenges.Contains(y)))
-                .Where(x => !string.IsNullOrEmpty(x))
-                .Where(x => group.AvailableChallenges.Contains(x));
+            var unlockableChallengeIdsOfBundles = bundles.Select(x => x.Challenges.FirstOrDefault(y => !member.SolvedChallenges.Contains(y)))
+                .Where(x => !string.IsNullOrEmpty(x)).Where(x => group.AvailableChallenges.Contains(x));
             var challengesWithinBundles = bundles.SelectMany(x => x.Challenges).ToList();
             var unlockableChallengeIdsNotPartOfBundles = group.AvailableChallenges.Where(x => !challengesWithinBundles.Contains(x));
             // If there is no maximum count of visible challenges defined, than add all challenges to the group
@@ -401,11 +407,10 @@ namespace SubmissionEvaluation.Domain.Operations
 
             // remove challenges which are too simple for a member, except they are part of a bundle or have no rating
             var ongoingChallengesOfBundle = bundles.SelectMany(x => x.Challenges.GetRange(1, x.Challenges.Count - 1));
-            var challengesWhichAreNotTooEasyOrPartOfABundle = challengesWhichAreNotAlreadySolvedOrUnlocked.Where(
-                x => x.State.DifficultyRating >= member.AverageDifficultyLevel * 0.9 ||
-                (!x.State.DifficultyRating.HasValue && member.AverageDifficultyLevel > 40) ||
+            var challengesWhichAreNotTooEasyOrPartOfABundle = challengesWhichAreNotAlreadySolvedOrUnlocked.Where(x =>
+                x.State.DifficultyRating >= member.AverageDifficultyLevel * 0.9 || !x.State.DifficultyRating.HasValue && member.AverageDifficultyLevel > 40 ||
                 ongoingChallengesOfBundle.Contains(x.Id));
-            
+
             // shuffle list of challenges using the random seed from the name of the user
             var availableChallengesShuffled = challengesWhichAreNotTooEasyOrPartOfABundle.Shuffle(GetAsciiSumOfString(member.Name)).ToList();
 
@@ -467,7 +472,6 @@ namespace SubmissionEvaluation.Domain.Operations
 
         public static bool CanAccessChallenge(IMember member, Challenge challenge, IFileProvider fileProvider)
         {
-            
             return GetChallengesCanBeViewedByMember(member, fileProvider).ContainsKey(challenge.Id);
         }
 

@@ -100,7 +100,7 @@ namespace SubmissionEvaluation.Domain.Operations
             var passed = reviewableChallenges.SelectMany(x => ProviderStore.FileProvider.LoadAllSubmissionsFor(x))
                 .Where(x => x.EvaluationState == EvaluationState.Evaluated && x.IsPassed);
             var orderedSubmissions = passed.OrderByDescending(x => x.SubmissionDate).ToList();
-            var bundles = ProviderStore.FileProvider.LoadAllBundles().SelectMany(x => x.Challenges.Select(y => new { Key = y, Value = x.Id }))
+            var bundles = ProviderStore.FileProvider.LoadAllBundles().SelectMany(x => x.Challenges.Select(y => new {Key = y, Value = x.Id}))
                 .ToDictionary(x => x.Key, x => x.Value);
             RemoveOlderDuplicatedSubmissions(orderedSubmissions, bundles);
             var reviewableSubmissions = orderedSubmissions.Where(x => x.ReviewState != ReviewStateType.Reviewed && x.ReviewState != ReviewStateType.Skipped);
@@ -123,10 +123,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 var ratingValue = ratingsDescending.FirstOrDefault(x => x.CategoryId == category.Id);
                 var childRating = new ReviewRating
                 {
-                    Id = category.Id,
-                    Title = category.Title,
-                    Description = category.Description,
-                    Quantifier = category.Quantifier
+                    Id = category.Id, Title = category.Title, Description = category.Description, Quantifier = category.Quantifier
                 };
                 if (ratingValue != null)
                 {
@@ -336,10 +333,8 @@ namespace SubmissionEvaluation.Domain.Operations
                     }
 
                     break;
-                case ReviewLevel.Expert:
-                    break;
-                case ReviewLevel.Master:
-                    return new Tuple<bool, string>(true, "");
+                case ReviewLevel.Expert: break;
+                case ReviewLevel.Master: return new Tuple<bool, string>(true, "");
             }
 
             var canReviewLanguage = reviewer.ReviewLanguages?.Contains(result.Language);

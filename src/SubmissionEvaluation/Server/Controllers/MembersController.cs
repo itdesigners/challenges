@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,12 +5,12 @@ using SubmissionEvaluation.Contracts.Data;
 using SubmissionEvaluation.Contracts.Data.Ranklist;
 using SubmissionEvaluation.Server.Classes.JekyllHandling;
 using SubmissionEvaluation.Server.Classes.Messages;
+using SubmissionEvaluation.Shared.Classes;
 using SubmissionEvaluation.Shared.Classes.Config;
 using SubmissionEvaluation.Shared.Models;
 using SubmissionEvaluation.Shared.Models.Members;
 using SubmissionEvaluation.Shared.Models.Permissions;
 using Member = SubmissionEvaluation.Contracts.ClientPocos.Member;
-using SubmissionEvaluation.Shared.Classes;
 
 namespace SubmissionEvaluation.Server.Controllers
 {
@@ -28,18 +27,24 @@ namespace SubmissionEvaluation.Server.Controllers
             {
                 return Ok(new GenericModel {HasError = true, Message = ErrorMessages.IdError});
             }
+
             var currentUser = JekyllHandler.GetMemberForUser(User);
-            if(Settings.Features.EnableRating || JekyllHandler.CheckPermissions(Actions.VIEW, "Member", currentUser, Restriction.MEMBERS, id)) {
+            if (Settings.Features.EnableRating || JekyllHandler.CheckPermissions(Actions.VIEW, "Member", currentUser, Restriction.MEMBERS, id))
+            {
                 var challengeCount = JekyllHandler.Domain.Query.GetAvailableChallengeCount();
                 var globalSubmitter = JekyllHandler.Domain.Query.GetGlobalSubmitter(member);
                 var achievements = JekyllHandler.Domain.Query.GetAwardsFor(member);
                 var history = JekyllHandler.Domain.Query.GetSubmitterHistory(member);
                 var points = JekyllHandler.Domain.Query.GetSubmitterRanklist(member);
-                if(!currentUser.IsAdmin) {
+                if (!currentUser.IsAdmin)
+                {
                     var permissions = JekyllHandler.GetPermissionsForMember(currentUser);
-                    history.Entries = history.Entries.Where(x => Settings.Features.EnableRating || permissions.ChallengesAccessible.Contains(x.Challenge) || currentUser.IsAdmin).ToList();
-                    points.Submissions = points.Submissions.Where(x => Settings.Features.EnableRating || permissions.ChallengesAccessible.Contains(x.Challenge) || currentUser.IsAdmin).ToList();
+                    history.Entries = history.Entries.Where(x =>
+                        Settings.Features.EnableRating || permissions.ChallengesAccessible.Contains(x.Challenge) || currentUser.IsAdmin).ToList();
+                    points.Submissions = points.Submissions.Where(x =>
+                        Settings.Features.EnableRating || permissions.ChallengesAccessible.Contains(x.Challenge) || currentUser.IsAdmin).ToList();
                 }
+
                 var model = new MemberModel<ISubmission, IMember>
                 {
                     Id = id,
@@ -54,9 +59,10 @@ namespace SubmissionEvaluation.Server.Controllers
                 };
 
                 return Ok(model);
-            } else
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -83,9 +89,11 @@ namespace SubmissionEvaluation.Server.Controllers
             }
 
             var ranklist = semester ? JekyllHandler.Domain.Query.GetCurrentSemesterRanklist() : JekyllHandler.Domain.Query.GetGlobalRanklist();
-            var members = JekyllHandler.MemberProvider.GetMembers().Where(x => member.IsAdmin || Settings.Features.EnableRating || permissions.MembersAccessible.Contains(x.Id)).ToDictionary(x => x.Id, x => new Member(x));
+            var members = JekyllHandler.MemberProvider.GetMembers()
+                .Where(x => member.IsAdmin || Settings.Features.EnableRating || permissions.MembersAccessible.Contains(x.Id))
+                .ToDictionary(x => x.Id, x => new Member(x));
 
-            IEnumerable<GlobalSubmitter> submitters = ranklist.Submitters.Where(x => members.Any(y => x.Id.Equals(y.Key)));
+            var submitters = ranklist.Submitters.Where(x => members.Any(y => x.Id.Equals(y.Key)));
 
             if (filterMode == "group")
             {
@@ -96,8 +104,7 @@ namespace SubmissionEvaluation.Server.Controllers
             {
                 switch (order)
                 {
-                    case "Name":
-                        break;
+                    case "Name": break;
                     case "Group":
                         submitters = submitters.OrderByDescending(x => members[x.Id].Groups.FirstOrDefault());
                         break;
@@ -153,23 +160,26 @@ namespace SubmissionEvaluation.Server.Controllers
         public IActionResult GetPermissionsForMember()
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(member != null) {
-            return Ok(JekyllHandler.GetPermissionsForMember(member));
-            } else
+            if (member != null)
+            {
+                return Ok(JekyllHandler.GetPermissionsForMember(member));
+            }
+            else
             {
                 return Ok(new Permissions());
             }
         }
+
         [HttpGet("PointsList/{id}")]
-        public IActionResult PointsList([FromRoute]string id)
+        public IActionResult PointsList([FromRoute] string id)
         {
             var member = JekyllHandler.MemberProvider.GetMemberById(id);
-            var points = JekyllHandler.Domain.Query.GetSubmitterRanklist(member)
-                .Submissions.Where(x =>
-                    x.Challenge != "ChallengeCreators" && x.Challenge != "Achievements" && x.Challenge != "Reviews")
-                .ToList().Select(x => GetDuplicateInfo(member, x)).ToList();
+            var points = JekyllHandler.Domain.Query.GetSubmitterRanklist(member).Submissions
+                .Where(x => x.Challenge != "ChallengeCreators" && x.Challenge != "Achievements" && x.Challenge != "Reviews").ToList()
+                .Select(x => GetDuplicateInfo(member, x)).ToList();
             return Ok(points);
         }
+
         private string FormatSemester(Semester semester)
         {
             var semesterPeriod = semester.Period == SemesterPeriod.SS ? "SS" : "WS";

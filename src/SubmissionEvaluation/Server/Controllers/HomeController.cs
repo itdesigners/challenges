@@ -1,14 +1,11 @@
-using System;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SubmissionEvaluation.Contracts.Data;
+using SubmissionEvaluation.Contracts.ClientPocos;
 using SubmissionEvaluation.Server.Classes;
 using SubmissionEvaluation.Server.Classes.JekyllHandling;
 using SubmissionEvaluation.Shared.Models;
 using SubmissionEvaluation.Shared.Models.Bundle;
-using Challenge = SubmissionEvaluation.Contracts.ClientPocos.Challenge;
-using Member = SubmissionEvaluation.Contracts.ClientPocos.Member;
 
 namespace SubmissionEvaluation.Server.Controllers
 {
@@ -24,8 +21,9 @@ namespace SubmissionEvaluation.Server.Controllers
             var activities = JekyllHandler.Domain.Query.GetRecentActivities();
             if (member == null)
             {
-                return new IndexHomeModel { Member = null };
+                return new IndexHomeModel {Member = null};
             }
+
             var categoryStats = JekyllHandler.Domain.Query.GetCategoryStats(member);
             var elements = categoryStats.ToDictionary(x => x.Key,
                 x => x.Value.Select(element => new CategoryListEntryExtendedModel
@@ -61,9 +59,7 @@ namespace SubmissionEvaluation.Server.Controllers
             }).ToList();
             var indexmodel = new IndexHomeModel
             {
-                Activities = activities,
-                CategoryStats = elements,
-                Member = new Member(member)
+                Activities = activities, CategoryStats = elements, Member = new Member(member)
                 //Bundles = bundles
             };
 

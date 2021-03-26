@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SubmissionEvaluation.Server.Classes.JekyllHandling;
-using SubmissionEvaluation.Shared.Classes.Config;
 
 namespace SubmissionEvaluation.Server
 {
@@ -25,12 +24,11 @@ namespace SubmissionEvaluation.Server
         {
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("IsChallengePlattformUser",
-                    policyBuilder =>
-                    {
-                        policyBuilder.RequireAuthenticatedUser().RequireClaim(ClaimTypes.Name).RequireClaim(ClaimTypes.GivenName)
-                            .RequireClaim(ClaimTypes.NameIdentifier).Build();
-                    });
+                options.AddPolicy("IsChallengePlattformUser", policyBuilder =>
+                {
+                    policyBuilder.RequireAuthenticatedUser().RequireClaim(ClaimTypes.Name).RequireClaim(ClaimTypes.GivenName)
+                        .RequireClaim(ClaimTypes.NameIdentifier).Build();
+                });
             });
 
             services.AddAuthentication(o =>
@@ -90,7 +88,7 @@ namespace SubmissionEvaluation.Server
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
-            
+
             app.UseStaticFiles(new StaticFileOptions {ServeUnknownFileTypes = true});
             app.Use(async (context, next) =>
             {
@@ -113,7 +111,7 @@ namespace SubmissionEvaluation.Server
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions { Authorization = new[] { new MyAuthorizationFilter() } });
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions {Authorization = new[] {new MyAuthorizationFilter()}});
             app.UseBlazorFrameworkFiles();
             app.UseEndpoints(endpoints =>
             {

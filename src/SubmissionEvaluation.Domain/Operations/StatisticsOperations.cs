@@ -195,7 +195,8 @@ namespace SubmissionEvaluation.Domain.Operations
         public List<SubmitterRankings> BuildSubmitterRanklist(List<ChallengeRanklist> ranklists)
         {
             var result = new ConcurrentDictionary<string, SubmitterRankings>();
-            Parallel.ForEach(ranklists, ranklist => {
+            Parallel.ForEach(ranklists, ranklist =>
+            {
                 foreach (var submitter in ranklist.Submitters)
                 {
                     if (!result.ContainsKey(submitter.Id))
@@ -215,6 +216,7 @@ namespace SubmissionEvaluation.Domain.Operations
             });
             return result.Values.ToList();
         }
+
         public GlobalRanklist BuildGlobalRanklist(IEnumerable<ChallengeRanklist> ranklists, GlobalRanklist oldRanklist)
         {
             var submitters = ranklists.SelectMany(x => x.Submitters);
@@ -231,9 +233,8 @@ namespace SubmissionEvaluation.Domain.Operations
             var creatorsRanklist = ranklists.FirstOrDefault(x => x.Challenge == "ChallengeCreators") ?? new ChallengeRanklist();
             var authorsCount = creatorsRanklist.Submitters.Where(x => DateInCurrentSemester(x.Date)).GroupBy(x => x.Id)
                 .ToDictionary(x => x.Key, x => x.Count());
-            var oldRanklist =
-                oldRanklists.FirstOrDefault(p => p.CurrentSemester?.FirstDay <= DateTime.Now && p.CurrentSemester?.LastDay >= DateTime.Now) ??
-                new GlobalRanklist();
+            var oldRanklist = oldRanklists.FirstOrDefault(p => p.CurrentSemester?.FirstDay <= DateTime.Now && p.CurrentSemester?.LastDay >= DateTime.Now) ??
+                              new GlobalRanklist();
             return BuildRanklistFromSubmitters(submittersGrouped, authorsCount, oldRanklist, false);
         }
 
@@ -469,8 +470,8 @@ namespace SubmissionEvaluation.Domain.Operations
             foreach (var submitter in submitters.GroupBy(x => x.Id))
             {
                 var bestEntry = submitter.First();
-                var otherLanguages = results.Where(x => x.IsPassed && x.MemberId == bestEntry.Id && x.Language != bestEntry.Language)
-                    .Select(x => x.Language).Distinct().ToList();
+                var otherLanguages = results.Where(x => x.IsPassed && x.MemberId == bestEntry.Id && x.Language != bestEntry.Language).Select(x => x.Language)
+                    .Distinct().ToList();
                 solvedCounter.Add(bestEntry.Language);
                 solvedCounter.AddRange(otherLanguages);
                 if (otherLanguages.Count > 0)
@@ -617,6 +618,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 Log.Error(ex, "Aktivitätslogging fehlgeschlagen");
             }
         }
+
         public void DeleteMemberFromGlobalRanking(IMember member)
         {
             using var writeLock = ProviderStore.FileProvider.GetLock();
@@ -832,6 +834,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 using var writeLock = ProviderStore.FileProvider.GetLock();
                 var updating = ProviderStore.FileProvider.LoadChallenge(props.Id, writeLock);
                 if (updating.FreezeDifficultyRating) { continue; }
+
                 if (!updating.FreezeDifficultyRating && updating.State.FeasibilityIndex == 0)
                 {
                     updating.State.DifficultyRating = null;
@@ -857,7 +860,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 {
                     if (!challenge.FreezeDifficultyRating)
                     {
-                        challenge.State.DifficultyRating = Math.Min(100, ((ctr / groupCount) + 1) * 100 / groups);
+                        challenge.State.DifficultyRating = Math.Min(100, (ctr / groupCount + 1) * 100 / groups);
                         if (challenge.RatingMethod != RatingMethod.Fixed)
                         {
                             challenge.State.DifficultyRating = Math.Min((int) (1.25 * challenge.State.DifficultyRating), 100);

@@ -11,9 +11,9 @@ using SubmissionEvaluation.Shared.Classes.Config;
 using SubmissionEvaluation.Shared.Classes.Messages;
 using SubmissionEvaluation.Shared.Models;
 using SubmissionEvaluation.Shared.Models.Bundle;
+using SubmissionEvaluation.Shared.Models.Permissions;
 using Challenge = SubmissionEvaluation.Contracts.ClientPocos.Challenge;
 using Member = SubmissionEvaluation.Contracts.ClientPocos.Member;
-using SubmissionEvaluation.Shared.Models.Permissions;
 
 namespace SubmissionEvaluation.Server.Controllers
 {
@@ -34,28 +34,30 @@ namespace SubmissionEvaluation.Server.Controllers
         public IActionResult List()
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.VIEW, "Bundles", member)) {
-            var bundles = JekyllHandler.Domain.Query.GetAllBundles(member, true);
-            var model = new BundleOverviewModel
+            if (JekyllHandler.CheckPermissions(Actions.VIEW, "Bundles", member))
             {
-                Categories = Settings.Customization.Categories,
-                Bundles = bundles.Where(x => member.IsAdmin || x.Author.Equals(member.Id)).Select(x => new BundleModel
+                var bundles = JekyllHandler.Domain.Query.GetAllBundles(member, true);
+                var model = new BundleOverviewModel
                 {
-                    Id = x.Id,
-                    Title = x.Title,
-                    Challenges = x.Challenges,
-                    Category = x.Category,
-                    AuthorId = x.Author,
-                    Author = JekyllHandler.MemberProvider.GetMemberById(x.Author, true).Name,
-                    IsDraft = x.IsDraft
-                }).ToList()
-            };
+                    Categories = Settings.Customization.Categories,
+                    Bundles = bundles.Where(x => member.IsAdmin || x.Author.Equals(member.Id)).Select(x => new BundleModel
+                    {
+                        Id = x.Id,
+                        Title = x.Title,
+                        Challenges = x.Challenges,
+                        Category = x.Category,
+                        AuthorId = x.Author,
+                        Author = JekyllHandler.MemberProvider.GetMemberById(x.Author, true).Name,
+                        IsDraft = x.IsDraft
+                    }).ToList()
+                };
 
-            AccountController.FillProfileMenuModel(model, member, ProfileMenuType.Bundles);
-            return Ok(model);
-            } else
+                AccountController.FillProfileMenuModel(model, member, ProfileMenuType.Bundles);
+                return Ok(model);
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -64,19 +66,15 @@ namespace SubmissionEvaluation.Server.Controllers
         public IActionResult Create()
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.CREATE, "Bundles", member)) {
-                var model = new BundleModel
-                {
-                    Author = member.Name,
-                    AuthorId = member.Id,
-                    IsDraft = true,
-                    Challenges = new List<string>()
-                };
+            if (JekyllHandler.CheckPermissions(Actions.CREATE, "Bundles", member))
+            {
+                var model = new BundleModel {Author = member.Name, AuthorId = member.Id, IsDraft = true, Challenges = new List<string>()};
                 FillLists(model);
                 return Ok(model);
-            } else
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -85,7 +83,8 @@ namespace SubmissionEvaluation.Server.Controllers
         public IActionResult Create([FromBody] BundleModel model)
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.CREATE, "Bundles", member)) {
+            if (JekyllHandler.CheckPermissions(Actions.CREATE, "Bundles", member))
+            {
                 if (!ModelState.IsValid)
                 {
                     model.HasError = true;
@@ -108,8 +107,7 @@ namespace SubmissionEvaluation.Server.Controllers
 
                 try
                 {
-                    JekyllHandler.Domain.Interactions.CreateBundle(model.Id, model.Title, model.Description, model.AuthorId,
-                        model.Category, model.Challenges);
+                    JekyllHandler.Domain.Interactions.CreateBundle(model.Id, model.Title, model.Description, model.AuthorId, model.Category, model.Challenges);
                     ModelState.Clear();
                     FillLists(model);
                     model.HasSuccess = true;
@@ -122,9 +120,10 @@ namespace SubmissionEvaluation.Server.Controllers
                     model.Message = ex.Message;
                     return Ok(model);
                 }
-            } else
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -141,7 +140,8 @@ namespace SubmissionEvaluation.Server.Controllers
         public IActionResult Edit(string id, bool created)
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.EDIT, "Bundles", member, Restriction.BUNDLES, id)) {
+            if (JekyllHandler.CheckPermissions(Actions.EDIT, "Bundles", member, Restriction.BUNDLES, id))
+            {
                 IBundle bundle;
                 try
                 {
@@ -157,7 +157,9 @@ namespace SubmissionEvaluation.Server.Controllers
                 }
 
                 if (bundle.Author != member.Id && !member.IsAdmin)
+                {
                     return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
+                }
 
                 var model = new BundleModel
                 {
@@ -179,9 +181,10 @@ namespace SubmissionEvaluation.Server.Controllers
 
                 FillLists(model);
                 return Ok(model);
-            } else
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -257,11 +260,12 @@ namespace SubmissionEvaluation.Server.Controllers
         public IActionResult AllBundlesAdminView()
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.VIEW, "ChallengeOverview", member)) {  
+            if (JekyllHandler.CheckPermissions(Actions.VIEW, "ChallengeOverview", member))
+            {
                 IEnumerable<IBundle> bundles;
                 try
                 {
-                    bundles = JekyllHandler.Domain.Query.GetAllBundles(new Member() { IsAdmin = true , Id = "_-=42=-_"});
+                    bundles = JekyllHandler.Domain.Query.GetAllBundles(new Member() {IsAdmin = true, Id = "_-=42=-_"});
                 }
                 catch (IOException)
                 {
@@ -281,17 +285,20 @@ namespace SubmissionEvaluation.Server.Controllers
                     Content = ""
                 }).ToList();
                 return Ok(model);
-            }else
+            }
+            else
             {
                 return Forbid();
             }
         }
+
         [HttpPost("Edit/{command}")]
         [Authorize(Roles = "admin, creator")]
         public IActionResult Edit([FromBody] BundleModel model, string command)
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.EDIT, "Bundles", member, Restriction.BUNDLES, model.Id)) {
+            if (JekyllHandler.CheckPermissions(Actions.EDIT, "Bundles", member, Restriction.BUNDLES, model.Id))
+            {
                 if (!ModelState.IsValid)
                 {
                     model.HasError = true;
@@ -300,23 +307,31 @@ namespace SubmissionEvaluation.Server.Controllers
 
                 try
                 {
-                    if (model.Challenges == null) model.Challenges = new List<string>();
+                    if (model.Challenges == null)
+                    {
+                        model.Challenges = new List<string>();
+                    }
+
                     switch (command)
                     {
                         default:
-                            JekyllHandler.Domain.Interactions.EditBundle(member, new Bundle
-                            {
-                                Id = model.Id,
-                                Title = model.Title,
-                                Description = model.Description,
-                                Author = model.AuthorId,
-                                Category = model.Category,
-                                Challenges = model.Challenges,
-                                IsDraft = model.IsDraft,
-                                HasPreviousChallengesCheck = model.HasPreviousChallengesCheck
-                            });
+                            JekyllHandler.Domain.Interactions.EditBundle(member,
+                                new Bundle
+                                {
+                                    Id = model.Id,
+                                    Title = model.Title,
+                                    Description = model.Description,
+                                    Author = model.AuthorId,
+                                    Category = model.Category,
+                                    Challenges = model.Challenges,
+                                    IsDraft = model.IsDraft,
+                                    HasPreviousChallengesCheck = model.HasPreviousChallengesCheck
+                                });
 
-                            if (command == "Publish") JekyllHandler.Domain.Interactions.PublishBundle(member, model.Id);
+                            if (command == "Publish")
+                            {
+                                JekyllHandler.Domain.Interactions.PublishBundle(member, model.Id);
+                            }
 
                             model.HasError = false;
                             model.HasSuccess = true;
@@ -335,9 +350,10 @@ namespace SubmissionEvaluation.Server.Controllers
                     model.Message = ex.Message;
                     return Ok(model);
                 }
-            } else
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
     }

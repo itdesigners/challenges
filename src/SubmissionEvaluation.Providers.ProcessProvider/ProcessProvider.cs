@@ -133,7 +133,7 @@ namespace SubmissionEvaluation.Providers.ProcessProvider
                     }
 
                     result.ExecutionDuration = (int) watch.ElapsedMilliseconds;
-                    
+
                     if (process.WaitForExit(timeout))
                     {
                         result.ExitCode = process.ExitCode;
@@ -149,7 +149,7 @@ namespace SubmissionEvaluation.Providers.ProcessProvider
 
                     outputWaitHandle.WaitOne(timeout);
                     errorWaitHandle.WaitOne(timeout);
-                    
+
                     lock (lockObject)
                     {
                         result.Output = outputBuilder.ToString();
@@ -165,7 +165,9 @@ namespace SubmissionEvaluation.Providers.ProcessProvider
                 return result;
             });
 
-            return await Task.WhenAny(task, Task.Delay(timeout * 2)) == task ? task.Result : new ProcessResult {Timeout = true, Filename = path, Output = outputBuilder.ToString(), Arguments = arguments};
+            return await Task.WhenAny(task, Task.Delay(timeout * 2)) == task
+                ? task.Result
+                : new ProcessResult {Timeout = true, Filename = path, Output = outputBuilder.ToString(), Arguments = arguments};
         }
 
         public ISyncLock GetLock(FolderMapping[] folders = null, InteresstedFileChanges[] changes = null)

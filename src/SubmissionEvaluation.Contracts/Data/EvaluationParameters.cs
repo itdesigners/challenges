@@ -19,10 +19,7 @@ namespace SubmissionEvaluation.Contracts.Data
             }
         }
 
-        public int ExecutionDuration
-        {
-            get { return HasTestRun ? (int) Math.Round(Results.Average(x => x.ExecutionDuration), 0) : int.MaxValue; }
-        }
+        public int ExecutionDuration { get { return HasTestRun ? (int) Math.Round(Results.Average(x => x.ExecutionDuration), 0) : int.MaxValue; } }
 
         public bool HasTestRun =>
             State != EvaluationResult.CompilationError && State != EvaluationResult.NotAllowedLanguage && State != EvaluationResult.Undefined &&

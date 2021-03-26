@@ -18,17 +18,6 @@ namespace SubmissionEvaluation.Providers.CryptographyProvider
             sodium_init();
         }
 
-#pragma warning disable IDE1006 // suppress naming convention for DLL import
-        [DllImport(Name, CallingConvention = CallingConvention.Cdecl)]
-        private static extern void sodium_init();
-
-        [DllImport(Name, CallingConvention = CallingConvention.Cdecl)]
-        internal static extern void randombytes_buf(byte[] buffer, int size);
-
-        [DllImport(Name, CallingConvention = CallingConvention.Cdecl)]
-        private static extern int crypto_pwhash(byte[] buffer, long bufferLen, byte[] password, long passwordLen, byte[] salt, long opsLimit, int memLimit, int alg);
-#pragma warning restore IDE1006
-
         public static string CreateArgon2Password(string password)
         {
             var saltArgon2 = CreateSalt();
@@ -85,5 +74,17 @@ namespace SubmissionEvaluation.Providers.CryptographyProvider
             var newHash = HashPassword(password, salt);
             return hash.SequenceEqual(newHash);
         }
+
+#pragma warning disable IDE1006 // suppress naming convention for DLL import
+        [DllImport(Name, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void sodium_init();
+
+        [DllImport(Name, CallingConvention = CallingConvention.Cdecl)]
+        internal static extern void randombytes_buf(byte[] buffer, int size);
+
+        [DllImport(Name, CallingConvention = CallingConvention.Cdecl)]
+        private static extern int crypto_pwhash(byte[] buffer, long bufferLen, byte[] password, long passwordLen, byte[] salt, long opsLimit, int memLimit,
+            int alg);
+#pragma warning restore IDE1006
     }
 }

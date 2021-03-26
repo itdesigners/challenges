@@ -165,6 +165,7 @@ namespace SubmissionEvaluation.Domain
             domain.Log.Information("Query: Abfragen aller verfügbarer Aufgaben");
             return ChallengeOperations.GetAllChallengesForMember(domain.ProviderStore.FileProvider, containUnavailable);
         }
+
         public ISubmission GetSubmission(string challenge, string id)
         {
             domain.Log.Information("Query: Abfragen der Einreichung {id}", id);

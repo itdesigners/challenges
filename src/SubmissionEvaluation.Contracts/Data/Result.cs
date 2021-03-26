@@ -21,6 +21,10 @@ namespace SubmissionEvaluation.Contracts.Data
         public string Hash { get; set; }
         public int? DuplicateScore { get; set; }
         public string DuplicateId { get; set; }
+
+        public string MemberName { get; set; }
+        public string? CompileError { get; set; }
+
         [JsonIgnore]
         [YamlIgnore]
         public bool IsPassed => EvaluationResult == EvaluationResult.Succeeded || EvaluationResult == EvaluationResult.SucceededWithTimeout;
@@ -38,8 +42,6 @@ namespace SubmissionEvaluation.Contracts.Data
         public int ExecutionDuration { get; set; }
 
         [YamlMember(Alias = "id")] public string MemberId { get; set; }
-
-        public string MemberName { get; set; }
 
         public string Language { get; set; }
         public long SizeInBytes { get; set; }
@@ -60,7 +62,6 @@ namespace SubmissionEvaluation.Contracts.Data
         public string Reviewer { get; set; }
         public DateTime? ReviewDate { get; set; }
         public int ReviewRating { get; set; }
-        public string? CompileError { get; set; }
         [YamlIgnore] public bool HasReviewData { get; set; }
 
         public DateTime LastSubmissionDate
@@ -68,6 +69,5 @@ namespace SubmissionEvaluation.Contracts.Data
             get => lastSubmissionDate > SubmissionDate ? lastSubmissionDate : SubmissionDate;
             set => lastSubmissionDate = value;
         }
-
     }
 }

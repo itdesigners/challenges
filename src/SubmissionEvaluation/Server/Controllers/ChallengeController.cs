@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using SubmissionEvaluation.Shared.Models.Permissions;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
@@ -20,6 +19,7 @@ using SubmissionEvaluation.Shared.Classes.Messages;
 using SubmissionEvaluation.Shared.Models;
 using SubmissionEvaluation.Shared.Models.Admin;
 using SubmissionEvaluation.Shared.Models.Challenge;
+using SubmissionEvaluation.Shared.Models.Permissions;
 using SubmissionEvaluation.Shared.Models.Shared;
 using SubmissionEvaluation.Shared.Models.Test;
 using File = SubmissionEvaluation.Shared.Models.Shared.File;
@@ -44,8 +44,7 @@ namespace SubmissionEvaluation.Server.Controllers
         public IActionResult Category(string id)
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            var challenges = JekyllHandler.Domain.Query.GetAllChallenges(member)
-                .Where(x => x.IsAvailable && x.Category == id && !x.State.IsPartOfBundle);
+            var challenges = JekyllHandler.Domain.Query.GetAllChallenges(member).Where(x => x.IsAvailable && x.Category == id && !x.State.IsPartOfBundle);
             var bundles = JekyllHandler.Domain.Query.GetAllBundles(member).Where(x => !x.IsDraft && x.Category == id);
 
             var category = challenges.Select(x => new CategoryListEntryModel
@@ -81,9 +80,11 @@ namespace SubmissionEvaluation.Server.Controllers
             try
             {
                 var member = JekyllHandler.GetMemberForUser(User);
-                if(!JekyllHandler.CheckPermissions(Actions.VIEW, "Challenges", member)) {
-                    return Ok(new GenericModel() { HasError = true, Message = ErrorMessages.NoPermission });
+                if (!JekyllHandler.CheckPermissions(Actions.VIEW, "Challenges", member))
+                {
+                    return Ok(new GenericModel() {HasError = true, Message = ErrorMessages.NoPermission});
                 }
+
                 var challenges = JekyllHandler.Domain.Query.GetAllChallenges(member, true);
                 var bundles = JekyllHandler.Domain.Query.GetAllBundles(member);
                 var groups = JekyllHandler.Domain.Query.GetAllGroups().ToList();
@@ -238,21 +239,21 @@ namespace SubmissionEvaluation.Server.Controllers
             var member = JekyllHandler.GetMemberForUser(User);
             if (JekyllHandler.CheckPermissions(Actions.VIEW, "ChallengeOverview", member))
             {
-                var categoryStats = JekyllHandler.Domain.Query.GetCategoryStats(new Member() { IsAdmin = true, Id = "_-=42=-_" });
+                var categoryStats = JekyllHandler.Domain.Query.GetCategoryStats(new Member() {IsAdmin = true, Id = "_-=42=-_"});
                 var elements = categoryStats.ToDictionary(x => x.Key,
-                x => x.Value.Select(element => new CategoryListEntryExtendedModel
-                {
-                    Activity = element.Activity,
-                    Category = element.Category,
-                    DifficultyRating = element.DifficultyRating,
-                    Id = element.Id,
-                    IsAvailable = element.IsAvailable,
-                    IsBundle = element.IsBundle,
-                    Languages = element.Languages != null ? string.Join(',', element.Languages) : null,
-                    RatingMethod = WASMHelper.helper.ValueRatingMethod(element.RatingMethod),
-                    Title = element.Title,
-                    LearningFocus = element.LearningFocus
-                }).ToList());
+                    x => x.Value.Select(element => new CategoryListEntryExtendedModel
+                    {
+                        Activity = element.Activity,
+                        Category = element.Category,
+                        DifficultyRating = element.DifficultyRating,
+                        Id = element.Id,
+                        IsAvailable = element.IsAvailable,
+                        IsBundle = element.IsBundle,
+                        Languages = element.Languages != null ? string.Join(',', element.Languages) : null,
+                        RatingMethod = WASMHelper.helper.ValueRatingMethod(element.RatingMethod),
+                        Title = element.Title,
+                        LearningFocus = element.LearningFocus
+                    }).ToList());
                 return Ok(elements);
             }
             else
@@ -260,6 +261,7 @@ namespace SubmissionEvaluation.Server.Controllers
                 return Forbid();
             }
         }
+
         private bool HasUserPermissionToView(IChallenge challenge)
         {
             if (User.IsInRole("admin"))
@@ -296,12 +298,14 @@ namespace SubmissionEvaluation.Server.Controllers
                 var toBeCopied = Encoding.UTF8.GetString(newfile.Content).Equals("Copy");
                 switch (newfile.IsDelete)
                 {
-                    case false when !toBeCopied: JekyllHandler.Domain.Interactions.AddAdditionalFileToChallenge(challenge, newfile.Name, newfile.Content);
+                    case false when !toBeCopied:
+                        JekyllHandler.Domain.Interactions.AddAdditionalFileToChallenge(challenge, newfile.Name, newfile.Content);
                         break;
                     case false:
                     {
-                        var toBeCopiedFile = model.Files.FirstOrDefault(x => x.OriginalName.Substring(x.OriginalName.IndexOf(Folder.pathSeperator, StringComparison.Ordinal))
-                            .Equals(newfile.OriginalName.Substring(x.OriginalName.IndexOf(Folder.pathSeperator, StringComparison.Ordinal))));
+                        var toBeCopiedFile = model.Files.FirstOrDefault(x =>
+                            x.OriginalName.Substring(x.OriginalName.IndexOf(Folder.pathSeperator, StringComparison.Ordinal))
+                                .Equals(newfile.OriginalName.Substring(x.OriginalName.IndexOf(Folder.pathSeperator, StringComparison.Ordinal))));
                         if (toBeCopiedFile != null)
                         {
                             JekyllHandler.Domain.Interactions.CopyFileToOtherFile(toBeCopiedFile.OriginalName, newfile.OriginalName, challenge);
@@ -319,7 +323,8 @@ namespace SubmissionEvaluation.Server.Controllers
         public IActionResult Create()
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if (JekyllHandler.CheckPermissions(Actions.CREATE, "Challenges", member)) {
+            if (JekyllHandler.CheckPermissions(Actions.CREATE, "Challenges", member))
+            {
                 var model = new ExtendedChallengeModel
                 {
                     Author = User.Identity.Name,
@@ -334,9 +339,7 @@ namespace SubmissionEvaluation.Server.Controllers
                     Referer = "/Challenges",
                     RatingMethodInput = "Fixed",
                     Category = "Katas",
-                    RatingMethods =
-                        Settings.Customization.RatingMethods.ToDictionary(p => WASMHelper.helper.Converter[p.Key],
-                            p => p.Value.Title),
+                    RatingMethods = Settings.Customization.RatingMethods.ToDictionary(p => WASMHelper.helper.Converter[p.Key], p => p.Value.Title),
                     Categories = Settings.Customization.Categories,
                     Tests = new List<ChallengeTest>(),
                     NewFiles = new List<DetailedInputFile>(),
@@ -344,9 +347,10 @@ namespace SubmissionEvaluation.Server.Controllers
                 };
                 PopulateDropdowns(model);
                 return Ok(model);
-            } else
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -355,13 +359,13 @@ namespace SubmissionEvaluation.Server.Controllers
         public IActionResult Create(ExtendedChallengeModel model)
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.CREATE, "Challenges", member)) {
+            if (JekyllHandler.CheckPermissions(Actions.CREATE, "Challenges", member))
+            {
                 PopulateDropdowns(model);
                 if (!ModelState.IsValid)
                 {
                     Console.WriteLine(model.Message);
-                    Console.WriteLine(
-                        $"{model.RatingMethodInput}, {model.RatingMethod}, {model.SourceType}, {model.Category}");
+                    Console.WriteLine($"{model.RatingMethodInput}, {model.RatingMethod}, {model.SourceType}, {model.Category}");
                     return Ok(model);
                 }
 
@@ -386,9 +390,10 @@ namespace SubmissionEvaluation.Server.Controllers
                     model.Message = ErrorMessages.IdAlreadyExists;
                     return Ok(model);
                 }
-            }else
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -397,7 +402,8 @@ namespace SubmissionEvaluation.Server.Controllers
         public ActionResult<CopyModel> Copy(CopyModel model)
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.CREATE, "Challenges", member, Restriction.CHALLENGES, model.NameCopyFrom)) {
+            if (JekyllHandler.CheckPermissions(Actions.CREATE, "Challenges", member, Restriction.CHALLENGES, model.NameCopyFrom))
+            {
                 IChallenge challenge;
                 if (string.IsNullOrEmpty(model.NameCopyTo))
                 {
@@ -427,9 +433,10 @@ namespace SubmissionEvaluation.Server.Controllers
                 }
 
                 return Ok(model);
-            } else
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -437,25 +444,29 @@ namespace SubmissionEvaluation.Server.Controllers
         public ActionResult<ChallengeModel> GetModel([FromRoute] string id)
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.EDIT, "Challenges", member, Restriction.CHALLENGES, id) ||JekyllHandler.CheckPermissions(Actions.CREATE, "Challenges", member, Restriction.CHALLENGES, id)) {
-            ChallengeModel model;
-            try
+            if (JekyllHandler.CheckPermissions(Actions.EDIT, "Challenges", member, Restriction.CHALLENGES, id) ||
+                JekyllHandler.CheckPermissions(Actions.CREATE, "Challenges", member, Restriction.CHALLENGES, id))
             {
-                if (id == null)
+                ChallengeModel model;
+                try
                 {
-                    return null;
+                    if (id == null)
+                    {
+                        return null;
+                    }
+
+                    model = LoadChallengeModel(id);
+                }
+                catch (IOException)
+                {
+                    return Ok(new GenericModel {HasError = true, Message = ErrorMessages.IdError});
                 }
 
-                model = LoadChallengeModel(id);
+                return Ok(model);
             }
-            catch (IOException)
+            else
             {
-                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.IdError});
-            }
-            return Ok(model);
-            } else
-            {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -481,28 +492,41 @@ namespace SubmissionEvaluation.Server.Controllers
             ModelState.Clear();
             PopulateDropdowns(model);
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.EDIT, "Challenges", member, Restriction.CHALLENGES, model.Id)) {
+            if (JekyllHandler.CheckPermissions(Actions.EDIT, "Challenges", member, Restriction.CHALLENGES, model.Id))
+            {
                 try
                 {
                     model.LastEditorID = member.Id;
                     if (model.Files != null)
+                    {
                         foreach (var challengeFile in model.Files)
+                        {
                             if (challengeFile.IsDelete)
-                                JekyllHandler.Domain.Interactions.RemoveAdditionalFileFromChallenge(model.Id,
-                                    challengeFile.OriginalName);
+                            {
+                                JekyllHandler.Domain.Interactions.RemoveAdditionalFileFromChallenge(model.Id, challengeFile.OriginalName);
+                            }
                             else if (challengeFile.Name != challengeFile.OriginalName)
-                                JekyllHandler.Domain.Interactions.ChangeAdditionalFilenameOfChallenge(model.Id,
-                                    challengeFile.OriginalName, challengeFile.Name);
+                            {
+                                JekyllHandler.Domain.Interactions.ChangeAdditionalFilenameOfChallenge(model.Id, challengeFile.OriginalName, challengeFile.Name);
+                            }
+                        }
+                    }
 
                     SaveChallengeFiles(model);
                     JekyllHandler.Domain.Interactions.EditChallenge(ConvertToChallengeProperties(model));
                     if (command != null && command.Equals("Publish") && model.IsDraft)
+                    {
                         JekyllHandler.Domain.Interactions.PublishChallenge(model.Id, member);
+                    }
 
                     model = LoadChallengeModel(model.Id);
                     model.Message = SuccessMessages.EditChallenge;
                     model.HasSuccess = true;
-                    if (command != null && command.Equals("Publish")) SchedulesAndTasks.Schedule_ChallengeStatsUpdate();
+                    if (command != null && command.Equals("Publish"))
+                    {
+                        SchedulesAndTasks.Schedule_ChallengeStatsUpdate();
+                    }
+
                     return Ok(model);
                 }
                 catch (IOException ioex)
@@ -512,9 +536,10 @@ namespace SubmissionEvaluation.Server.Controllers
                     model.Message = ErrorMessages.GenericError;
                     return Ok(model);
                 }
-            } else
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -612,12 +637,14 @@ namespace SubmissionEvaluation.Server.Controllers
         public ActionResult<string> Delete(string id)
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.EDIT, "Challenges", member, Restriction.CHALLENGES, id)) {
+            if (JekyllHandler.CheckPermissions(Actions.EDIT, "Challenges", member, Restriction.CHALLENGES, id))
+            {
                 var challenge = JekyllHandler.Domain.Query.GetChallenge(member, id);
                 JekyllHandler.Domain.Interactions.DeleteChallenge(member, challenge);
 
                 return Ok(SuccessMessages.DeleteChallenge);
-            }else
+            }
+            else
             {
                 return Ok(ErrorMessages.NoPermission);
             }
@@ -690,15 +717,21 @@ namespace SubmissionEvaluation.Server.Controllers
         public ActionResult<string> UploadChallenge(List<DetailedInputFile> files)
         {
             var member = JekyllHandler.GetMemberForUser(User);
-            if(JekyllHandler.CheckPermissions(Actions.CREATE, "Challenges", member)) {
+            if (JekyllHandler.CheckPermissions(Actions.CREATE, "Challenges", member))
+            {
                 foreach (var newfile in files)
+                {
                     if (newfile.Content.Length > 0)
+                    {
                         JekyllHandler.Domain.Interactions.UploadChallenge(newfile.Content);
+                    }
+                }
 
                 return Ok(SuccessMessages.EditChallenge);
-            } else
+            }
+            else
             {
-                return Ok(new GenericModel { HasError = true, Message = ErrorMessages.NoPermission });
+                return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
         }
 
@@ -730,7 +763,11 @@ namespace SubmissionEvaluation.Server.Controllers
             PopulateDropdowns(model);
             model.Bundle = JekyllHandler.Domain.Query.GetAllBundles(member).FirstOrDefault(x => x.Challenges.Contains(model.Id))?.Title;
 
-            if (model.Referer == null) model.Referer = "/Challenges";
+            if (model.Referer == null)
+            {
+                model.Referer = "/Challenges";
+            }
+
             return model;
         }
 

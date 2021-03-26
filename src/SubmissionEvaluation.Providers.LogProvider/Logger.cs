@@ -28,15 +28,9 @@ namespace SubmissionEvaluation.Providers.LogProvider
             Log.Logger = logConfig.CreateLogger();
         }
 
-        public ISmtpProvider SmtpProvider
-        {
-            set => mailLogger.SmtpProvider = value;
-        }
+        public ISmtpProvider SmtpProvider { set => mailLogger.SmtpProvider = value; }
 
-        public List<string> ReportMails
-        {
-            set => mailLogger.ReportMails = value;
-        }
+        public List<string> ReportMails { set => mailLogger.ReportMails = value; }
 
         public void Information(string msg, params object[] args)
         {

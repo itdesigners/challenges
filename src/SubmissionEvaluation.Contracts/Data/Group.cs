@@ -15,19 +15,11 @@ namespace SubmissionEvaluation.Contracts.Data
         public string Title { get; set; }
         public List<string> GroupAdminIds { get; set; }
 
-        public string[] AvailableChallenges
-        {
-            get => availableChallenges ?? new string[0];
-            set => availableChallenges = value;
-        }
+        public string[] AvailableChallenges { get => availableChallenges ?? new string[0]; set => availableChallenges = value; }
 
         public int MaxUnlockedChallenges { get; set; }
 
-        public string[] ForcedChallenges
-        {
-            get => forcedChallenges ?? new string[0];
-            set => forcedChallenges = value;
-        }
+        public string[] ForcedChallenges { get => forcedChallenges ?? new string[0]; set => forcedChallenges = value; }
 
         public int? RequiredPoints { get; set; }
         public DateTime? StartDate { get; set; }

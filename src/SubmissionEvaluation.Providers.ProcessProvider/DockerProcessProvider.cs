@@ -199,9 +199,7 @@ namespace SubmissionEvaluation.Providers
 
                             var createTask = dockerClient.Containers.CreateContainerAsync(new CreateContainerParameters
                             {
-                                Image = "test",
-                                Cmd = new[] {"timeout", "60m", "tail", "-f", "/dev/null"},
-                                HostConfig = new HostConfig {AutoRemove = true}
+                                Image = "test", Cmd = new[] {"timeout", "60m", "tail", "-f", "/dev/null"}, HostConfig = new HostConfig {AutoRemove = true}
                             });
                             container = createTask.Result; // TODO: Should add timeout handling!
                             isRetrySuccess = true;
@@ -247,10 +245,7 @@ namespace SubmissionEvaluation.Providers
 
             return new DockerLock(this)
             {
-                LockActive = true,
-                DockerId = container.ID,
-                Folders = finalFolders.ToArray(),
-                Changes = changes?.ToArray() ?? new InteresstedFileChanges[0]
+                LockActive = true, DockerId = container.ID, Folders = finalFolders.ToArray(), Changes = changes?.ToArray() ?? new InteresstedFileChanges[0]
             };
         }
 
@@ -342,8 +337,8 @@ namespace SubmissionEvaluation.Providers
             archive.SaveTo(ms, CompressionType.None);
             ms.Flush();
             ms.Seek(0, SeekOrigin.Begin);
-            var result = client.Containers.ExtractArchiveToContainerAsync(id,
-                new ContainerPathStatParameters {AllowOverwriteDirWithFile = true, Path = "/"}, ms);
+            var result = client.Containers.ExtractArchiveToContainerAsync(id, new ContainerPathStatParameters {AllowOverwriteDirWithFile = true, Path = "/"},
+                ms);
             if (!result.Wait(60000))
             {
                 throw new Exception("Docker copy failed!");
@@ -366,8 +361,8 @@ namespace SubmissionEvaluation.Providers
             archive.SaveTo(ms, CompressionType.None);
             ms.Flush();
             ms.Seek(0, SeekOrigin.Begin);
-            var result = client.Containers.ExtractArchiveToContainerAsync(id,
-                new ContainerPathStatParameters {AllowOverwriteDirWithFile = true, Path = "/"}, ms);
+            var result = client.Containers.ExtractArchiveToContainerAsync(id, new ContainerPathStatParameters {AllowOverwriteDirWithFile = true, Path = "/"},
+                ms);
             if (!result.Wait(60000))
             {
                 throw new Exception("Docker copy failed!");

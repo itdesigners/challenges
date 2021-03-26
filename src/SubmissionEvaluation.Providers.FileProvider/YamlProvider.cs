@@ -64,7 +64,7 @@ namespace SubmissionEvaluation.Providers.FileProvider
                 {
                     writer.WriteLine("---");
                 }
-                
+
                 serializer.Serialize(writer, category);
                 first = false;
             }
@@ -198,8 +198,7 @@ namespace SubmissionEvaluation.Providers.FileProvider
                     case HandleMode.ThrowException:
                     case HandleMode.ThrowExceptionAndDelete:
                         throw new DeserializationException("Parsen der Textdaten fehlgeschlagen, da null.", null);
-                    case HandleMode.ReturnNull:
-                        return null;
+                    case HandleMode.ReturnNull: return null;
                 }
             }
             catch (Exception ex)
@@ -253,10 +252,8 @@ namespace SubmissionEvaluation.Providers.FileProvider
                     case HandleMode.ThrowException:
                     case HandleMode.ThrowExceptionAndDelete:
                         throw new DeserializationException($"Deserialisierung fehlgeschlagen. {pathToFile} konnte nicht gelesen werden.", null);
-                    case HandleMode.ReturnNull:
-                        return null;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+                    case HandleMode.ReturnNull: return null;
+                    default: throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
                 }
 
                 return result;
@@ -436,7 +433,9 @@ namespace SubmissionEvaluation.Providers.FileProvider
         private static string GetYamlDescription(string fileContent)
         {
             const string descriptionSeparator = "---";
-            return fileContent[(fileContent.IndexOf(descriptionSeparator, fileContent.IndexOf(descriptionSeparator, StringComparison.InvariantCulture) + 1, StringComparison.InvariantCulture) + descriptionSeparator.Length)..].Trim();
+            return fileContent[
+                (fileContent.IndexOf(descriptionSeparator, fileContent.IndexOf(descriptionSeparator, StringComparison.InvariantCulture) + 1,
+                    StringComparison.InvariantCulture) + descriptionSeparator.Length)..].Trim();
         }
 
         public virtual void SerializeWithDescription<T>(string path, T obj) where T : IWithDescription

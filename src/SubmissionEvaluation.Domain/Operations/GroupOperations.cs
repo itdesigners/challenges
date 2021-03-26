@@ -1,7 +1,7 @@
 using System;
 using SubmissionEvaluation.Contracts.Data;
+using SubmissionEvaluation.Contracts.Exceptions;
 using SubmissionEvaluation.Contracts.Providers;
-using SubmissionEvaluation.Contracts.Exceptions; 
 
 namespace SubmissionEvaluation.Domain.Operations
 {
@@ -22,6 +22,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 }
             }
         }
+
         internal static bool VerifyGroup(Domain domain, string group)
         {
             var providerStore = domain.ProviderStore;
@@ -36,6 +37,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 return false;
             }
         }
+
         private static void VerifyGroupProperties(Group properties)
         {
             if (string.IsNullOrWhiteSpace(properties.Title))

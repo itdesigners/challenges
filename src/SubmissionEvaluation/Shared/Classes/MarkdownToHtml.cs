@@ -53,7 +53,7 @@ namespace SubmissionEvaluation.Shared.Classes
 
             var tempMarkdown = new StringBuilder();
             using (var reader = new StringReader(markdown))
-            { 
+            {
                 var insideCode = false;
                 string line;
                 while ((line = reader.ReadLine()) != null)
@@ -65,30 +65,37 @@ namespace SubmissionEvaluation.Shared.Classes
                         renderer.Render(MarkdownParser.Parse(tempMarkdown.ToString(), pipeline));
                         tempMarkdown.Clear();
 
-                        if(consoleParsing) { 
+                        if (consoleParsing)
+                        {
                             line = line.Substring(matchBegin.Index + matchBegin.Length);
-                        } else
+                        }
+                        else
                         {
                             line = line.Substring(matchBegin.Index);
                         }
+
                         insideCode = true;
-                        if(consoleParsing) { 
+                        if (consoleParsing)
+                        {
                             result.Write("<div><pre class=\'consoleblock\'>");
                         }
                     }
 
                     if (insideCode)
                     {
-                        if(!consoleParsing &! containsHtmlParagraphs)
+                        if (!consoleParsing & !containsHtmlParagraphs)
                         {
                             result.Write("<p>");
                         }
+
                         var matchEnd = Regex.Match(line, @"\{%\s*endoutput\s*%\}(?<realtrailing>.(?<trailing>.)*)*");
                         if (matchEnd.Success)
                         {
-                            if(consoleParsing) { 
+                            if (consoleParsing)
+                            {
                                 line = line.Substring(0, matchEnd.Index);
                             }
+
                             insideCode = false;
                         }
 
@@ -96,7 +103,9 @@ namespace SubmissionEvaluation.Shared.Classes
                         {
                             line = $"<span class=\"console_start\">{line}</span>";
                         }
-                        if(consoleParsing) { 
+
+                        if (consoleParsing)
+                        {
                             line = Regex.Replace(line, @"`\[([A-F0-9]{6})\]([^`]+)`", "<span style=\"color:#$1\">$2</span>");
                             line = Regex.Replace(line, @"`([^`]+)`", "<span class=\"console_input\">$1</span>");
                         }
@@ -104,24 +113,30 @@ namespace SubmissionEvaluation.Shared.Classes
                         if (matchEnd.Success)
                         {
                             result.Write(line);
-                            if(consoleParsing) { 
+                            if (consoleParsing)
+                            {
                                 result.Write("</pre></div>");
                                 tempMarkdown.AppendLine(matchEnd.Groups["realtrailing"].Value);
-                            } else if(!containsHtmlParagraphs)
+                            }
+                            else if (!containsHtmlParagraphs)
                             {
                                 result.Write("</p>");
                             }
-                            
                         }
                         else
                         {
-                            if(consoleParsing) { 
+                            if (consoleParsing)
+                            {
                                 result.WriteLine(line);
-                            } else {
+                            }
+                            else
+                            {
                                 result.Write(line);
-                                if(!containsHtmlParagraphs) { 
-                                result.Write("</p>");
-                                    }
+                                if (!containsHtmlParagraphs)
+                                {
+                                    result.Write("</p>");
+                                }
+
                                 result.WriteLine("");
                             }
                         }
@@ -135,25 +150,28 @@ namespace SubmissionEvaluation.Shared.Classes
 
             renderer.Render(MarkdownParser.Parse(tempMarkdown.ToString(), pipeline));
             result.Flush();
-            if(consoleParsing) { 
-            return ReplaceBulletLists(result.ToString());
-            }else
+            if (consoleParsing)
+            {
+                return ReplaceBulletLists(result.ToString());
+            }
+            else
             {
                 return result.ToString();
             }
         }
+
         /**
          * Since quill represents uls with styled ols, they need to be replaced.
          */
-        static string ReplaceBulletLists(string input) 
+        private static string ReplaceBulletLists(string input)
         {
             var result = new StringBuilder();
 
             using (var reader = new StringReader(input))
             {
                 string line;
-                bool inUl = false;
-                while((line = reader.ReadLine())!=null)
+                var inUl = false;
+                while ((line = reader.ReadLine()) != null)
                 {
                     var containsOrderedList = Regex.Match(line, @"<\s*ol\s*>");
                     var containsOrderedListEnd = Regex.Match(line, @"<\s*/ol\s*>");
@@ -162,39 +180,49 @@ namespace SubmissionEvaluation.Shared.Classes
                         var containsBulletPoints = Regex.Match(line, @"<li\s+data-list=\s*""bullet""\s*>");
                         if (containsBulletPoints.Success)
                         {
-                            line = line.Substring(0, containsOrderedList.Index) + "<ul>" + line.Substring(containsOrderedList.Index + containsOrderedList.Length);
+                            line = line.Substring(0, containsOrderedList.Index) + "<ul>" +
+                                   line.Substring(containsOrderedList.Index + containsOrderedList.Length);
                             inUl = true;
-                        }else {
+                        }
+                        else
+                        {
                             var nextLine = reader.ReadLine();
-                            if(nextLine != null)
+                            if (nextLine != null)
                             {
                                 var nextContainsBulletPoints = Regex.Match(nextLine, @"<li\s+data-list=\s*""bullet""\s*>");
                                 var nextContainsOrderedListEnd = Regex.Match(nextLine, @"<\s*/ol\s*>");
                                 if (nextContainsBulletPoints.Success)
                                 {
-                                    line = line.Substring(0, containsOrderedList.Index) + "<ul>" + line.Substring(containsOrderedList.Index + containsOrderedList.Length);
+                                    line = line.Substring(0, containsOrderedList.Index) + "<ul>" +
+                                           line.Substring(containsOrderedList.Index + containsOrderedList.Length);
                                     inUl = true;
-                                    if(nextContainsOrderedListEnd.Success)
+                                    if (nextContainsOrderedListEnd.Success)
                                     {
                                         inUl = false;
-                                        nextLine = nextLine.Substring(0, nextContainsOrderedListEnd.Index) + "</ul>" + nextLine.Substring(nextContainsOrderedListEnd.Index + nextContainsOrderedListEnd.Length);
+                                        nextLine = nextLine.Substring(0, nextContainsOrderedListEnd.Index) + "</ul>" +
+                                                   nextLine.Substring(nextContainsOrderedListEnd.Index + nextContainsOrderedListEnd.Length);
                                     }
                                 }
+
                                 result.Append(line + "\n");
                                 result.Append(nextLine + "\n");
                                 continue;
                             }
                         }
+
                         if (containsOrderedListEnd.Success && inUl)
                         {
-                            line = line.Substring(0, containsOrderedListEnd.Index) + "</ul>" + line.Substring(containsOrderedListEnd.Index + containsOrderedListEnd.Length);
-                            inUl = false; 
+                            line = line.Substring(0, containsOrderedListEnd.Index) + "</ul>" +
+                                   line.Substring(containsOrderedListEnd.Index + containsOrderedListEnd.Length);
+                            inUl = false;
                         }
+
                         result.Append(line + "\n");
                     }
                     else if (containsOrderedListEnd.Success && inUl)
                     {
-                        line = line.Substring(0, containsOrderedListEnd.Index) + "</ul>" + line.Substring(containsOrderedListEnd.Index + containsOrderedListEnd.Length);
+                        line = line.Substring(0, containsOrderedListEnd.Index) + "</ul>" +
+                               line.Substring(containsOrderedListEnd.Index + containsOrderedListEnd.Length);
                         inUl = false;
                         result.Append(line + "\n");
                     }
@@ -203,7 +231,8 @@ namespace SubmissionEvaluation.Shared.Classes
                         result.Append(line + "\n");
                     }
                 }
-             }
+            }
+
             return result.ToString().Trim();
         }
     }

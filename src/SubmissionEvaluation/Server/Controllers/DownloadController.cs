@@ -8,7 +8,6 @@ using Microsoft.Net.Http.Headers;
 using SubmissionEvaluation.Server.Classes.JekyllHandling;
 using SubmissionEvaluation.Server.Classes.Messages;
 using SubmissionEvaluation.Shared.Classes;
-using SubmissionEvaluation.Shared.Models.Shared;
 
 namespace SubmissionEvaluation.Server.Controllers
 {
@@ -66,6 +65,7 @@ namespace SubmissionEvaluation.Server.Controllers
                 return Ok(new DownloadInfo(ErrorMessages.GenericError));
             }
         }
+
         private static bool IsFileHidden(string path)
         {
             if (path.Contains(".."))

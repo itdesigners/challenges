@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using SubmissionEvaluation.Contracts.Data;
 using SubmissionEvaluation.Contracts.Data.Review;
 
@@ -13,7 +12,8 @@ namespace SubmissionEvaluation.Contracts.ClientPocos
 
         public Member(IMember member, bool fullInfo = true, bool isPasswordRequested = false)
         {
-            if(fullInfo) { 
+            if (fullInfo)
+            {
                 AverageDifficultyLevel = member.AverageDifficultyLevel;
                 CanRate = member.CanRate;
                 DateOfEntry = member.DateOfEntry;
@@ -35,6 +35,7 @@ namespace SubmissionEvaluation.Contracts.ClientPocos
                 Type = member.Type;
                 UnlockedChallenges = member.UnlockedChallenges;
             }
+
             FirstName = member.FirstName;
             Id = member.Id;
             Name = member.Name;

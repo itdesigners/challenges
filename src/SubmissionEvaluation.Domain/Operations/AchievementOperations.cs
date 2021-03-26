@@ -14,17 +14,14 @@ namespace SubmissionEvaluation.Domain.Operations
         public List<string> Contributors { private get; set; }
         internal StatisticsOperations StatisticsOperations { get; set; }
 
-        private IEnumerable<Achievement> ListOfAchievements
-        {
-            get { return AchievementRaters.SelectMany(p => p.ListOfAchievements); }
-        }
+        private IEnumerable<Achievement> ListOfAchievements { get { return AchievementRaters.SelectMany(p => p.ListOfAchievements); } }
 
         public ChallengeRanklist BuildAchievementsRanklist(IFileProvider fileProvider)
         {
             var awards = fileProvider.LoadAwards();
             var ranklist = new ChallengeRanklist {Challenge = "Achievements"};
             foreach (var user in awards)
-            { 
+            {
                 foreach (var achievementId in user.Value)
                 {
                     var achievement = ListOfAchievements.SingleOrDefault(x => x.Id == achievementId.Id);
@@ -42,6 +39,7 @@ namespace SubmissionEvaluation.Domain.Operations
                     }
                 }
             }
+
             return ranklist;
         }
 

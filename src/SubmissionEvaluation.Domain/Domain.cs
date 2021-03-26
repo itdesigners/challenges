@@ -12,8 +12,8 @@ namespace SubmissionEvaluation.Domain
     public class Domain
     {
         public Domain(IFileProvider fileProvider, IMemberProvider memberProvider, IProcessProvider processProvider, IProcessProvider sandboxedProcessProvider,
-            IChallengeEstimator challengeEstimator, ISmtpProvider smtpProvider, List<ICompiler> compilers, ILog logger,
-            bool enableReview, bool enableReviewerPromotion, bool enableAchievements, string siteUrl, string helpEmail)
+            IChallengeEstimator challengeEstimator, ISmtpProvider smtpProvider, List<ICompiler> compilers, ILog logger, bool enableReview,
+            bool enableReviewerPromotion, bool enableAchievements, string siteUrl, string helpEmail)
         {
             Log = logger;
             MemberProvider = memberProvider;
@@ -57,7 +57,7 @@ namespace SubmissionEvaluation.Domain
                 MemberProvider = memberProvider,
                 SmtpProvider = smtpProvider,
                 Compilers = compilers,
-                EvaluationOperations = EvaluationOperations,
+                EvaluationOperations = EvaluationOperations
             };
 
             StatisticsOperations = new StatisticsOperations

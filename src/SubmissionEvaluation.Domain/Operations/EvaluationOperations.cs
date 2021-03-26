@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
-using System.Net;
 using SubmissionEvaluation.Contracts.Data;
 using SubmissionEvaluation.Contracts.Exceptions;
 using SubmissionEvaluation.Contracts.Providers;
@@ -56,15 +56,16 @@ namespace SubmissionEvaluation.Domain.Operations
                     ErrorDetails = new List<FailedTestRunDetails> {new FailedTestRunDetails {ErrorMessage = $"<pre>{e.Message}</pre>"}},
                     Language = e.Language,
                     State = EvaluationResult.CompilationError,
-                    SizeInBytes = new System.IO.FileInfo(ProviderStore.FileProvider.GetSourceZipPathForSubmission(result)).Length
-            };
+                    SizeInBytes = new FileInfo(ProviderStore.FileProvider.GetSourceZipPathForSubmission(result)).Length
+                };
             }
             catch (LanguageNotAllowedException e)
             {
                 Log.Warning("Nicht erlaubte Programmiersprache für Aufgabe verwendet!");
                 evaluationParameters = new EvaluationParameters
                 {
-                    ErrorDetails = new List<FailedTestRunDetails> {new FailedTestRunDetails {ErrorMessage = $"<pre>{WebUtility.HtmlEncode(e.Message)}</pre>"}},
+                    ErrorDetails =
+                        new List<FailedTestRunDetails> {new FailedTestRunDetails {ErrorMessage = $"<pre>{WebUtility.HtmlEncode(e.Message)}</pre>"}},
                     Language = e.Language,
                     State = EvaluationResult.NotAllowedLanguage
                 };
@@ -145,8 +146,8 @@ namespace SubmissionEvaluation.Domain.Operations
             return changed;
         }
 
-        internal void RunSubmissions(IEnumerable<Result> submissions, bool runFailed = false, bool runEvenNonCompilable = false,
-            bool resetStats = false, bool breakAfterFirstFailedTest = false)
+        internal void RunSubmissions(IEnumerable<Result> submissions, bool runFailed = false, bool runEvenNonCompilable = false, bool resetStats = false,
+            bool breakAfterFirstFailedTest = false)
         {
             var results = submissions as IList<Result> ?? submissions.ToList();
             var workingBefore = results.Count(x => x.IsPassed);
@@ -314,10 +315,7 @@ namespace SubmissionEvaluation.Domain.Operations
         private List<RunResult> RunConfiguredTestsAndCompareResults(IChallenge challenge, ExecutionParameters execParams, string submissionBinaryPath,
             IEnumerable<TestParameters> tests, bool breakAfterFirstFailedTest)
         {
-            var folderMappings = new[]
-            {
-                new FolderMapping {ReadOnly = true, Source = submissionBinaryPath, Target = "/testrun/bin"}
-            };
+            var folderMappings = new[] {new FolderMapping {ReadOnly = true, Source = submissionBinaryPath, Target = "/testrun/bin"}};
 
             ISyncLock CreateLock()
             {

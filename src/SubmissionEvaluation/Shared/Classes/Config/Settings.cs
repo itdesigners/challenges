@@ -3,7 +3,9 @@ namespace SubmissionEvaluation.Shared.Classes.Config
     public static class Settings
     {
         internal static bool Initialized { get; set; } = false;
+
         public static string SecurityToken { get; internal set; } = string.Empty;
+
         //In days
         public static int DuplicateCheckWindow { get; internal set; }
         public static AuthenticationSettings Authentication { get; } = new AuthenticationSettings();

@@ -20,11 +20,7 @@ namespace SubmissionEvaluation.Contracts.Data
 
         [YamlIgnore]
         [JsonIgnore]
-        public string LastEditorID
-        {
-            get => string.IsNullOrEmpty(State.LastEditorId) ? AuthorID : State.LastEditorId;
-            set => State.LastEditorId = value;
-        }
+        public string LastEditorID { get => string.IsNullOrEmpty(State.LastEditorId) ? AuthorID : State.LastEditorId; set => State.LastEditorId = value; }
 
         public string Title { get; set; }
         public RatingMethod RatingMethod { get; set; }
@@ -39,23 +35,11 @@ namespace SubmissionEvaluation.Contracts.Data
 
         [YamlIgnore] [JsonIgnore] public bool IsReviewable => RatingMethod == RatingMethod.Fixed;
 
-        public List<string> IncludeTests
-        {
-            get => includeTests ?? new List<string>();
-            set => includeTests = value;
-        }
+        public List<string> IncludeTests { get => includeTests ?? new List<string>(); set => includeTests = value; }
 
-        public List<string> DependsOn
-        {
-            get => dependsOn ?? new List<string>();
-            set => dependsOn = value;
-        }
+        public List<string> DependsOn { get => dependsOn ?? new List<string>(); set => dependsOn = value; }
 
-        public List<string> Languages
-        {
-            get => languages ?? new List<string>();
-            set => languages = value;
-        }
+        public List<string> Languages { get => languages ?? new List<string>(); set => languages = value; }
 
         [YamlIgnore] [JsonIgnore] public string Description { get; set; }
 
@@ -63,11 +47,7 @@ namespace SubmissionEvaluation.Contracts.Data
 
         public ChallengeState State { get; set; } = new ChallengeState();
 
-        public DateTime LastEdit
-        {
-            get => lastEdit < Date ? Date : lastEdit;
-            set => lastEdit = value;
-        }
+        public DateTime LastEdit { get => lastEdit < Date ? Date : lastEdit; set => lastEdit = value; }
 
         public override string ToString()
         {

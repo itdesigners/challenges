@@ -22,8 +22,7 @@ namespace SubmissionEvaluation.Server.Classes
                 {
                     switch (Path.GetExtension(filename)?.ToLowerInvariant())
                     {
-                        case ".zip":
-                            return data;
+                        case ".zip": return data;
                         case ".7z":
                             using (var stream = new MemoryStream(data))
                             {
