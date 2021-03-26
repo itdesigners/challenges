@@ -16,9 +16,9 @@
         <div class="shadow-bottom-center" style="margin-bottom: 10px">
             <div class="categories-list-header" style="border-bottom: none">
                 Bisherige Einreichungen
-                <button @onclick="Reload" class="btn btn-primary">
-                    <span class="oi oi-reload"></span>
-                </button>
+            </div>
+            <div>
+                <button class="btn btn-outline-dark btn-margin" style="width: 100%" type="button" @onclick="Reload">Aktualisieren</button>
             </div>
             <SubmissionList @bind-Model="Model"/>
         </div>
@@ -41,24 +41,27 @@
                         <input type="hidden" @bind="Model.Id"/>
                         <div id="uploadframe" class="col-8">
                             <div class="upload-area">
-                                <DropDownZone @bind-Files="TempHolder" id="dropdownSubmission"/>
-
-                                <div class="upload-area-text">
-
-                                    <p>
-                                        Dateien hereinziehen oder hier klicken, um Dateien auszuwählen (max. 12 Dateien).
-                                    </p>
-                                    <p>
-                                        Alternativ kann auch eine Zip-Datei hier hochgeladen werden.
-                                    </p>
-                                </div>
+                                <DropDownZone @bind-Files="TempHolder" id="dropdownSubmission" />
+                                @if (TempHolder.Count == 0)
+                                {
+                                    <div>
+                                        <p>
+                                            Dateien hereinziehen oder hier klicken, um Dateien auszuwählen (max. 12 Dateien).
+                                        </p>
+                                        <p>
+                                            Alternativ kann auch eine Zip-Datei hier hochgeladen werden.
+                                        </p>
+                                    </div>
+                                }
                             </div>
                         </div>
-                        <div class="col-2">
-                            <button id="emptyButton" class="btn btn-danger btn-block" type="button" @onclick="DiscardHolder">Leeren</button>
-                        </div>
-                        <div class="col-2">
-                            <button id="uploadButton" type="submit" class="btn btn-block btn-success">Upload</button>
+                        <div class="col-4">
+                            <div>
+                                <button id="uploadButton" type="submit" class="btn btn-success btn-margin" style="width: 100%">Upload</button>
+                            </div>
+                            <div>
+                                <button id="emptyButton" class="btn btn-outline-dark btn-margin" type="button" @onclick="DiscardHolder" style="width: 100%">Leeren</button>
+                            </div>
                         </div>
                     </div>
                 </EditForm>

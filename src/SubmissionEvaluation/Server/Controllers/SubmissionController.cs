@@ -200,11 +200,11 @@ namespace SubmissionEvaluation.Server.Controllers
             var containsArchives = files.Any(x => archiveExtensions.Contains(Path.GetExtension(x.OriginalName).ToLower()));
             var member = JekyllHandler.MemberProvider.GetMemberById(jekyllId);
 
-            byte[] challengeArchive = null;
-            string filename = null;
+            byte[] challengeArchive;
+            string filename;
             if (containsArchives)
             {
-                var file = files.First(x => archiveExtensions.Contains(Path.GetExtension(x.OriginalName).ToLower()));
+                var file = files.First(x => archiveExtensions.Contains(Path.GetExtension(x.OriginalName)?.ToLower()));
                 filename = file.OriginalName;
                 using (var ms = new MemoryStream())
                 {
@@ -212,11 +212,11 @@ namespace SubmissionEvaluation.Server.Controllers
                 }
 
                 challengeArchive = ArchiveHelper.ConvertToZip(challengeArchive, filename);
-                filename = Path.GetFileNameWithoutExtension(filename) + ".zip";
+                filename = $"{Path.GetFileNameWithoutExtension(filename)}.zip";
             }
             else
             {
-                filename = id + ".zip";
+                filename = $"{id}.zip";
                 challengeArchive = GenerateZipFile(files);
             }
 
