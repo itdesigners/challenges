@@ -37,54 +37,53 @@
             </tr>
         </thead>
         <tbody>
-
-        @foreach (var member in Memberships.Members.Where(x => x.Name.ToLower().Contains(SearchValue.ToLower())))
-        {
-            <tr>
-                <td>
-                    <a class="no-link-coloring" href=@($"Members/Member/{member.Id}")>@(member.Uid.Length > 8 ? member.Uid.Substring(0, 7) + ".." : member.Uid)</a>
-                </td>
-                <td>
-                    <a class="no-link-coloring" href=@($"Members/Member/{member.Id}")>@member.Name</a>
-                </td>
-                <td>@member.State</td>
-                <td>@string.Join(", ", member.Roles)</td>
-                <td>@string.Join(", ", member.Groups)</td>
-                <td>@member.ReviewLevel</td>
-                <td>
-                    @if (member.State == MemberState.Pending)
-                    {
-                        <a @onclick="() => ActivatePendingMember(member.Id)" title="Freischalten" class="btn btn-sm">
-                            <span class="oi oi-lock-unlocked"></span>
-                        </a>
-                    }
-                    else
-                    {
-                        <a @onclick="() => ImpersonateMember(member.Id)" title="Impersonieren" class="btn btn-sm">
-                            <span class="oi oi-person"></span>
-                        </a>
-                        <a href=@($"Admin/ManageMemberRoles/{member.Id}") title="Rollen verwalten" class="btn btn-sm">
-                            <span class="oi oi-people"></span>
-                        </a>
-                        <a href=@($"Admin/ManageMemberGroups/{member.Id}") title="Gruppen verwalten" class="btn btn-sm">
-                            <span class="oi oi-tags"></span>
-                        </a>
-                        <a @onclick="() => IncreaseMemberReviewLevel(member.Id)" title="Reviewlevel anheben" class="btn btn-sm">
-                            <span class="oi oi-arrow-circle-top"></span>
-                        </a>
-                        @if (member.Type != MemberType.LDAP)
+            @foreach (var member in Memberships.Members.Where(x => x.Name.ToLower().Contains(SearchValue.ToLower())))
+            {
+                <tr>
+                    <td>
+                        <a class="no-link-coloring" href=@($"Members/Member/{member.Id}")>@(member.Uid != null ? member.Uid.Length > 8 ? member.Uid.Substring(0, 7) + ".." : member.Uid : "")</a>
+                    </td>
+                    <td>
+                        <a class="no-link-coloring" href=@($"Members/Member/{member.Id}")>@member.Name</a>
+                    </td>
+                    <td>@member.State</td>
+                    <td>@string.Join(", ", member.Roles)</td>
+                    <td>@string.Join(", ", member.Groups)</td>
+                    <td>@member.ReviewLevel</td>
+                    <td>
+                        @if (member.State == MemberState.Pending)
                         {
-                            <a href=@($"Admin/ConfirmAction/{member.Id}/ResetMemberPassword") title="Passwort zurücksetzen" class="btn btn-sm">
-                                <span class="oi-key oi"></span>
+                            <a @onclick="() => ActivatePendingMember(member.Id)" title="Freischalten" class="btn btn-sm">
+                                <span class="oi oi-lock-unlocked"></span>
                             </a>
                         }
-                        <a href=@($"Admin/ConfirmAction/{member.Id}/DeleteMember") title="Löschen" class="btn btn-sm">
-                            <span class="oi-trash oi"></span>
-                        </a>
-                    }
-                </td>
-            </tr>
-        }
+                        else
+                        {
+                            <a @onclick="() => ImpersonateMember(member.Id)" title="Impersonieren" class="btn btn-sm">
+                                <span class="oi oi-person"></span>
+                            </a>
+                            <a href=@($"Admin/ManageMemberRoles/{member.Id}") title="Rollen verwalten" class="btn btn-sm">
+                                <span class="oi oi-people"></span>
+                            </a>
+                            <a href=@($"Admin/ManageMemberGroups/{member.Id}") title="Gruppen verwalten" class="btn btn-sm">
+                                <span class="oi oi-tags"></span>
+                            </a>
+                            <a @onclick="() => IncreaseMemberReviewLevel(member.Id)" title="Reviewlevel anheben" class="btn btn-sm">
+                                <span class="oi oi-arrow-circle-top"></span>
+                            </a>
+                            @if (member.Type != MemberType.LDAP)
+                            {
+                                <a href=@($"Admin/ConfirmAction/{member.Id}/ResetMemberPassword") title="Passwort zurücksetzen" class="btn btn-sm">
+                                    <span class="oi-key oi"></span>
+                                </a>
+                            }
+                            <a href=@($"Admin/ConfirmAction/{member.Id}/DeleteMember") title="Löschen" class="btn btn-sm">
+                                <span class="oi-trash oi"></span>
+                            </a>
+                        }
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
