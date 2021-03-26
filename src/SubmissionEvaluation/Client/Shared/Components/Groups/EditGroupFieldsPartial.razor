@@ -46,7 +46,7 @@
                     {
                         Console.WriteLine(Model.SubGroups.ToString());
                         Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(group));
-                        <option value="@group.Id" title="@group.Id">@group.Title</option>
+                        <option value="@group.Id" title="@group.Title">@group.Title</option>
                     }
                 </select>
             </div>
@@ -68,11 +68,11 @@
                 <button id="btnAddAvailableChallenge" @onclick="AddToAvailableChallenges" type="button" class="btn btn-outline-dark ">
                     <span class="oi-plus oi"></span>
                 </button>
-                <select @bind="Model.SelectedAddAvailableChallenge" class="form-control">
+                <select class="form-control" @bind="Model.SelectedAddAvailableChallenge">
                     <option value="" selected>Weitere verfügbare Challenge hinzufügen</option>
                     @foreach (var challenge in Model.SelectableAvailableChallenges.Where(x => !Model.AvailableChallenges.Contains(x.Id)))
                     {
-                        <option value="@challenge.Id" title="@challenge.Id">@challenge.Title</option>
+                        <option value="@challenge.Id" title="@challenge.Title">@challenge.Title (@challenge.Id)</option>
                     }
                 </select>
             </div>
@@ -103,7 +103,7 @@
                     <option value="" selected>Weitere erzwunge Challenge hinzufügen</option>
                     @foreach (var challenge in  Model.SelectableForcedChallenges.Where(x => !Model.ForcedChallenges.Contains(x.Title)))
                     {
-                        <option value="@challenge.Id" title="@challenge.Title">@challenge.Title</option>
+                        <option value="@challenge.Id" title="@challenge.Title">@challenge.Title (@challenge.Id)</option>
                     }
                 </select>
             </div>
@@ -167,6 +167,7 @@
         if (!string.IsNullOrWhiteSpace(Model.SelectedAvailableChallenge))
         {
             Model.AvailableChallenges.Remove(Model.SelectedAvailableChallenge);
+            Model.SelectedAvailableChallenge = string.Empty;
         }
         StateHasChanged();
     }
@@ -186,8 +187,10 @@
     void RemoveForcedChallenge()
     {
         if (!string.IsNullOrWhiteSpace(Model.SelectedForcedChallenge))
+        {
             Model.ForcedChallenges.Remove(Model.SelectedForcedChallenge);
-
+            Model.SelectedForcedChallenge = string.Empty;
+        }
         StateHasChanged();
     }
 
@@ -196,6 +199,7 @@
         if (!string.IsNullOrWhiteSpace(Model.SelectedAddForcedChallenge) & !Model.ForcedChallenges.Contains(Model.SelectedAddForcedChallenge))
         {
             Model.ForcedChallenges.Add(Model.SelectedAddForcedChallenge);
+            Model.SelectedAddForcedChallenge = string.Empty;
         }
         StateHasChanged();
     }

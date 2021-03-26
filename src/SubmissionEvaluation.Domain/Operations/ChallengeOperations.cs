@@ -203,7 +203,7 @@ namespace SubmissionEvaluation.Domain.Operations
                 return new List<IChallenge>().ToDictionary(x => x.Id);
             }
 
-            if (ChallengesCanBeViewedByMemberCache.Contains(member.Id))
+            if (member.Id != null && ChallengesCanBeViewedByMemberCache.Contains(member.Id))
             {
                 return ChallengesCanBeViewedByMemberCache.Get(member.Id) as IReadOnlyDictionary<string, IChallenge>;
             }
@@ -241,7 +241,10 @@ namespace SubmissionEvaluation.Domain.Operations
 
             var res = visibleChallenges.Distinct(new IChallengeComparer()).ToDictionary(x => x.Id);
 
-            ChallengesCanBeViewedByMemberCache.Set(member.Id, res, DateTimeOffset.Now.AddMinutes(5));
+            if (member.Id != null)
+            {
+                ChallengesCanBeViewedByMemberCache.Set(member.Id, res, DateTimeOffset.Now.AddMinutes(5));
+            }
 
             // ensure list of challenges is unique before returning as dictionary
             return res;
