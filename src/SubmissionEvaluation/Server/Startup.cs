@@ -56,7 +56,7 @@ namespace SubmissionEvaluation.Server
             services.AddResponseCompression(opts => { opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[] {"application/octet-stream"}); });
 
             services.AddHangfire(x => { });
-            services.AddHangfireServer();
+            services.AddHangfireServer(x => { x.WorkerCount = Environment.ProcessorCount; });
             services.AddDirectoryBrowser();
             services.AddControllersWithViews();
             services.AddRazorPages();
