@@ -18,7 +18,7 @@
                 <div class="col-sm-3 col-12 side-menu">
                     @foreach (var item in Model?.SubmissionFilePaths)
                     {
-                        <button type="submit" id="btnSource_@GetFileName(item)" class="btn-block" name="filePath" value="@item" @onclick="() => SetCurrentFile(item)"> @GetFileName(item)</button>
+                        <button type="submit" id="btnSource_@GetFileName(item)" class="btn btn-outline-dark btn-block btn-margin" name="filePath" value="@item" @onclick="() => SetCurrentFile(item)"> @GetFileName(item)</button>
                     }
                 </div>
                 <div class="col-sm-9 col-12 editor-wrapper">
@@ -51,7 +51,6 @@
 
     private async void SetCurrentFile(string item)
     {
-    //The below is a get, but you need to give the file as model, cause otherwise it blocks.
         var responseMessage = await httpClient.PostAsJsonAsync($"api/Submission/GetCurrentFile/{ChallengeName}/{SelectedSubmission}", item);
         if (responseMessage.IsSuccessStatusCode)
         {
@@ -75,6 +74,5 @@
             navi.NavigateTo($"Home/Error/{Model.Message}");
         }
     }
-
-    //TODO: Optional: Remove js by blazor.
+    
 }

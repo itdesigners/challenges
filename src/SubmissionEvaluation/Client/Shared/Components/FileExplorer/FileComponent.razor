@@ -6,7 +6,7 @@
         @File.Name
     </div>
     <input hidden="@hidden" @bind-value="NewName" style="@fontColor" class="folder_input fileheader" @onkeypress:preventDefault="@preventDefault" @onkeypress:stopPropagation="@preventDefault" @onkeypress="e => OnKeyPressed(e)"/>
-    <button type="button" class="btn btn-primary" @onclick="() => Rename(File)" hidden="@hidden">Submit</button>
+    <button type="button" class="btn btn-outline-dark" @onclick="() => Rename(File)" hidden="@hidden">Submit</button>
     <div id=@($"fileepic_{File.Name}") class="col-12 filepart filepic">
         @if (File.Type.Equals("folder"))
         {

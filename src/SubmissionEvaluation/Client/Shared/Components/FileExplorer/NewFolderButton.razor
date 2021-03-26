@@ -1,10 +1,10 @@
 ﻿@using SubmissionEvaluation.Shared.Models.Shared
 <div class="@ButtonStyling">
-    <button type="button" hidden="@(!hidden)" class="btn btn-primary file-button @ButtonStyling new_button" @onclick="ShowOrHide">Neuer Ordner</button>
+    <button type="button" hidden="@(!hidden)" class="btn btn-outline-dark file-button @ButtonStyling new_button" @onclick="ShowOrHide">Neuer Ordner</button>
     <input hidden="@hidden" @bind-value="@FolderName" style="@fontColor" class="folder_input @ButtonStyling" @onkeypress="() => { fontColor = InputButtonHelper.GetNormalColor();StateHasChanged(); }"/>
     <div class="align-center">
-        <button type="button" hidden="@hidden" class="btn btn-primary file-button @ButtonStyling" @onclick="NewFolder">Anlegen</button>
-        <button type="button" hidden="@hidden" class="btn btn-primary file-button @ButtonStyling" @onclick="ShowOrHide">Abbrechen</button>
+        <button type="button" hidden="@hidden" class="btn btn-outline-dark file-button @ButtonStyling" @onclick="NewFolder">Anlegen</button>
+        <button type="button" hidden="@hidden" class="btn btn-outline-dark file-button @ButtonStyling" @onclick="ShowOrHide">Abbrechen</button>
     </div>
 </div>
 

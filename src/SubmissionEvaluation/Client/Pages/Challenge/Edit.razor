@@ -54,8 +54,8 @@
                     </div>
 
 
-                    <button id="btnSave" name="command" type="submit" value="Save" class="btn btn-primary btn-block text-center input-field-padding" @onclick='e => EditModelCallback(formContext, "Save")'><span class="oi oi-book"></span> Challenge speichern</button>
-                    <button id="btnSaveAndClose" name="command" type="submit" value="SaveAndClose" class="btn btn-primary btn-block text-center input-field-padding" @onclick='() => EditModelCallback(formContext, "SaveAndClose")'><span class="oi oi-book"></span> Challenge speichern und zurück</button>
+                    <button id="btnSave" name="command" type="submit" value="Save" class="btn btn-outline-dark btn-block text-center input-field-padding" @onclick='e => EditModelCallback(formContext, "Save")'><span class="oi oi-book"></span> Challenge speichern</button>
+                    <button id="btnSaveAndClose" name="command" type="submit" value="SaveAndClose" class="btn btn-outline-dark btn-block text-center input-field-padding" @onclick='() => EditModelCallback(formContext, "SaveAndClose")'><span class="oi oi-book"></span> Challenge speichern und zurück</button>
                     @if (Model.IsDraft && !Model.HasChallengeError)
                     {
                         <button id="btnPublish" name="command" type="submit" value="Publish" class="btn btn-success btn-block text-center input-field-padding" @onclick='e => EditModelCallback(formContext, "Publish")'><span class="oi oi-pin"></span> Challenge veröffentlichen</button>

@@ -39,7 +39,7 @@
         <p id="outputHelpBlock" class="form-text text-muted">
             Beschreibt die erwartete Programmausgabe. Wird diese nicht erfüllt, schlägt der Test fehl.
         </p>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#consoleOutputCompareSettings" aria-controls="collapseExample" @onclick="() => collapse = !collapse">
+        <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#consoleOutputCompareSettings" aria-controls="collapseExample" @onclick="() => collapse = !collapse">
             Zeige Vergleichseinstellungen der erwarteten Ausgabe
         </button>
         <div hidden="@collapse" id="consoleOutputCompareSettings">
@@ -164,7 +164,7 @@
             Beschreibt den Inhalt der erwarteten Ausgabedatei.
         </p>
 
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#fileOutputCompareSettings" aria-controls="collapseExample" @onclick="() => collapseFileCompareSettings = !collapseFileCompareSettings">
+        <button class="btn btn-outline-dark" type="button" data-toggle="collapse" data-target="#fileOutputCompareSettings" aria-controls="collapseExample" @onclick="() => collapseFileCompareSettings = !collapseFileCompareSettings">
             Zeige Vergleichseinstellungen der erwarteten Ausgabedatei
         </button>
         <div hidden="@collapseFileCompareSettings" id="fileOutputCompareSettings">

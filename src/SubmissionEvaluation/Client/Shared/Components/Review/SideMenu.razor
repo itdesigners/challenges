@@ -16,7 +16,7 @@
     <div id="fileContainer" hidden="@(!IsFlat)">
         @foreach (var file in SourceFiles)
         {
-            <a class="btn btn-primary" style="margin-bottom: 1em; min-width: 100%;" @onclick="() => ChangeFile(file)">@file.Name</a>
+            <a class="btn btn-outline-dark" style="margin-bottom: 1em; min-width: 100%;" @onclick="() => ChangeFile(file)">@file.Name</a>
         }
     </div>
 </div>

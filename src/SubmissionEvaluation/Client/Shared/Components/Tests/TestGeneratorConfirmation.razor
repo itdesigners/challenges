@@ -16,8 +16,8 @@
             <div class="panel-body challenge-creation-panel">
                 <MessageHeader Model="Model"/>
                 <EditTestFieldsPartial Model="Model.Test" ChallengeId="@Model.ChallengeId" Input="Input"/>
-                <button id="btnSave" name="command" type="submit" @onclick="@CreateTest" value="Save" class="btn btn-primary btn-block text-center input-field-padding"><span class="oi oi-data-transfer-upload"></span> Test speichern</button>
-                <button id="btnRetry" name="command" type="submit" @onclick="@Retry" value="Retry" class="btn btn-primary btn-block text-center input-field-padding"><span class="oi oi-reload"></span> Test verwerfen und nochmal Starten</button>
+                <button id="btnSave" name="command" type="submit" @onclick="@CreateTest" value="Save" class="btn btn-outline-dark btn-block text-center input-field-padding"><span class="oi oi-data-transfer-upload"></span> Test speichern</button>
+                <button id="btnRetry" name="command" type="submit" @onclick="@Retry" value="Retry" class="btn btn-outline-dark btn-block text-center input-field-padding"><span class="oi oi-reload"></span> Test verwerfen und nochmal Starten</button>
 
             </div>
         </EditForm>

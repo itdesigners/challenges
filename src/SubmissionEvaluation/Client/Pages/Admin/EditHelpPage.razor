@@ -34,8 +34,8 @@
                         <ValidationMessage For="() => Model.Description" class="text-danger"/>
                         <InputTextArea @bind-Value="Model.Description" class="form-control"/>
                     </div>
-                    <button id="btnSave" name="command" type="submit" value="Save" @onclick='() => SendUpdateToServer("Save", formContext)' class="btn btn-primary btn-block text-center input-field-padding"><span class="oi oi-book"></span> Seite speichern</button>
-                    <button id="btnSaveAndClose" name="command" type="submit" value="SaveAndClose" @onclick='() => SendUpdateToServer("SaveAndClose", formContext)' class="btn btn-primary btn-block text-center input-field-padding"><span class="oi oi-book"></span> Seite speichern und zurück</button>
+                    <button id="btnSave" name="command" type="submit" value="Save" @onclick='() => SendUpdateToServer("Save", formContext)' class="btn btn-outline-dark btn-block text-center input-field-padding"><span class="oi oi-book"></span> Seite speichern</button>
+                    <button id="btnSaveAndClose" name="command" type="submit" value="SaveAndClose" @onclick='() => SendUpdateToServer("SaveAndClose", formContext)' class="btn btn-outline-dark btn-block text-center input-field-padding"><span class="oi oi-book"></span> Seite speichern und zurück</button>
                 </EditForm>
 
             </div>

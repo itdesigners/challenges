@@ -39,8 +39,8 @@
 
                         <EditBundleFieldsPartial Model="Model" Settings="CustomizationSettings" @ref="Partial"/>
 
-                        <button id="btnSave" name="command" @onclick='() => SubmitForm("Save", formContext)' value="Save" class="btn btn-primary btn-block text-center input-field-padding"><span class="oi oi-book"></span> Bundle speichern</button>
-                        <button id="btnSaveAndClose" name="command" @onclick='() => SubmitForm("SaveAndClose", formContext)' value="SaveAndClose" class="btn btn-primary btn-block text-center input-field-padding"><span class="oi oi-book"></span> Bundle speichern und zurück</button>
+                        <button id="btnSave" name="command" @onclick='() => SubmitForm("Save", formContext)' value="Save" class="btn btn-outline-dark btn-block text-center input-field-padding"><span class="oi oi-book"></span> Bundle speichern</button>
+                        <button id="btnSaveAndClose" name="command" @onclick='() => SubmitForm("SaveAndClose", formContext)' value="SaveAndClose" class="btn btn-outline-dark btn-block text-center input-field-padding"><span class="oi oi-book"></span> Bundle speichern und zurück</button>
                         @if (Model.IsDraft)
                         {
                             <button id="btnPublish" name="command" @onclick='() => SubmitForm("Publish", formContext)' value="Publish" class="btn btn-success btn-block text-center input-field-padding"><span class="oi oi-pin"></span> Bundle veröffentlichen</button>

@@ -23,9 +23,9 @@
                     {
                         <EditTestFieldsPartial Model="@Model.Test" Input='domain.FetchFolder("Input", TestFolder)' ChallengeId="@Challenge"/>
                     }
-                    <button id="btnSave" name="command" type="button" value="Save" class="btn btn-primary btn-block text-center input-field-padding" @onclick='() => EditTest(formContext, "Save")'><span class="oi oi-data-transfer-upload"></span> Test speichern</button>
-                    <button id="btnSaveAndClose" name="command" type="button" value="SaveAndClose" class="btn btn-primary btn-block text-center input-field-padding" @onclick='() => EditTest(formContext, "SaveAndClose")'><span class="oi oi-data-transfer-upload"></span><span class="oi oi-media-skip-backward"></span> Test speichern und zurück</button>
-                    <button id="btnSaveAndNext" name="command" type="button" value="SaveAndNext" class="btn btn-primary btn-block text-center input-field-padding" @onclick='() => EditTest(formContext, "SaveAndNext")'><span class="oi oi-data-transfer-upload"></span><span class="oi oi-media-skip-forward"></span> Test speichern und nächster</button>
+                    <button id="btnSave" name="command" type="button" value="Save" class="btn btn-outline-dark btn-block text-center input-field-padding" @onclick='() => EditTest(formContext, "Save")'><span class="oi oi-data-transfer-upload"></span> Test speichern</button>
+                    <button id="btnSaveAndClose" name="command" type="button" value="SaveAndClose" class="btn btn-outline-dark btn-block text-center input-field-padding" @onclick='() => EditTest(formContext, "SaveAndClose")'><span class="oi oi-data-transfer-upload"></span><span class="oi oi-media-skip-backward"></span> Test speichern und zurück</button>
+                    <button id="btnSaveAndNext" name="command" type="button" value="SaveAndNext" class="btn btn-outline-dark btn-block text-center input-field-padding" @onclick='() => EditTest(formContext, "SaveAndNext")'><span class="oi oi-data-transfer-upload"></span><span class="oi oi-media-skip-forward"></span> Test speichern und nächster</button>
                 </div>
             </EditForm>
         </div>

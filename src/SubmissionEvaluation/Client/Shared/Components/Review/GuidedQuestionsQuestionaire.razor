@@ -9,11 +9,11 @@
             <div class="col-3">
                 @if (!CurrentQuestion.Equals(GuidedQuestions[0]))
                 {
-                    <button class="btn btn-primary" @onclick="PreviousQuestion">Vorherige Frage</button>
+                    <button class="btn btn-outline-dark" @onclick="PreviousQuestion">Vorherige Frage</button>
                 }
             </div>
             <div class="col-3 d-flex flex-row-reverse ml-auto">
-                <button class="btn btn-primary pull-right" @onclick="NextQuestion">Nächste Frage</button>
+                <button class="btn btn-outline-dark pull-right" @onclick="NextQuestion">Nächste Frage</button>
             </div>
             <div class="guidedQuestion col-12">
                 <div class="form-group ">
@@ -49,7 +49,7 @@
                 <h3>Der Fragebogen wurde ausgefüllt. Sende das Review ab.</h3>
             </div>
             <div class="col-sm-3 col-12 pull-right">
-                <button type="button" class="btn btn-primary btn-block" @onclick="@InvokeParentSubmit">Review einreichen</button>
+                <button type="button" class="btn btn-outline-dark btn-block" @onclick="@InvokeParentSubmit">Review einreichen</button>
             </div>
         </div>
     }
