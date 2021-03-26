@@ -402,7 +402,6 @@ namespace SubmissionEvaluation.Server.Controllers
                 return Ok(new GenericModel {HasError = true, Message = ErrorMessages.IdError});
             }
 
-            SubmissionViewModel model = null;
             var currentUser = JekyllHandler.GetMemberForUser(User);
             var submission = JekyllHandler.Domain.Query.GetSubmission(challenge, id);
             var memberId = User.Claims.First(x => x.Type == ClaimTypes.Sid).Value;
@@ -413,7 +412,7 @@ namespace SubmissionEvaluation.Server.Controllers
                 return Ok(new GenericModel {HasError = true, Message = ErrorMessages.NoPermission});
             }
 
-            model = BuildSubmissionViewModel(submission, challenge);
+            var model = BuildSubmissionViewModel(submission, challenge);
 
             return Ok(model);
         }
