@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -177,6 +179,19 @@ namespace SubmissionEvaluation.Server.Controllers
             var points = JekyllHandler.Domain.Query.GetSubmitterRanklist(member).Submissions
                 .Where(x => x.Challenge != "ChallengeCreators" && x.Challenge != "Achievements" && x.Challenge != "Reviews").ToList()
                 .Select(x => GetDuplicateInfo(member, x)).ToList();
+            return Ok(points);
+        }
+
+        [HttpPost("PointsList")]
+        public IActionResult PointsList([FromBody] List<string> memberIds)
+        {
+            var points = memberIds.AsParallel().Select(id =>
+            {
+                var member = JekyllHandler.MemberProvider.GetMemberById(id);
+                return (id, JekyllHandler.Domain.Query.GetSubmitterRanklist(member).Submissions
+                    .Where(x => x.Challenge != "ChallengeCreators" && x.Challenge != "Achievements" && x.Challenge != "Reviews")
+                    .Select(x => GetDuplicateInfo(member, x)).ToList());
+            });
             return Ok(points);
         }
 

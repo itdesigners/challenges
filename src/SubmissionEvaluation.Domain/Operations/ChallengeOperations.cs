@@ -241,9 +241,9 @@ namespace SubmissionEvaluation.Domain.Operations
 
             var res = visibleChallenges.Distinct(new IChallengeComparer()).ToDictionary(x => x.Id);
 
-            if (member.Id != null)
+            if (member.Id != null && res.Count != 0)
             {
-                ChallengesCanBeViewedByMemberCache.Set(member.Id, res, DateTimeOffset.Now.AddMinutes(5));
+                ChallengesCanBeViewedByMemberCache.Set(member.Id, res, DateTimeOffset.Now.AddSeconds(15));
             }
 
             // ensure list of challenges is unique before returning as dictionary

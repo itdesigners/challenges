@@ -270,18 +270,9 @@ namespace SubmissionEvaluation.Server.Controllers
             }
 
             var member = JekyllHandler.GetMemberForUser(User);
-            if (JekyllHandler.Domain.Query.TryGetBundleForChallenge(member, challenge.Id, out var bundle))
-            {
-                if (bundle.HasPreviousChallengesCheck)
-                {
-                    if (!JekyllHandler.Domain.Query.HasMemberSolvedAllPreviousChallengesInBundle(member, challenge))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
+            return !JekyllHandler.Domain.Query.TryGetBundleForChallenge(member, challenge.Id, out var bundle) ||
+                   !bundle.HasPreviousChallengesCheck ||
+                   JekyllHandler.Domain.Query.HasMemberSolvedAllPreviousChallengesInBundle(member, challenge);
         }
 
         private void SaveChallengeFiles(ExtendedChallengeModel model)
@@ -560,78 +551,6 @@ namespace SubmissionEvaluation.Server.Controllers
             return result;
         }
 
-
-        /**
-         * FileEditor in Browser has been removed. Uncomment this, if reimplemented someday.
-         * [Authorize(Roles = "admin,creator")]
-         * [HttpGet]
-         * public async Task
-         * <ActionResult
-         * <EditFileModel>
-         *     > EditFile(string id, string relativeFilePath)
-         *     {
-         *     if (id == null) return RedirectToAction("List", "Challenge");
-         *     var member = JekyllHandler.GetMemberForUser(User);
-         *     IChallenge challenge;
-         *     try
-         *     {
-         *     challenge = JekyllHandler.Domain.Query.GetChallenge(member, id, true);
-         *     }
-         *     catch (IOException)
-         *     {
-         *     return Ok(new EditFileModel
-         *     {
-         *     ChallengeId = id,
-         *     RelativeFilePath = relativeFilePath,
-         *     HasError = true,
-         *     Message = ErrorMessages.IdError,
-         *     Referer = $"/Challenges/Edit/{id}"
-         *     });
-         *     }
-         *     if (challenge.AuthorID != User.Claims.First(x => x.Type == ClaimTypes.Sid).Value && !User.IsInRole("admin"))
-         *     {
-         *     return Ok(new EditFileModel
-         *     {
-         *     ChallengeId = id,
-         *     RelativeFilePath = relativeFilePath,
-         *     HasError = true,
-         *     Message = ErrorMessages.NoPermission,
-         *     Referer = $"/Challenges/Edit/{id}"
-         *     });
-         *     }
-         *     var content = JekyllHandler.Domain.Query.GetChallengeAdditionalFileContentAsText(challenge.Id, relativeFilePath);
-         *     var model = new EditFileModel
-         *     {
-         *     ChallengeId = challenge.Id,
-         *     RelativeFilePath = relativeFilePath,
-         *     FileContent = content,
-         *     Referer = $"/Challenges/Edit/{id}"
-         *     };
-         *     return Ok(model);
-         *     }
-         *     [Authorize(Roles = "admin,creator")]
-         *     [HttpPost]
-         *     public async Task<ActionResult
-         *     <EditFileModel>
-         *         > EditFile(EditFileModel model)
-         *         {
-         *         if (model.ChallengeId == null) return RedirectToAction("List", "Challenge");
-         *         var member = JekyllHandler.GetMemberForUser(User);
-         *         IChallenge challenge;
-         *         try
-         *         {
-         *         challenge = JekyllHandler.Domain.Query.GetChallenge(member, model.ChallengeId, true);
-         *         }
-         *         catch (IOException)
-         *         {
-         *         model.HasError = true;
-         *         model.Message = ErrorMessages.IdError;
-         *         return Ok(model);
-         *         }
-         *         JekyllHandler.Domain.Interactions.EditAdditionalTextFile(challenge, model.RelativeFilePath, model.FileContent);
-         *         return Ok(model);
-         *         }
-         */
         [Authorize(Roles = "admin,creator")]
         [HttpDelete("DeleteChallenge/{id}")]
         public ActionResult<string> Delete(string id)

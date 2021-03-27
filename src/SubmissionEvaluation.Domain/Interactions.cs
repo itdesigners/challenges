@@ -580,8 +580,14 @@ namespace SubmissionEvaluation.Domain
                 return;
             }
 
-            domain.Log.Information($"Interaktion: Lösche Nutzer mit der Benutzerid {memberId}");
             var member = domain.MemberProvider.GetMemberById(memberId);
+            if (member == null)
+            {
+                domain.Log.Warning($"Interaktion: Ein Nutzer mit der Benutzerid {memberId} existiert nicht.");
+                return;
+            }
+
+            domain.Log.Information($"Interaktion: Lösche Nutzer mit der Benutzerid {memberId}");
             domain.Maintenance.EnsureMemberIsNotChallengeAuthor(member);
             var dataStore = domain.ProviderStore;
             SubmissionOperations.DeleteSubmissionForMember(dataStore, member);

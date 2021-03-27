@@ -5,6 +5,7 @@
 @using Member = SubmissionEvaluation.Contracts.ClientPocos.Member
 @using SubmissionEvaluation.Shared.Models.Admin
 @using System.Net.Http.Json
+@using SubmissionEvaluation.Client.Pages.Members
 @using SubmissionEvaluation.Shared.Models.Permissions 
 @using SubmissionEvaluation.Shared.Classes 
 @using Group = SubmissionEvaluation.Contracts.ClientPocos.Group 
@@ -50,7 +51,7 @@
 
 @code {
     AdminUserModel<Member> Model { get; set; }
-    
+
     Permissions Permissions { get; set; } = new Permissions();
     AdminGroupsModel<Group> Groups { get; set; } = new AdminGroupsModel<Group>();
     Dictionary<string, List<PointsHoldTupel<Submission, Member>>> PointsForRelevantMembers { get; set; } = new Dictionary<string, List<PointsHoldTupel<Submission, Member>>>();
@@ -68,9 +69,14 @@
         {
             Model = await httpClient.GetFromJsonAsync<AdminUserModel<Member>>("api/Group/Users");
             Groups = await httpClient.GetFromJsonAsync<AdminGroupsModel<Group>>("api/Group/Groups");
-            foreach(var member in Model.GroupMemberships.SelectMany(x=> x.Members).Distinct())
+            var res = await httpClient.PostAsJsonAsync("api/Members/PointsList", Model.GroupMemberships.SelectMany(x => x.Members).Select(x => x.Id).Distinct());
+            if (res.IsSuccessStatusCode)
             {
-                PointsForRelevantMembers[member.Id] = await httpClient.GetFromJsonAsync<List<PointsHoldTupel<Submission, Member>>> ($"api/Members/PointsList/{member.Id}");
+                var pointLists = await res.Content.ReadFromJsonAsync<List<Tuple<string, List<PointsHoldTupel<Submission, Member>>>>>();
+                foreach (var (memberId, pointList) in pointLists)
+                {
+                    PointsForRelevantMembers[memberId] = pointList;
+                }
             }
         }
         StateHasChanged();

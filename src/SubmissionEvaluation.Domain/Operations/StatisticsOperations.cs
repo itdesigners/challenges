@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Caching;
 using System.Threading.Tasks;
 using SubmissionEvaluation.Contracts.Data;
 using SubmissionEvaluation.Contracts.Data.Ranklist;
@@ -14,6 +15,8 @@ namespace SubmissionEvaluation.Domain.Operations
 {
     internal class StatisticsOperations
     {
+        private static MemoryCache cache = new MemoryCache("cache");
+
         public ILog Log { set; private get; }
         public ProviderStore ProviderStore { private get; set; }
         public IList<ISubmissionRater> Raters { private get; set; }
@@ -89,6 +92,10 @@ namespace SubmissionEvaluation.Domain.Operations
 
         public List<ChallengeRanklist> GenerateAllChallengeRanklists(bool includeSpecialRanklists = true)
         {
+            if (cache.Contains(nameof(GenerateAllChallengeRanklists))) {
+                return cache.Get(nameof(GenerateAllChallengeRanklists)) as List<ChallengeRanklist>; 
+            }
+
             var allChallengeRanklists = GetBasicRanklists(includeSpecialRanklists);
             if (includeSpecialRanklists)
             {
@@ -96,7 +103,9 @@ namespace SubmissionEvaluation.Domain.Operations
                 allChallengeRanklists.Add(reviewRanklist);
             }
 
-            return allChallengeRanklists.OrderBy(x => x.Challenge, new ChallengeForRankingComparer()).ToList();
+            var ranklist = allChallengeRanklists.OrderBy(x => x.Challenge, new ChallengeForRankingComparer()).ToList();
+            cache.Set(nameof(GenerateAllChallengeRanklists), ranklist, DateTimeOffset.Now.AddSeconds(15));
+            return ranklist;
         }
 
         public List<ChallengeRanklist> GenerateAllChallengeRanklistsForSemester(bool includeSpecialRanklists = true)
