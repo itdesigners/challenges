@@ -58,14 +58,6 @@
                     {
                         <p>
                             @("Diese Aufgabe ist Teil der Aufgabenserie: ")<a href="@("Bundle/View/" + Model.Bundle)">@Model.BundleTitle</a>
-                            @if (Model.LastChallenge != null)
-                            {
-                                <NavLink href="@("Challenge/View/" + Model.LastChallenge)">[&laquo;]</NavLink>
-                            }
-                            @if (Model.NextChallenge != null)
-                            {
-                                <span>&nbsp;<a href="@("/Challenge/View/" + Model.NextChallenge)">&raquo;</a></span>
-                            }
                         </p>
                     }
                 </div>
