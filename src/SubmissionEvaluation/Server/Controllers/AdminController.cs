@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -282,8 +283,20 @@ namespace SubmissionEvaluation.Server.Controllers
         [HttpPost("ResetMemberPassword")]
         public IActionResult ResetMemberPassword([FromBody] string id)
         {
+            Func<string> passwordGenerator = () =>
+            {
+                var charSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&*@".ToArray();
+                var stringBuilder = new StringBuilder();
+                var random = new Random();
+                for (var i = 0; i < 24; i++)
+                {
+                    stringBuilder.Append(charSet.ElementAt(random.Next(1, charSet.Length) - 1));
+                }
+                return stringBuilder.ToString();
+            };
+
             var member = JekyllHandler.MemberProvider.GetMemberById(id);
-            var newPwd = "$" + new Random().Next(1000000, int.MaxValue);
+            var newPwd = passwordGenerator.Invoke();
             var pwdHash = CryptographyProvider.CreateArgon2Password(newPwd);
             JekyllHandler.MemberProvider.UpdatePassword(member, pwdHash);
             var model = new ResetPasswordModel<IMember> {Member = member, Password = newPwd};
