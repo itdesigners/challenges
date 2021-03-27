@@ -1,10 +1,10 @@
 ﻿---
-author: 1e3fcd02b1547f847cb7fc3add4484a5
+author: bcd81729d2e02d68bfecb89fb1b4e417
 title: FizzBuzz
 ratingMethod: Fixed
-category: Grundlagen
-stickAsBeginner: true
-date: 2019-08-06T23:08:02.5403413+02:00
+category: Katas
+freezeDifficultyRating: false
+date: 2019-08-06T21:08:02.5403413+00:00
 source: http://ccd-school.de/coding-dojo/
 learningFocus: 
 isDraft: false
@@ -13,11 +13,11 @@ dependsOn: []
 languages: []
 state:
   passedCount: 80
-  failedCount: 22
+  failedCount: 23
   hasError: false
   errorDescription: ''
   lastEditorId: 
-  feasibilityIndex: 500000
+  feasibilityIndex: 3478
   feasibilityIndexMod: 0
   difficultyRating: 20
   isPartOfBundle: false
@@ -25,8 +25,8 @@ state:
   maxEffort: 8 hrs
   features:
   - Iterations
-  activity: -13464
-lastEdit: 2019-08-06T23:08:02.5403413+02:00
+  activity: -14304
+lastEdit: 2019-08-06T21:08:02.5403413+00:00
 
 ---
 Schreibe eine Anwendung, welche den Benutzer nach einer Zahl zwischen `1` und `100` fragt. Die eingegebene Zahl soll dann auf dem Bildschirm ausgegeben werden, wobei bestimmte Zahlen dabei nach folgenden Regeln übersetzt werden sollen: 

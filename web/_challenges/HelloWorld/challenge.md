@@ -1,31 +1,38 @@
 ﻿---
-author: 1e3fcd02b1547f847cb7fc3add4484a5
+author: bcd81729d2e02d68bfecb89fb1b4e417
 title: Hallo, Welt!
 ratingMethod: Fixed
-category: Grundlagen
-stickAsBeginner: true
+category: Katas
+freezeDifficultyRating: false
 date: 2015-10-05T00:01:09.0000000
 source: none
-learningFocus: Intro
+learningFocus: 
 isDraft: false
 includeTests: []
 dependsOn: []
 languages: []
 state:
-  passedCount: 509
-  failedCount: 321
+  passedCount: 519
+  failedCount: 331
   hasError: false
   errorDescription: ''
   lastEditorId: 
-  feasibilityIndex: 500000
+  feasibilityIndex: 1575
   feasibilityIndexMod: 0
-  difficultyRating: 20
+  difficultyRating: 35
   isPartOfBundle: false
-  minEffort: 30 mins
-  maxEffort: 8 hrs
+  minEffort: 5 mins
+  maxEffort: 15 mins
   features: 
-  activity: -47088
-lastEdit: 2021-02-03T17:19:40.4411678+01:00
+  activity: 36
+lastEdit: 2015-10-05T00:01:09.0000000
 
 ---
-<code>Schreibe eine Konsolenanwendung, die den Namen beim Programmstart vom Benutzer abfragt und diesen anschließend diesen mit Hallo, &lt;Name&gt;!</code><p> grüßt.</p><p>Beispiel:</p><p>{% output %}</p><p>&gt; HalloWelt.exe</p><p>Geben Sie den Namen ein: `Markus`</p><p>Hallo, Markus!</p><p>{% endoutput %}</p>
+Schreibe eine Konsolenanwendung, die den Namen beim Programmstart vom Benutzer abfragt und diesen anschließend diesen mit `Hallo, <Name>!` grüßt.
+
+Beispiel:
+{% output %}
+> HalloWelt.exe
+Geben Sie den Namen ein: `Markus`
+Hallo, Markus!
+{% endoutput %}

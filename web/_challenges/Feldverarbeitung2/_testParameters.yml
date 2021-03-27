@@ -1,4 +1,3 @@
-﻿id: 1
 parameters: []
 input:
   content: "8\n83\n65\n18\n25\n23\n46\n45\n32"
@@ -7,7 +6,6 @@ expectedOutput:
   settings:
     compareMode: ContainsWord
 ---
-id: 2
 hint: "Funktionieren negative Zahlen richtig?"
 parameters: []
 input:
@@ -17,7 +15,6 @@ expectedOutput:
   settings:
     compareMode: ContainsWord
 ---
-id: 3
 hint: "Funktioniert die Überprüfung der Arraylänge richtig?"
 parameters: []
 input:

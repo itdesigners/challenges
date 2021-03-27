@@ -1,5 +1,3 @@
-﻿id: 1
-parameters: []
 input:
   content: "Markus\n"
 expectedOutput:
@@ -8,8 +6,6 @@ expectedOutput:
     whitespaces: RemoveEvenNewlines
     compareMode: Contains
 ---
-id: 2
-parameters: []
 input:
   content: "Chuck\n"
 expectedOutput:
@@ -18,8 +14,6 @@ expectedOutput:
     whitespaces: RemoveEvenNewlines
     compareMode: Contains
 ---
-id: 3
-parameters: []
 input:
   content: "MickeyTheLittleMouse\n"
 expectedOutput:

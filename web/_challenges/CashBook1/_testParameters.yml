@@ -1,5 +1,3 @@
-﻿clearSandbox: true
-id: 1
 parameters:
 - add
 - 2.9.2015
@@ -18,9 +16,8 @@ expectedOutputFile:
   name: bookings.csv
   content: "2.9.2015;Filter;-4.2\n"
   settings: {}
----
 clearSandbox: true
-id: 2
+---
 hint: "Am Ende Hinzufügen mit bereits vorhandenen Buchungen klappt nicht."
 parameters:
 - add
@@ -40,9 +37,8 @@ expectedOutputFile:
   name: bookings.csv
   content: "2.9.2015;Filter;-4.2\n1.1.2000;Haribos;-5.1\n"
   settings: {}
----
 clearSandbox: true
-id: 3
+---
 hint: "Am Ende Hinzufügen mit bereits vorhandenen Buchungen klappt nicht."
 parameters:
 - add
@@ -62,9 +58,8 @@ expectedOutputFile:
   name: bookings.csv
   content: "2.9.2015;Filter;-4.2\n31.12.2017;Kaffee;-13.37\n"
   settings: {}
----
 clearSandbox: true
-id: 4
+---
 hint: "Buchung abbrechen klappt nicht"
 parameters:
 - add
@@ -80,3 +75,4 @@ expectedOutputFile:
   name: bookings.csv
   content: "2.9.2015;Filter;-4.2\n"
   settings: {}
+clearSandbox: true

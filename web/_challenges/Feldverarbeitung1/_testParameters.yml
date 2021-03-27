@@ -1,16 +1,11 @@
-﻿id: 1
-parameters: []
+﻿parameters: []
 input:
   content: "8\n83\n65\n18\n25\n23\n45\n45\n32"
 expectedOutput:
   content: "2"
-  alternatives:
-  - Hallo
-  - Yay, es funzt!
   settings:
     compareMode: ContainsWord
 ---
-id: 2
 hint: "Werden negative Zahlen richtig verarbeitet?"
 parameters: []
 input:
@@ -20,7 +15,6 @@ expectedOutput:
   settings:
     compareMode: ContainsWord
 ---
-id: 3
 hint: "Funktioniert die Kontroller der Array größe richtig?"
 parameters: []
 input:
@@ -30,7 +24,6 @@ expectedOutput:
   settings:
     compareMode: ContainsWord
 ---
-id: 4
 hint: "Funktioniert die Kontrolle der Array größe richtig? Der Nutzer kann diese Zahl auch mehrmals falsch eingeben."
 parameters: []
 input:

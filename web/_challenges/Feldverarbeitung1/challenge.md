@@ -1,10 +1,10 @@
 ﻿---
-author: 1e3fcd02b1547f847cb7fc3add4484a5
+author: bcd81729d2e02d68bfecb89fb1b4e417
 title: Rechnen mit Arrays
 ratingMethod: Fixed
-category: Grundlagen
-stickAsBeginner: false
-date: 2019-06-21T13:55:23.2327400+02:00
+category: Katas
+freezeDifficultyRating: false
+date: 2019-06-21T11:55:23.2327400+00:00
 source: none
 learningFocus: 
 isDraft: false
@@ -13,21 +13,21 @@ dependsOn: []
 languages: []
 state:
   passedCount: 97
-  failedCount: 111
+  failedCount: 116
   hasError: false
   errorDescription: ''
   lastEditorId: 
-  feasibilityIndex: 873
+  feasibilityIndex: 836
   feasibilityIndexMod: 0
   difficultyRating: 60
   isPartOfBundle: true
-  minEffort: 30 mins
-  maxEffort: 8 hrs
+  minEffort: 5 mins
+  maxEffort: 15 mins
   features:
   - Arrays
   - Iterations
-  activity: -14568
-lastEdit: 2021-01-25T10:49:13.6932658+01:00
+  activity: -1206
+lastEdit: 2019-11-06T08:55:36.5111483+00:00
 
 ---
 In dieser Aufgabe werden einfache Operationen auf Arrays geübt. Lese dazu zunächst

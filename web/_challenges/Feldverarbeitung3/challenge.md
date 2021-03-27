@@ -1,12 +1,12 @@
 ﻿---
-author: 1e3fcd02b1547f847cb7fc3add4484a5
+author: bcd81729d2e02d68bfecb89fb1b4e417
 title: Verändertes Array
 ratingMethod: Fixed
-category: Grundlagen
-stickAsBeginner: false
-date: 2019-06-21T14:34:59.0724847+02:00
+category: Katas
+freezeDifficultyRating: false
+date: 2019-06-21T12:34:59.0724847+00:00
 source: none
-learningFocus: 
+learningFocus: Collections
 isDraft: false
 includeTests: []
 dependsOn: []
@@ -19,15 +19,15 @@ state:
   lastEditorId: 
   feasibilityIndex: 580
   feasibilityIndexMod: 2
-  difficultyRating: 60
+  difficultyRating: 70
   isPartOfBundle: true
-  minEffort: 30 mins
-  maxEffort: 8 hrs
+  minEffort: 15 mins
+  maxEffort: 45 mins
   features:
   - Arrays
   - Iterations
-  activity: -14568
-lastEdit: 2019-06-21T14:34:59.0724847+02:00
+  activity: -1730
+lastEdit: 2019-06-21T12:34:59.0724847+00:00
 
 ---
 In dieser Aufgabe werden einfache Operationen auf Arrays geübt. Lesen Sie dazu zunächst
