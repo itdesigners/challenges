@@ -164,6 +164,7 @@ namespace SubmissionEvaluation.Domain
             challengeToCopy.Date = DateTime.Now;
             challengeToCopy.LastEditorID = null;
             challengeToCopy.LearningFocus = challenge.LearningFocus;
+            challengeToCopy.FreezeDifficultyRating = challenge.FreezeDifficultyRating;
             domain.ProviderStore.FileProvider.CreateChallenge(challengeToCopy);
 
             using (var writeLock = domain.ProviderStore.FileProvider.GetLock())
