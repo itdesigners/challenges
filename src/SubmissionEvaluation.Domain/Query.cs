@@ -350,7 +350,7 @@ namespace SubmissionEvaluation.Domain
 
             var challengeElements = challenges.Select(x => (IElement) new ChallengeElement(x));
             var bundleElements = bundles.Select(x => new BundleElement(x));
-            var elements = challengeElements.Concat(bundleElements).OrderByDescending(x => x.Activity);
+            var elements = challengeElements.Concat(bundleElements);
             return elements.GroupBy(x => x.Category).ToDictionary(x => x.Key, x => x.ToList());
         }
 

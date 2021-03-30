@@ -238,6 +238,15 @@ namespace SubmissionEvaluation.Domain.Operations
             }
 
             #endregion
+            #region pre-sort challenges by title, complexity and solved - which is a sensitive default for most views
+
+            visibleChallenges = visibleChallenges
+                .OrderBy(x => x.Title)
+                .OrderBy(x => x.State.DifficultyRating > 0 ? x.State.DifficultyRating : 1000)
+                .OrderBy(x => member.SolvedChallenges?.Contains(x.Id))
+                .ToList();
+
+            #endregion
 
             var res = visibleChallenges.Distinct(new IChallengeComparer()).ToDictionary(x => x.Id);
 
