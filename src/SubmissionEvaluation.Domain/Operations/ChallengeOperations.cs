@@ -422,6 +422,9 @@ namespace SubmissionEvaluation.Domain.Operations
             nextUnlockableChallenges.AddRange(availableChallengesShuffled.Where(x => ongoingChallengesOfBundle.Contains(x.Id)));
             nextUnlockableChallenges.AddRange(availableChallengesShuffled.Where(x => !ongoingChallengesOfBundle.Contains(x.Id)));
 
+            // filter out challenges that are unavailable
+            nextUnlockableChallenges = nextUnlockableChallenges.Where(x => x.IsAvailable).ToList();
+
             // select only as much challenges as required or available
             var nextUnlockedChallenges = nextUnlockableChallenges.Count >= numberOfMissingChallenges
                 ? nextUnlockableChallenges.GetRange(0, numberOfMissingChallenges)
