@@ -146,7 +146,7 @@ namespace SubmissionEvaluation.Server.Controllers
             if (JekyllHandler.CheckPermissions(Actions.EDIT, "Groups", member, Restriction.GROUPS, id))
             {
                 var group = JekyllHandler.Domain.Query.GetGroup(id);
-                var challenges = JekyllHandler.Domain.Query.GetAllChallenges(new Member() {IsAdmin = true}).OrderBy(x => x.Id).ToList();
+                var challenges = JekyllHandler.Domain.Query.GetAllChallenges(new Member() {IsAdmin = true}).Where(x=>x.IsAvailable).OrderBy(x => x.Id).ToList();
                 var groupAdmins = JekyllHandler.MemberProvider.GetMembers().Where(x => x.IsGroupAdmin);
                 return Ok(new GroupModel<IChallenge, Member, Group>
                 {
