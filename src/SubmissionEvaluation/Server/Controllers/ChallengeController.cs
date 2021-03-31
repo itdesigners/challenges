@@ -66,7 +66,9 @@ namespace SubmissionEvaluation.Server.Controllers
                 Title = x.Title,
                 DifficultyRating = x.State.DifficultyRating,
                 LearningFocus = x.LearningFocus
-            })).OrderBy(x => x.DifficultyRating > 0 ? x.DifficultyRating : 1000).ToList();
+            })).OrderBy(x => x.Title)
+                .OrderBy(x => x.DifficultyRating > 0 ? x.DifficultyRating : 1000)
+                .OrderByDescending(x => member.SolvedChallenges?.Contains(x.Id)).ToList();
 
             return Ok(new CategoryListModel<Member> {Category = Settings.Customization.Categories[id], Entries = category, Member = new Member(member)});
         }
