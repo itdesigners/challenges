@@ -77,7 +77,8 @@
                 </select>
             </div>
 
-            <h4 class="col-form-label">In Reihenfolge erzwungene Challenges</h4>
+            <h4 class="col-form-label">Neue Gruppenmitglieder müssen zunächst folgende Aufgaben lösen</h4>
+            <p>Achtung: Diese Liste sollte nicht in einem laufenden Kurs geändert werden</p>
             <div class="form-group">
                 <select size="6" class="form-control" @bind="Model.SelectedForcedChallenge">
                     @foreach (var challenge in Model.ForcedChallenges)
