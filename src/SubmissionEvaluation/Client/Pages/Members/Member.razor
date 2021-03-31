@@ -14,6 +14,34 @@
     <div class="col-sm-12">
         <div class="post-area">
             <div class="post-header">
+                Ungelöste Challenges 
+            </div>
+             @if (Challenges != null && Challenges.Challenges != null)
+             {
+            <div class="post">
+                    <table class="ranking_table">
+                        <thead>
+                        <tr class="ranking_head">
+                            <th class="th_name">Challenge</th>
+                        </tr>
+                        </thead>
+                        @foreach (var challenge in Challenges.Challenges)
+                        {
+                            <tr>
+                                <td>
+                                    <a href=@($"/Challenge/View/{challenge.Id}")>@challenge.Title</a>
+                                </td>
+                             </tr>
+                        }
+                    </table>
+            </div>
+             }
+        </div>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="post-area">
+            <div class="post-header">
                 Punktewertungen
             </div>
             @if (Model != null)
@@ -210,6 +238,7 @@
     MemberModel<Result, Contracts.ClientPocos.Member> Model { get; set; }
     Permissions Permissions { get; set; }
     CustomizationSettingsClient CustomSettings { get; set; }
+    ChallengeOverviewModel Challenges { get; set; }
 
     [Parameter]
     public string id { get; set; }
@@ -224,6 +253,7 @@
         }
         CustomSettings = await httpClient.GetFromJsonAsync<CustomizationSettingsClient>("api/Account/GetCustomSettings");
         Model = await httpClient.GetFromJsonAsync<MemberModel<Result, Contracts.ClientPocos.Member>>($"api/Members/Get/{id}");
+        Challenges = await httpClient.GetFromJsonAsync<ChallengeOverviewModel>($"api/Challenge/GetAllChallengesToDoByMemberId/{id}");
         if (Model.HasError)
         {
             navi.NavigateTo($"Home/Error/{Model.Message}");

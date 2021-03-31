@@ -69,6 +69,11 @@ namespace SubmissionEvaluation.Server.Classes.JekyllHandling
             return MemberProvider.GetMemberByUid(uid);
         }
 
+        public static IMember GetMemberById(string uid)
+        {
+            return MemberProvider.GetMemberById(uid);
+        }
+
         public static string GetVersionHash()
         {
             return Environment.GetEnvironmentVariable("CURRENT_HASH");

@@ -71,6 +71,33 @@ namespace SubmissionEvaluation.Server.Controllers
             return Ok(new CategoryListModel<Member> {Category = Settings.Customization.Categories[id], Entries = category, Member = new Member(member)});
         }
 
+        [HttpGet("GetAllChallengesToDoByMemberId/{id}")]
+        [Authorize(Roles = "admin, groupAdmin")]
+        public IActionResult GetAllChallengesToDoByMemberId([FromRoute] string id)
+        {
+            var model = new ChallengeOverviewModel();
+            try
+            {
+                var member = JekyllHandler.GetMemberById(id);
+                var challenges = JekyllHandler.Domain.Query.GetAllChallenges(member, false).Where(p => member.SolvedChallenges.All(p2 => p2 != p.Id));
+                var bundles = JekyllHandler.Domain.Query.GetAllBundles(member);
+                var groups = JekyllHandler.Domain.Query.GetAllGroups().ToList();
+                IReadOnlyList<ChallengeModel> challenge = challenges.Select(x => ConvertChallengesToChallengeModel(x, bundles, groups)).ToList();
+
+                model = new ChallengeOverviewModel
+                {
+                    Challenges = challenge.ToList(),
+                    Categories = null,
+                    RatingMethods = null
+                };
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.StackTrace);
+            }
+
+            return Ok(model);
+        }
 
         [HttpGet("GetAllChallengesForMember")]
         [HttpGet("GetAllChallengesForMember/{task}")]
