@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using SubmissionEvaluation.Classes.Config;
 using SubmissionEvaluation.Contracts.Data;
 using SubmissionEvaluation.Contracts.Data.Ranklist;
@@ -33,5 +34,6 @@ namespace SubmissionEvaluation.Shared.Models.Challenge
         public bool Solved { get; set; }
         public bool CanRate { get; set; }
         public string LearningFocus { get; set; }
+        public List<string> PartOfGroups { get; set; }
     }
 }

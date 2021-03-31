@@ -53,6 +53,18 @@
                             @("Keine Angabe zur Quelle")
                         }
                     </p>
+                    <p>
+                        @if (Model?.PartOfGroups.Count > 1)
+                        {
+                            @("Bestandteil der Gruppen: ")
+                            @string.Join(" und ", Model?.PartOfGroups)
+                        }
+                        else
+                        {
+                            @("Bestandteil der Gruppe: ")
+                            @Model?.PartOfGroups.FirstOrDefault();
+                        }
+                    </p>
 
                     @if (!string.IsNullOrWhiteSpace(Model.Bundle))
                     {

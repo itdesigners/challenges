@@ -207,6 +207,9 @@ namespace SubmissionEvaluation.Server.Controllers
             }
 
             var ranklist = JekyllHandler.Domain.Query.GetChallengeRanklist(challenge);
+
+            var groupsOfMember = (member.Groups ?? new string[] { }).Select(x => JekyllHandler.Domain.Query.GetGroup(x));
+            var challengesPerGroup = groupsOfMember.Select(x => new Tuple<string, List<string>>(x.Title, x.AvailableChallenges.Concat(x.ForcedChallenges).ToList()));
             var challengeViewModel = new ChallengeViewModel
             {
                 Name = id,
@@ -229,7 +232,8 @@ namespace SubmissionEvaluation.Server.Controllers
                 Points = JekyllHandler.Domain.Query.GetRatingPoints(challenge),
                 Solved = member.SolvedChallenges.Contains(id),
                 CanRate = member.SolvedChallenges.Contains(id) && member.CanRate.Contains(id),
-                LearningFocus = challenge.LearningFocus
+                LearningFocus = challenge.LearningFocus,
+                PartOfGroups = challengesPerGroup.Where(x => x.Item2.Contains(id)).Select(x => x.Item1).ToList()
             };
 
             if (JekyllHandler.Domain.Query.TryGetBundleForChallenge(member, challenge.Id, out var bundle))
