@@ -27,5 +27,6 @@ namespace SubmissionEvaluation.Contracts.Data
         string Reviewer { get; }
         DateTime? ReviewDate { get; }
         int? CustomScore { get; }
+        string MemberName { get; set; }
     }
 }

@@ -72,9 +72,14 @@ namespace SubmissionEvaluation.Server.Controllers
         {
             if (entry.DuplicateScore > 50)
             {
-                var dupe = JekyllHandler.Domain.Query.GetDuplicationSourceInfo(member, entry.Challenge);
-                var dupeAuthor = JekyllHandler.MemberProvider.GetMemberById(dupe.copySource?.MemberId);
-                return new PointsHoldTupel<ISubmission, IMember>(entry, dupe.entry, dupe.copySource, dupeAuthor);
+                var (submission, copySource) = JekyllHandler.Domain.Query.GetDuplicationSourceInfo(member, entry.Challenge);
+                if (submission != null && copySource != null)
+                {
+                    submission.MemberName = JekyllHandler.MemberProvider.GetMemberById(submission.MemberId).Name;
+                    var dupeAuthor = JekyllHandler.MemberProvider.GetMemberById(copySource.MemberId);
+                    copySource.MemberName = dupeAuthor.Name;
+                    return new PointsHoldTupel<ISubmission, IMember>(entry, submission, copySource, dupeAuthor);
+                }
             }
 
             return new PointsHoldTupel<ISubmission, IMember>(entry, null, null, null);
