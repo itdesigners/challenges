@@ -25,7 +25,7 @@
                 {
                     <div class="form-group has-feedback">
                         <label class="col-form-label">@RegistrationMessage</label>
-                        @if (!string.IsNullOrEmpty(Model.MessageTranslation))
+                        @if (!string.IsNullOrEmpty(Model.MessageTranslation) && Model.HasError)
                         {
                             <br />
                             <label class="col-form-label" style="font-weight: bold">@Model.MessageTranslation</label>
