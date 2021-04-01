@@ -343,16 +343,20 @@ namespace SubmissionEvaluation.Domain
             }
 
             domain.Log.Information("Interaktion: Registriere neuen user {username}", username);
-            var member = domain.MemberProvider.GetMemberByName(username);
+            var member = domain.MemberProvider.GetMemberByName(fullname);
             if (member != null)
             {
-                throw new Exception("User already exists");
+                throw new Exception("User with fullname already exists");
+            }
+            
+            member = domain.MemberProvider.GetMemberByUid(username);
+            if (member != null)
+            {
+                throw new Exception("User with Uid already exists");
             }
 
-            member = domain.Interactions.AddMember(username, "");
-            domain.MemberProvider.UpdateUid(member, username);
+            member = domain.Interactions.AddMember(fullname, "", username);
             domain.MemberProvider.UpdatePassword(member, passwordHash);
-            domain.MemberProvider.UpdateName(member, fullname);
             return member;
         }
 
