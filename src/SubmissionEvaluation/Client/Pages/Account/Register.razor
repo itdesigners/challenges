@@ -34,13 +34,10 @@ else
         {
             Model = await res.Content.ReadFromJsonAsync<RegisterModel>();
         }
-        if (Model.HasError && Model.Message.Equals(ErrorMessages.ActivationNeeded))
+
+        if ((Model.HasError && Model.Message.Equals(ErrorMessages.ActivationNeeded)) || Model.HasSuccess)
         {
-            navi.NavigateTo("Account/Login");
-        }
-        else if (Model.HasSuccess)
-        {
-            navi.NavigateTo("Account/View");
+            navi.NavigateTo("Account/Login", forceLoad: true);
         }
         else
         {

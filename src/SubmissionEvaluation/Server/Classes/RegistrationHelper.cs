@@ -81,7 +81,6 @@ namespace SubmissionEvaluation.Server.Classes
                 if (attributeTable != null)
                 {
                     new IdentityAuthenticator().WriteIdentityCookie(model.Username, attributeTable, context).Wait(5000);
-
                     return new RegisterModel {HasSuccess = true};
                 }
             }

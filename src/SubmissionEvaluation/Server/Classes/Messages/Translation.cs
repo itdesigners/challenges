@@ -44,7 +44,7 @@ namespace SubmissionEvaluation.Server.Classes.Messages
                 },
                 {ErrorMessages.MissingName, "Bitte einen Benutzernamen eingeben."},
                 {ErrorMessages.MissingPassword, "Bitte ein Password eingeben."},
-                {ErrorMessages.UserCreateFailed, "Anlegen des Benutzer fehlgeschlagen. Vermutlich ist der Benutzername bereits vergeben."},
+                {ErrorMessages.UserCreateFailed, "Anlegen des Benutzer fehlgeschlagen. Vermutlich ist der Benutzername oder Name (Vor- und Nachname) bereits vergeben."},
                 {ErrorMessages.MissingMail, "Bitte eine E-Mailadresse eingeben"},
                 {ErrorMessages.ActivationNeeded, "Der Account muss erst durch einen Administrator freigeschaltet werden."},
                 {ErrorMessages.UserNotFound, "Gesuchter Nutzer konnte nicht gefunden werden."},

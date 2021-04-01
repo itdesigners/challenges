@@ -25,6 +25,11 @@
                 {
                     <div class="form-group has-feedback">
                         <label class="col-form-label">@RegistrationMessage</label>
+                        @if (!string.IsNullOrEmpty(Model.MessageTranslation))
+                        {
+                            <br />
+                            <label class="col-form-label" style="font-weight: bold">@Model.MessageTranslation</label>
+                        } 
                     </div>
                     <div class="form-group has-feedback">
                         <i class="oi oi-person form-control-feedback"></i>
