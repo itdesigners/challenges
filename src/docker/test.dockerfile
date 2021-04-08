@@ -11,22 +11,22 @@ ENV http_proxy="${build_proxy}"
 ENV https_proxy="${build_proxy}"
 
 RUN apt-get update && \
-    apt-get upgrade -y
+    apt-get upgrade -y && \
+    apt-get install -y apt-utils curl wget tar  software-properties-common
 
 # Configure timezone
-RUN apt-get install -y --no-install-recommends apt-utils wget tar && \
-    echo "tzdata tzdata/Areas select Europe" > /tmp/preseed.txt; \
+RUN echo "tzdata tzdata/Areas select Europe" > /tmp/preseed.txt; \
     echo "tzdata tzdata/Zones/Europe select Berlin" >> /tmp/preseed.txt; \
     debconf-set-selections /tmp/preseed.txt && \
-    apt-get install -y --no-install-recommends tzdata
+    apt-get install -y tzdata
 
 # Configure locale
-RUN apt-get install -y --no-install-recommends locales && \
+RUN apt-get install -y locales && \
     locale-gen de_DE.UTF-8 && \
     update-locale LANG=de_DE.UTF-8
 
 # C / C++
-RUN apt-get install -y --no-install-recommends gcc g++ cppcheck make && \
+RUN apt-get install -y gcc g++ cppcheck make && \
     gcc --version && \
     g++ --version
 
@@ -40,11 +40,11 @@ RUN wget -q --no-check-certificate -O cmake_inst.sh https://cmake.org/files/v3.1
     cmake --version
 
 # Python
-RUN apt-get install -y --no-install-recommends python3 && \
+RUN apt-get install -y python3 && \
     python3 --version
 
 # Java
-RUN apt-get install -y --no-install-recommends openjdk-11-jdk-headless && \
+RUN apt-get install -y default-jdk && \
     java --version
 
 # Maven
@@ -75,7 +75,7 @@ RUN if [[ -z $proxy ]]; then \
 
 # Kotlin
 ENV PATH=$PATH:/usr/lib/kotlinc/bin
-RUN apt-get install -y --no-install-recommends unzip && \
+RUN apt-get install -y unzip && \
     cd /usr/lib && \
     wget -q https://github.com/JetBrains/kotlin/releases/download/v1.3.41/kotlin-compiler-1.3.41.zip && \
     unzip kotlin-compiler-*.zip && \
@@ -84,9 +84,7 @@ RUN apt-get install -y --no-install-recommends unzip && \
     kotlin -version
 
 # Haskell
-RUN apt-get update && \
-    apt-get install -y software-properties-common && \
-    add-apt-repository -y ppa:hvr/ghc && \
+RUN add-apt-repository -y ppa:hvr/ghc && \
     apt-get update && \
     apt-get install -y ghc && \
     ghc --version
@@ -100,13 +98,17 @@ RUN wget -q -O /tmp/scala.deb www.scala-lang.org/files/archive/scala-2.13.0.deb 
     rm /tmp/sbt.deb && \
     scala -version
 
-# JavaScript
-RUN apt-get install -y --no-install-recommends nodejs npm && \
+# JavaScript & Typescript
+RUN curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
+    apt-get update && \
+    apt-get install -y nodejs npm && \
+    npm install -g typescript && \
     nodejs --version && \
-    npm --version
+    npm --version && \
+    tsc --version
 
 # Perl
-RUN apt-get install -y --no-install-recommends perl && \
+RUN apt-get install -y perl && \
     perl --version
 
 # Io
@@ -122,7 +124,7 @@ RUN apt-get install -y git && \
     io --version
 
 # Go
-RUN apt-get install -y --no-install-recommends golang  && \
+RUN apt-get install -y golang  && \
     rm -rf `find /usr/share/go-* -type d -name test` && \
     go version
 
@@ -135,10 +137,6 @@ RUN wget -q -O rustup.rs https://sh.rustup.rs && \
     rm rustup.rs && \
     rustc -V
 
-# TypeScript
-RUN apt-get install -y --no-install-recommends npm && \
-    npm install -g typescript && \
-    tsc --version
 
 # Julia
 ENV PATH=$PATH:/usr/lib/julia/bin
@@ -150,7 +148,7 @@ RUN wget -q -O julia.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/1.1
 
 # C# (DotNetCore) / F#
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
-RUN apt-get install -y --no-install-recommends ca-certificates apt-transport-https && \
+RUN apt-get install -y ca-certificates apt-transport-https && \
     wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
@@ -167,7 +165,7 @@ RUN apt-get remove -y gnupg dirmngr curl git unzip apt-transport-https wget && \
     rm -rf `find / -type d -name doc -name man -name tmp`
 
 # Reduce duplicates
-RUN apt-get install -y --no-install-recommends rdfind && \
+RUN apt-get install -y rdfind && \
     rdfind -makeresultsfile false -deleteduplicates true -makehardlinks true /usr && \
     apt-get remove -y rdfind && \
     apt-get clean
@@ -207,7 +205,7 @@ RUN mkdir dotnettest && \
 
 #Run Maven once, else it will download alot with each build
 ADD TestProjectMaven.zip /tmp/
-RUN apt-get install -y --no-install-recommends unzip && \
+RUN apt-get install -y unzip && \
     unzip -q /tmp/TestProjectMaven.zip -d /tmp/testprojectmaven/ && rm /tmp/TestProjectMaven.zip && \
     cd /tmp/testprojectmaven && \
     mvn package  && \
