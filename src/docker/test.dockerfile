@@ -99,11 +99,11 @@ RUN wget -q -O /tmp/scala.deb www.scala-lang.org/files/archive/scala-2.13.0.deb 
     scala -version
 
 # JavaScript & Typescript
-RUN curl -sL https://deb.nodesource.com/setup_15.x | bash - && \
+RUN su -c "curl -sL https://deb.nodesource.com/setup_15.x | bash -" && \
     apt-get update && \
     apt-get install -y nodejs && \
     npm install -g typescript && \
-    nodejs --version && \
+    node --version && \
     npm --version && \
     tsc --version
 
